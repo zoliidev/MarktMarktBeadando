@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/profil">
+
+    <fragment
+        android:id="@+id/profil"
+        android:name="hu.marktmarkt.beadando.Profil"
+        android:label="fragment_profil"
+        tools:layout="@layout/fragment_profil" >
+        <action
+            android:id="@+id/action_profil_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_profil_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_profil_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_profil_to_információkFragment"
+            app:destination="@id/információkFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="hu.marktmarkt.beadando.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/akciókFragment"
+        android:name="hu.marktmarkt.beadando.AkciókFragment"
+        android:label="fragment_akciok"
+        tools:layout="@layout/fragment_akciok" >
+        <action
+            android:id="@+id/action_akciókFragment_to_mainFragment2"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="hu.marktmarkt.beadando.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_profil"
+            app:destination="@id/profil" />
+    </fragment>
+    <fragment
+        android:id="@+id/információkFragment"
+        android:name="hu.marktmarkt.beadando.InformációkFragment"
+        android:label="fragment_informaciok"
+        tools:layout="@layout/fragment_informaciok" >
+        <action
+            android:id="@+id/action_információkFragment_to_profil"
+            app:destination="@id/profil" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="hu.marktmarkt.beadando.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_profil"
+            app:destination="@id/profil" />
+    </fragment>
+</navigation>
