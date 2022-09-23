@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_profil_to_információkFragment"
             app:destination="@id/információkFragment" />
+        <action
+            android:id="@+id/onAkcióClick"
+            app:destination="@id/akciókFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -29,7 +32,7 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_mainFragment"
+            android:id="@+id/on_succes_login"
             app:destination="@id/mainFragment" />
     </fragment>
     <fragment
@@ -38,7 +41,7 @@
         android:label="fragment_akciok"
         tools:layout="@layout/fragment_akciok" >
         <action
-            android:id="@+id/action_akciókFragment_to_mainFragment2"
+            android:id="@+id/on_back_main"
             app:destination="@id/mainFragment" />
     </fragment>
     <fragment
