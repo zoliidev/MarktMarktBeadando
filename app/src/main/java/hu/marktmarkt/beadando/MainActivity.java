@@ -11,13 +11,14 @@ import androidx.fragment.app.FragmentTransaction;
 import hu.marktmarkt.beadando.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-    private ActivityMainBinding binding;
     private FragmentManager frgManager;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         binding.bottomNavigationView.setOnClickListener(item -> {
             switch (item.getId()) {
 
