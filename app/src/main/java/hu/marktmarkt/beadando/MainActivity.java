@@ -3,6 +3,7 @@ package hu.marktmarkt.beadando;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         binding.bottomNavigationView.setOnClickListener(item -> {
             switch (item.getId()) {

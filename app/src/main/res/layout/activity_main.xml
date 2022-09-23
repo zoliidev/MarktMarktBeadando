@@ -53,6 +53,4 @@
             app:navGraph="@navigation/main_nav"
             tools:visibility="visible" />
     </LinearLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
