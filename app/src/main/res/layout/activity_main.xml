@@ -7,26 +7,8 @@
     tools:context=".MainActivity">
 
 
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragmentContainerView"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/main_nav" />
-    </FrameLayout>
-
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/KI_NE_TÖRÖLD"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
@@ -47,6 +29,37 @@
 
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    <EditText
+        android:id="@+id/edtShearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Shearch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/lnvNav"
+        android:layout_width="408dp"
+        android:layout_height="635dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtShearch">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerView"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            android:tag="frgContainerView"
+            app:navGraph="@navigation/main_nav" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
