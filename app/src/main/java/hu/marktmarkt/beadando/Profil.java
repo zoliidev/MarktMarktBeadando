@@ -8,6 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,12 +65,43 @@ public class Profil extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
+    private Button teszt;
+    private EditText prodId;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profil, container, false);
+
+        teszt = view.findViewById(R.id.button);
+        prodId = view.findViewById(R.id.prodID);
+
+
+        //TODO: ezt kivinni ebből a függvényből
+        teszt.setOnClickListener(view1 -> {
+            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+            String url = "https://oldal.vaganyzoltan.hu/api/product.php";
+
+            StringRequest getProd = new StringRequest(Request.Method.POST, url, response -> {
+                Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
+                //TODO: kapott választ át kell alakítani egy json objektummá, majd ebből hozzunk létre egy új fragmentet.
+            }, error -> Toast.makeText(getContext(), "Hiba történt!", Toast.LENGTH_LONG).show()) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> MyData = new HashMap<>();
+                    MyData.put("id", prodId.getText().toString());
+                    MyData.put("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjY2NzA0OTgyfQ.CRuB5v02bJ4wOnKKCcz3MepWDQ94_6AIajVXkXfw_6Q");
+                    return MyData;
+                }
+            };
+            requestQueue.add(getProd);
+        });
+
+        return view;
 private Button btn;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profil, container, false);
-
     }
 }
