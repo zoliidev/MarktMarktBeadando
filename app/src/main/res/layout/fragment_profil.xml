@@ -20,15 +20,6 @@
             android:text="Profil fragment"
             android:textSize="26sp" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:gravity="center"
-            android:labelFor="@+id/prodID"
-            android:text="@string/term_kk_d"
-            android:textSize="20sp" />
-
         <EditText
             android:id="@+id/prodID"
             android:layout_width="match_parent"
@@ -37,6 +28,7 @@
             android:ems="10"
             android:inputType="number"
             android:minHeight="48dp"
+            android:hint="@string/term_kk"
             android:importantForAutofill="no" />
 
         <Button

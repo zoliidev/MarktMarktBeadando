@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">MarktMarkt Project</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">Search</string>
-    <string name="term_kk_d">Termékkód</string>
+    <string name="term_kk_d">Product id</string>
+    <string name="search2">Search</string>
+    <string name="term_kk">Product id</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

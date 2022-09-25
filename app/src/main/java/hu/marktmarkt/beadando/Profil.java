@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -91,7 +89,7 @@ public class Profil extends Fragment {
                 protected Map<String, String> getParams() {
                     Map<String, String> MyData = new HashMap<>();
                     MyData.put("id", prodId.getText().toString());
-                    MyData.put("token", "null");
+                    MyData.put("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjY2NzA0OTgyfQ.CRuB5v02bJ4wOnKKCcz3MepWDQ94_6AIajVXkXfw_6Q");
                     return MyData;
                 }
             };
