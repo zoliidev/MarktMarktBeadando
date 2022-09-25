@@ -3,17 +3,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_500"
     tools:context=".Profil">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/frgAkciok"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Profil fragment"
-        android:textSize="26dp"
-        android:layout_gravity="center"
-        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/frgAkciok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Profil fragment"
+            android:textSize="26sp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center"
+            android:labelFor="@+id/prodID"
+            android:text="@string/term_kk_d"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/prodID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:ems="10"
+            android:inputType="number"
+            android:minHeight="48dp"
+            android:importantForAutofill="no" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:text="Tesztelj!" />
+    </LinearLayout>
 
 </FrameLayout>
