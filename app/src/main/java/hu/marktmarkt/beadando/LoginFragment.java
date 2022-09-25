@@ -1,16 +1,11 @@
 package hu.marktmarkt.beadando;
 
-import static androidx.navigation.fragment.FragmentKt.findNavController;
-
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * A simple {@link Fragment} subclass.

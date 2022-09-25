@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -14,6 +15,7 @@ import hu.marktmarkt.beadando.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
     private FragmentManager frgManager;
     private ActivityMainBinding binding;
+    FragmentContainerView fragmentContainerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,30 +24,37 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        fragmentContainerView =
+                findViewById(R.id.fragmentView);
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         binding.bottomNavigationView.setOnClickListener(item -> {
+            Fragment fragment = null;
             switch (item.getId()) {
 
                 case R.id.itmMain:
-                    replaceFragment(new MainFragment());
+                    fragment = new MainFragment();
+                    replaceFragment(fragment);
                     break;
                 case R.id.itmAkcio:
-                    replaceFragment(new AkciókFragment());
+                    fragment = new AkciókFragment();
+                    replaceFragment(fragment);
                     break;
                 case R.id.itmProfil:
-                    replaceFragment(new Profil());
-                    break;
+                    fragment = new Profil();
+                    replaceFragment(fragment);
+                default:
+
+
             }
 
         });
     }
     private void replaceFragment(Fragment frg){
-       /* frgManager=new FragmentManager() {
-        };
-        frgManager.findFragmentByTag("frgContainerView");*/
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.lnvNav, frg);
-        fragmentTransaction.commit();
+        fragmentTransaction.replace(R.id.fragmentView, frg);
+        fragmentTransaction.setReorderingAllowed(true);
+        fragmentTransaction.commitNow();
     }
 }
