@@ -41,16 +41,14 @@
         android:inputType="textPersonName"
         android:textColor="#757575"
         android:textColorHint="#757575"
-        android:inputType="textPersonName"
-        android:text="Search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/lnvNav"
-        android:layout_width="408dp"
-        android:layout_height="635dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,8 +60,8 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:defaultNavHost="true"
             android:tag="frgContainerView"
+            app:defaultNavHost="true"
             app:navGraph="@navigation/main_nav" />
     </LinearLayout>
 
