@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/ProfilFragment">
+    app:startDestination="@id/akciókFragment">
 
     <fragment
         android:id="@+id/ProfilFragment"
@@ -71,4 +71,5 @@
             android:id="@+id/action_settingsFragment_to_profil"
             app:destination="@id/ProfilFragment" />
     </fragment>
+    <action android:id="@+id/action_global_ProfilFragment" app:destination="@id/ProfilFragment" />
 </navigation>
