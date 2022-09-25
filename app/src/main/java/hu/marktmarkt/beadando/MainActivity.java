@@ -1,19 +1,25 @@
 package hu.marktmarkt.beadando;
 
-
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import hu.marktmarkt.beadando.databinding.ActivityMainBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
-    private FragmentManager frgManager;
-    private ActivityMainBinding binding;
+    private BottomNavigationView navigationView;
+    private final MainFragment mainFragment = new MainFragment();
+    private final AkciókFragment akciókFragment = new AkciókFragment();
+    private final Profil profil = new Profil();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,30 +28,34 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        binding.bottomNavigationView.setOnClickListener(item -> {
-            switch (item.getId()) {
+        navigationView = findViewById(R.id.bottomNavigationView);
+        navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                MenuItem menuItem = navigationView.getMenu().findItem(item.getItemId());
+                menuItem.setChecked(true);
 
-                case R.id.itmMain:
-                    replaceFragment(new MainFragment());
-                    break;
-                case R.id.itmAkcio:
-                    replaceFragment(new AkciókFragment());
-                    break;
-                case R.id.itmProfil:
-                    replaceFragment(new Profil());
-                    break;
+                switch (item.getItemId()) {
+                    case R.id.itmMain:
+                        replaceFragment(mainFragment);
+                        break;
+                    case R.id.itmAkcio:
+                        replaceFragment(akciókFragment);
+                        break;
+                    case R.id.itmProfil:
+                        replaceFragment(profil);
+                        break;
+                }
+                return false;
             }
-
         });
+
     }
     private void replaceFragment(Fragment frg){
-       /* frgManager=new FragmentManager() {
-        };
-        frgManager.findFragmentByTag("frgContainerView");*/
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.lnvNav, frg);
+        fragmentTransaction.replace(R.id.fragmentView, frg);
         fragmentTransaction.commit();
     }
 }

@@ -1,4 +1,4 @@
-# Markt-Martkt-Sequel / DROID APP
+# MarktMartktBeadando / DROID APP
 **Classification: internal & partners only**
 
 # Api Segéd-software: POSTMAN!
@@ -9,9 +9,21 @@
 > - password
 > - token (ha van)
 > - deviceName
+>
+>Kimenet -> Json tábla:
+> - JsonWebToken (30 napos lejárati idővel)
 
-> Kimenet->Json tábla:
->  - felhasználónév
->  - utónév
->  - Standard-JWT
->  - Adatbázis id
+> #### Product-API
+> https://oldal.vaganyzoltan.hu/api/product.php
+> POST-request-ben kell elküldeni:
+> - termékkód
+> - token
+>
+>Kimenet -> Json tábla:
+> - termék neve
+> - termék ára
+> - termék leírása
+> - termék képe (a webszerverre mutat azaz: https://oldal.vaganyzoltan.hu/prod-img/<IMG változó>
+
+>Tervezés: Figma
+> - https://www.figma.com/file/LpYaS9CWV5I1zuZ5ZhE4kT/MarktMarkt-tervek?node-id=0%3A1
