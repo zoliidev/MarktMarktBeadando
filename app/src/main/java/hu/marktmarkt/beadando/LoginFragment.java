@@ -1,11 +1,30 @@
 package hu.marktmarkt.beadando;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,9 +75,69 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //Keresősáv, navbar elrejtés
+        BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
+        navBar.setVisibility(View.GONE);
+        EditText search = requireActivity().findViewById(R.id.searchBar);
+        search.setVisibility(View.GONE);
+        //---
+
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        Button logIn = view.findViewById(R.id.loginBt);
+        EditText name = view.findViewById(R.id.loginUsername);
+        EditText pass = view.findViewById(R.id.loginPassword);
+
+        logIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Login", "Katt");
+                RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+                String url = "https://oldal.vaganyzoltan.hu/api/login.php";
+
+                StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+                    //MainActivity.loginToken = response;
+
+                    JSONObject object;
+                    String logToken = null;
+                    String resp = "Hiba";
+                    try {
+                        object = new JSONObject(response);
+                        if(!object.isNull("token")) logToken = object.get("token").toString();
+                        if(!object.isNull("resp")) resp = object.get("resp").toString();
+                    } catch (JSONException e) {
+                        Log.e("SetToken @ LoginFragment.java", e.getMessage());
+                    }
+
+                    if (logToken != null) {
+                        MainActivity.setToken(logToken);
+                        Toast.makeText(getContext(), "Sikeres bejelentkezés!", Toast.LENGTH_LONG).show();
+
+                        FragmentManager fragmentManager = getParentFragmentManager();
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.setReorderingAllowed(true);
+                        transaction.replace(R.id.fragmentView, new MainFragment(), null);
+                        search.setVisibility(View.VISIBLE);
+                        navBar.setVisibility(View.VISIBLE);
+
+                        transaction.commit();
+                    }else{
+                        Toast.makeText(getContext(), resp, Toast.LENGTH_LONG).show();
+                    }
+
+                }, error -> Toast.makeText(getContext(), "Hiba történt!", Toast.LENGTH_LONG).show()) {
+                    protected Map<String, String> getParams() {
+                        Map<String, String> MyData = new HashMap<>();
+                        MyData.put("name", name.getText().toString());
+                        MyData.put("password", pass.getText().toString());
+                        return MyData;
+                    }
+                };
+                requestQueue.add(getToken);
+            }
+        });
+
+        return view;
     }
 }

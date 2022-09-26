@@ -5,4 +5,8 @@
     <string name="search2">Search</string>
     <string name="term_kk">Product id</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="marktmart_login">MarktMart Login</string>
+    <string name="login">Login</string>
 </resources>

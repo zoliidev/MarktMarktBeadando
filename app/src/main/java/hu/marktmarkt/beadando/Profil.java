@@ -76,7 +76,6 @@ public class Profil extends Fragment {
         teszt = view.findViewById(R.id.button);
         prodId = view.findViewById(R.id.prodID);
 
-
         //TODO: ezt kivinni ebből a függvényből
         teszt.setOnClickListener(view1 -> {
             RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
@@ -89,7 +88,7 @@ public class Profil extends Fragment {
                 protected Map<String, String> getParams() {
                     Map<String, String> MyData = new HashMap<>();
                     MyData.put("id", prodId.getText().toString());
-                    MyData.put("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjY2NzA0OTgyfQ.CRuB5v02bJ4wOnKKCcz3MepWDQ94_6AIajVXkXfw_6Q");
+                    MyData.put("token", MainActivity.getLoginToken());
                     return MyData;
                 }
             };

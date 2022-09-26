@@ -6,4 +6,8 @@
     <string name="search2">Keresés</string>
     <string name="term_kk">Termékkód</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="password">Jelszó</string>
+    <string name="username">Felhasználónév</string>
+    <string name="marktmart_login">MarktMarkt Bejelentkezés</string>
+    <string name="login">Bejelentkezés</string>
 </resources>
