@@ -16,6 +16,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,6 +87,26 @@ public class Profil extends Fragment {
             StringRequest getProd = new StringRequest(Request.Method.POST, url, response -> {
                 Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
                 //TODO: kapott választ át kell alakítani egy json objektummá, majd ebből hozzunk létre egy új fragmentet.
+                //JSON product objektum (még nincs kész)
+                String name = "\n";
+                String price = "\n";
+                String description = "\n";
+                String img = "";
+                String testText = "Product:\n\t";
+                try {
+                    JSONObject productObject = new JSONObject(response);
+                    //ez itt nem vizsgál megfelelően jelenleg
+                    if(!productObject.isNull("name")) name = productObject.get("name").toString();
+                    if(!productObject.isNull("price")) price = productObject.get("price").toString();
+                    if(!productObject.isNull("description")) description = productObject.get("description").toString();
+                    if(!productObject.isNull("img")) img = productObject.get("img").toString();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                testText += name + price + description + img;
+                Toast.makeText(getContext(), testText, Toast.LENGTH_LONG).show();
+
             }, error -> Toast.makeText(getContext(), "Hiba történt!", Toast.LENGTH_LONG).show()) {
                 protected Map<String, String> getParams() {
                     Map<String, String> MyData = new HashMap<>();
