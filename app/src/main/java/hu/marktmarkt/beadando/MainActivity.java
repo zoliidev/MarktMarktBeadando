@@ -2,7 +2,6 @@ package hu.marktmarkt.beadando;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -18,7 +17,7 @@ import com.google.android.material.navigation.NavigationBarView;
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
     private final MainFragment mainFragment = new MainFragment();
-    private final AkciókFragment akciókFragment = new AkciókFragment();
+    private final AkciokFragment akciokFragment = new AkciokFragment();
     private final Profil profil = new Profil();
 
     @Override
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                         replaceFragment(mainFragment);
                         break;
                     case R.id.itmAkcio:
-                        replaceFragment(akciókFragment);
+                        replaceFragment(akciokFragment);
                         break;
                     case R.id.itmProfil:
                         replaceFragment(profil);

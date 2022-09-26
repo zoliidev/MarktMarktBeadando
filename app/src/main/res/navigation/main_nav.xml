@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/akciókFragment"
-        android:name="hu.marktmarkt.beadando.AkciókFragment"
+        android:name="hu.marktmarkt.beadando.AkciokFragment"
         android:label="fragment_akciok"
         tools:layout="@layout/fragment_akciok" >
         <action
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/információkFragment"
-        android:name="hu.marktmarkt.beadando.InformációkFragment"
+        android:name="hu.marktmarkt.beadando.InformaciokFragment"
         android:label="fragment_informaciok"
         tools:layout="@layout/fragment_informaciok" >
         <action
