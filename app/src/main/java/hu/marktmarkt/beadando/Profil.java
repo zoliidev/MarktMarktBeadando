@@ -1,14 +1,18 @@
 package hu.marktmarkt.beadando;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -93,6 +97,7 @@ public class Profil extends Fragment {
                 String description = "\n";
                 String img = "";
                 String testText = "Product:\n\t";
+
                 try {
                     JSONObject productObject = new JSONObject(response);
                     //ez itt nem vizsgál megfelelően jelenleg
@@ -101,11 +106,26 @@ public class Profil extends Fragment {
                     if(!productObject.isNull("description")) description = productObject.get("description").toString();
                     if(!productObject.isNull("img")) img = productObject.get("img").toString();
 
+                    Fragment fragment = new ProductFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("name", name);
+                    bundle.putString("price", price);
+                    bundle.putString("desc", description);
+                    bundle.putString("img", img);
+                    fragment.setArguments(bundle);
+
+                    //fragment váltás productra
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setReorderingAllowed(true);
+                    transaction.replace(R.id.fragmentView, fragment, null);
+
+                    transaction.commit();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                testText += name + price + description + img;
-                Toast.makeText(getContext(), testText, Toast.LENGTH_LONG).show();
+                //testText += name + price + description + img;
+                //Toast.makeText(getContext(), testText, Toast.LENGTH_LONG).show();
 
             }, error -> Toast.makeText(getContext(), "Hiba történt!", Toast.LENGTH_LONG).show()) {
                 protected Map<String, String> getParams() {
