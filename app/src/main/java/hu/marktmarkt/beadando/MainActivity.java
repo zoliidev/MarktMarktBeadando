@@ -2,6 +2,7 @@ package hu.marktmarkt.beadando;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,46 +49,60 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.hide();
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
-        String url = "https://oldal.vaganyzoltan.hu/api/validate.php";
-        String logToken = fileOlvas(getBaseContext());
-        logToken = logToken.substring(1);
+        Context baseContext = getBaseContext();
 
-        String finalLogToken = logToken;
-        StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
-            JSONObject object;
-            boolean loggedIn = false;
-            String resp = "Hiba";
-            try {
-                object = new JSONObject(response);
-                if(!object.isNull("loggedIN")) loggedIn = object.getBoolean("loggedIN");
-                if(!object.isNull("resp")) resp = object.getString("resp");
-            } catch (JSONException e) {
-                Log.e("SetToken @ MainActivity.java", e.getMessage());
-            }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+                String url = "https://oldal.vaganyzoltan.hu/api/validate.php";
+                String logToken = fileOlvas(baseContext);
+                //String logToken = "";
+                if(!logToken.equals("")) logToken = logToken.substring(1);
+                if(logToken.equals("")){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new LoginFragment()).commit();
+                }
 
-            if (loggedIn) {
-                MainActivity.setToken(finalLogToken);
-                BottomNavigationView navBar = this.findViewById(R.id.bottomNavigationView);
-                EditText search = this.findViewById(R.id.searchBar);
-                search.setVisibility(View.VISIBLE);
-                navBar.setVisibility(View.VISIBLE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new MainFragment()).commit();
-                Toast.makeText(getBaseContext(), "Sikeres bejelentkezés!", Toast.LENGTH_LONG).show();
-            }else{
-                Toast.makeText(getBaseContext(), resp, Toast.LENGTH_LONG).show();
-            }
+                String finalLogToken = logToken;
+                StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+                    JSONObject object;
+                    boolean loggedIn = false;
+                    String resp = "Hiba";
+                    try {
+                        object = new JSONObject(response);
+                        if(!object.isNull("loggedIN")) loggedIn = object.getBoolean("loggedIN");
+                        if(!object.isNull("resp")) resp = object.getString("resp");
+                    } catch (JSONException e) {
+                        Log.e("SetToken @ MainActivity.java", e.getMessage());
+                    }
 
-        }, error -> Toast.makeText(getBaseContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
-            protected Map<String, String> getParams() {
-                Map<String, String> MyData = new HashMap<>();
-                MyData.put("token", finalLogToken);
-                return MyData;
+                    if (loggedIn) {
+                        MainActivity.setToken(finalLogToken);
+                        BottomNavigationView navBar = findViewById(R.id.bottomNavigationView);
+                        EditText search = findViewById(R.id.searchBar);
+                        search.setVisibility(View.VISIBLE);
+                        navBar.setVisibility(View.VISIBLE);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new MainFragment()).commit();
+                        Toast.makeText(getBaseContext(), "Sikeres bejelentkezés!", Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(getBaseContext(), resp, Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new LoginFragment()).commit();
+                    }
+
+                }, error ->
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new LoginFragment()).commit()) {
+                    protected Map<String, String> getParams() {
+                        Map<String, String> MyData = new HashMap<>();
+                        MyData.put("token", finalLogToken);
+                        return MyData;
+                    }
+                };
+                requestQueue.add(getToken);
             }
-        };
-        requestQueue.add(getToken);
+        });
 
         navigationView = findViewById(R.id.bottomNavigationView);
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -146,9 +162,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         catch (FileNotFoundException e) {
-            Log.e("login activity", "A fájl nem található: " + e.toString());
+            Log.e("login activity", "A fájl nem található: " + e.getMessage());
         } catch (IOException e) {
-            Log.e("login activity", "A fájl nem olvasható: " + e.toString());
+            Log.e("login activity", "A fájl nem olvasható: " + e.getMessage());
         }
 
         return ret;
