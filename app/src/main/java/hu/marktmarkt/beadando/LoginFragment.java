@@ -1,5 +1,6 @@
 package hu.marktmarkt.beadando;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCaller;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -74,12 +76,11 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
-    EditText search = requireActivity().findViewById(R.id.searchBar);
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Keresősáv, navbar elrejtés
+        BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
+        EditText search = requireActivity().findViewById(R.id.searchBar);
         navBar.setVisibility(View.GONE);
         search.setVisibility(View.GONE);
         //---
@@ -127,7 +128,7 @@ public class LoginFragment extends Fragment {
                         Toast.makeText(getContext(), resp, Toast.LENGTH_LONG).show();
                     }
 
-                }, error -> Toast.makeText(getContext(), "Hiba történt!", Toast.LENGTH_LONG).show()) {
+                }, error -> Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show()) {
                     protected Map<String, String> getParams() {
                         Map<String, String> MyData = new HashMap<>();
                         MyData.put("name", name.getText().toString());
