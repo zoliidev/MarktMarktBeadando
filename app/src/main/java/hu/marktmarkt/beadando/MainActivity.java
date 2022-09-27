@@ -1,8 +1,13 @@
 package hu.marktmarkt.beadando;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -11,8 +16,23 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
@@ -28,6 +48,45 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+        String url = "https://oldal.vaganyzoltan.hu/api/validate.php";
+        String logToken = fileOlvas(getBaseContext());
+        logToken = logToken.substring(1);
+
+        String finalLogToken = logToken;
+        StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+            JSONObject object;
+            boolean loggedIn = false;
+            String resp = "Hiba";
+            try {
+                object = new JSONObject(response);
+                if(!object.isNull("loggedIN")) loggedIn = object.getBoolean("loggedIN");
+                if(!object.isNull("resp")) resp = object.getString("resp");
+            } catch (JSONException e) {
+                Log.e("SetToken @ MainActivity.java", e.getMessage());
+            }
+
+            if (loggedIn) {
+                MainActivity.setToken(finalLogToken);
+                BottomNavigationView navBar = this.findViewById(R.id.bottomNavigationView);
+                EditText search = this.findViewById(R.id.searchBar);
+                search.setVisibility(View.VISIBLE);
+                navBar.setVisibility(View.VISIBLE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new MainFragment()).commit();
+                Toast.makeText(getBaseContext(), "Sikeres bejelentkezés!", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getBaseContext(), resp, Toast.LENGTH_LONG).show();
+            }
+
+        }, error -> Toast.makeText(getBaseContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+            protected Map<String, String> getParams() {
+                Map<String, String> MyData = new HashMap<>();
+                MyData.put("token", finalLogToken);
+                return MyData;
+            }
+        };
+        requestQueue.add(getToken);
 
         navigationView = findViewById(R.id.bottomNavigationView);
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -64,5 +123,34 @@ public class MainActivity extends AppCompatActivity {
     }
     public static String getLoginToken(){
         return loginToken;
+    }
+    private String fileOlvas(Context context) {
+
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput("loginToken.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "A fájl nem található: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "A fájl nem olvasható: " + e.toString());
+        }
+
+        return ret;
     }
 }

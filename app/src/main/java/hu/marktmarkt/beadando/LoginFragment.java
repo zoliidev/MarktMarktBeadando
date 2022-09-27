@@ -1,6 +1,7 @@
 package hu.marktmarkt.beadando;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -122,13 +125,13 @@ public class LoginFragment extends Fragment {
                         transaction.replace(R.id.fragmentView, new MainFragment(), null);
                         search.setVisibility(View.VISIBLE);
                         navBar.setVisibility(View.VISIBLE);
-
                         transaction.commit();
+                        FileKi(logToken, requireContext());
                     }else{
                         Toast.makeText(getContext(), resp, Toast.LENGTH_LONG).show();
                     }
 
-                }, error -> Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show()) {
+                }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
                     protected Map<String, String> getParams() {
                         Map<String, String> MyData = new HashMap<>();
                         MyData.put("name", name.getText().toString());
@@ -140,5 +143,15 @@ public class LoginFragment extends Fragment {
             }
         });
         return view;
+    }
+    private void FileKi(String data, Context context) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("loginToken.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
     }
 }
