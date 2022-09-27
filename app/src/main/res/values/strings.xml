@@ -9,4 +9,5 @@
     <string name="username">Username</string>
     <string name="marktmart_login">MarktMart Login</string>
     <string name="login">Login</string>
+    <string name="remember_me">Remember me</string>
 </resources>

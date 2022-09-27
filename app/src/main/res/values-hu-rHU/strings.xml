@@ -10,4 +10,5 @@
     <string name="username">Felhasználónév</string>
     <string name="marktmart_login">MarktMarkt Bejelentkezés</string>
     <string name="login">Bejelentkezés</string>
+    <string name="remember_me">Jegyezz meg</string>
 </resources>
