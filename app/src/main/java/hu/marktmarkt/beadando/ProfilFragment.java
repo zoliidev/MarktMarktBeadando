@@ -21,10 +21,10 @@ import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Profil#newInstance} factory method to
+ * Use the {@link ProfilFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Profil extends Fragment {
+public class ProfilFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,7 +35,7 @@ public class Profil extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public Profil() {
+    public ProfilFragment() {
         // Required empty public constructor
     }
 
@@ -48,8 +48,8 @@ public class Profil extends Fragment {
      * @return A new instance of fragment Profil.
      */
     // TODO: Rename and change types and number of parameters
-    public static Profil newInstance(String param1, String param2) {
-        Profil fragment = new Profil();
+    public static ProfilFragment newInstance(String param1, String param2) {
+        ProfilFragment fragment = new ProfilFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

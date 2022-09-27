@@ -2,30 +2,23 @@ package hu.marktmarkt.beadando;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
     private final MainFragment mainFragment = new MainFragment();
     private final AkciokFragment akciokFragment = new AkciokFragment();
-    private final Profil profil = new Profil();
+    private final ProfilFragment profilFragment = new ProfilFragment();
     private static String loginToken;
 
 
@@ -52,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                         replaceFragment(akciokFragment);
                         break;
                     case R.id.itmProfil:
-                        replaceFragment(profil);
+                        replaceFragment(profilFragment);
                         break;
                 }
                 return false;

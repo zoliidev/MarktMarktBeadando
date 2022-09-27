@@ -74,12 +74,13 @@ public class LoginFragment extends Fragment {
         }
     }
 
+    BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
+    EditText search = requireActivity().findViewById(R.id.searchBar);
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Keresősáv, navbar elrejtés
-        BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
         navBar.setVisibility(View.GONE);
-        EditText search = requireActivity().findViewById(R.id.searchBar);
         search.setVisibility(View.GONE);
         //---
 
@@ -137,7 +138,6 @@ public class LoginFragment extends Fragment {
                 requestQueue.add(getToken);
             }
         });
-
         return view;
     }
 }
