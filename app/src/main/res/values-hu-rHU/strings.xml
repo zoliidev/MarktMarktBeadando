@@ -13,4 +13,5 @@
     <string name="remember_me">Jegyezz meg</string>
     <string name="loading">Betöltés...</string>
     <string name="marktmarkt">MarktMarkt</string>
+    <string name="logout">Kijelenetkezés</string>
 </resources>
