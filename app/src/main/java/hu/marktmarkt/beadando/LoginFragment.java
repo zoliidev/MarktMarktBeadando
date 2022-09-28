@@ -1,7 +1,6 @@
 package hu.marktmarkt.beadando;
 
-import android.app.Activity;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,28 +11,22 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCaller;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import hu.marktmarkt.beadando.Collection.FileManager;
+import hu.marktmarkt.beadando.Collection.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,79 +76,79 @@ public class LoginFragment extends Fragment {
         }
     }
 
+    private Util change;
+    private Button logIn;
+    private EditText name;
+    private EditText pass;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    private Switch sw;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //Keresősáv, navbar elrejtés
-        BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
-        EditText search = requireActivity().findViewById(R.id.searchBar);
-        navBar.setVisibility(View.GONE);
-        search.setVisibility(View.GONE);
-        //---
-
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+        change = new Util();
 
-        Button logIn = view.findViewById(R.id.loginBt);
-        EditText name = view.findViewById(R.id.loginUsername);
-        EditText pass = view.findViewById(R.id.loginPassword);
-        Switch sw = view.findViewById(R.id.login_sw);
+        logIn = view.findViewById(R.id.loginBt);
+        name = view.findViewById(R.id.loginUsername);
+        pass = view.findViewById(R.id.loginPassword);
+        sw = view.findViewById(R.id.login_sw);
 
-        if (Objects.equals(new FileManager().fileOlvas(requireContext(), "saveMe.txt"), "\ntrue")) {
+        change.removeBars(requireActivity());
+
+        if (Objects.equals(new FileManager().fileOlvas(requireContext(), "saveMe.txt"), "\ntrue"))
             sw.setChecked(true);
-        }
 
-            sw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Toast.makeText(requireContext(), sw.isChecked() + " teszt", Toast.LENGTH_LONG).show();
-                new FileManager().FileKi(sw.isChecked() + "", requireContext(), "saveMe.txt");
-            }
-        });
+        sw.setOnClickListener(swListener);
 
-        logIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-                String url = "https://oldal.vaganyzoltan.hu/api/login.php";
-
-                StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
-                    JSONObject object;
-                    String logToken = null;
-                    String resp = "Hiba";
-                    try {
-                        object = new JSONObject(response);
-                        if (!object.isNull("token")) logToken = object.get("token").toString();
-                        if (!object.isNull("resp")) resp = object.get("resp").toString();
-                    } catch (JSONException e) {
-                        Log.e("SetToken @ LoginFragment.java", e.getMessage());
-                    }
-
-                    if (logToken != null) {
-                        MainActivity.setToken(logToken);
-                        Toast.makeText(requireContext(), "Sikeres bejelentkezés!", Toast.LENGTH_LONG).show();
-
-                        FragmentManager fragmentManager = getParentFragmentManager();
-                        FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.setReorderingAllowed(true);
-                        transaction.replace(R.id.fragmentView, new MainFragment(), null);
-                        search.setVisibility(View.VISIBLE);
-                        navBar.setVisibility(View.VISIBLE);
-                        transaction.commit();
-                        new FileManager().FileKi(logToken, requireContext(), "loginToken.txt");
-                    } else {
-                        Toast.makeText(getContext(), resp, Toast.LENGTH_LONG).show();
-                    }
-
-                }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
-                    protected Map<String, String> getParams() {
-                        Map<String, String> MyData = new HashMap<>();
-                        MyData.put("name", name.getText().toString());
-                        MyData.put("password", pass.getText().toString());
-                        return MyData;
-                    }
-                };
-                requestQueue.add(getToken);
-            }
-        });
+        logIn.setOnClickListener(loginListener);
         return view;
     }
+
+    View.OnClickListener swListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            new FileManager().FileKi(sw.isChecked() + "", requireContext(), "saveMe.txt");
+        }
+    };
+
+    View.OnClickListener loginListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+            String url = "https://oldal.vaganyzoltan.hu/api/login.php";
+
+            StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+                JSONObject object;
+                String logToken = null;
+                String resp = "Hiba";
+                try {
+                    object = new JSONObject(response);
+                    if (!object.isNull("token")) logToken = object.get("token").toString();
+                    if (!object.isNull("resp")) resp = object.get("resp").toString();
+                } catch (JSONException e) {
+                    Log.e("SetToken @ LoginFragment.java", e.getMessage());
+                }
+
+                if (logToken != null) {
+                    MainActivity.setToken(logToken);
+                    Toast.makeText(requireContext(), "Sikeres bejelentkezés!", Toast.LENGTH_LONG).show();
+
+                    change.addBars(requireActivity());
+                    change.setFragment(getParentFragmentManager(), new MainFragment());
+                    new FileManager().FileKi(logToken, requireContext(), "loginToken.txt");
+                } else {
+                    Toast.makeText(getContext(), resp, Toast.LENGTH_LONG).show();
+                }
+
+            }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> MyData = new HashMap<>();
+                    MyData.put("name", name.getText().toString());
+                    MyData.put("password", pass.getText().toString());
+                    return MyData;
+                }
+            };
+            requestQueue.add(getToken);
+        }
+    };
 }

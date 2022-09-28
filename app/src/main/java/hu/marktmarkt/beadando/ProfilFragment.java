@@ -3,6 +3,8 @@ package hu.marktmarkt.beadando;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +17,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import hu.marktmarkt.beadando.Collection.FileManager;
+import hu.marktmarkt.beadando.Collection.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,6 +73,7 @@ public class ProfilFragment extends Fragment {
     }
 
     private Button teszt;
+    private Button logout;
     private EditText prodId;
 
     @Override
@@ -75,26 +82,37 @@ public class ProfilFragment extends Fragment {
 
         teszt = view.findViewById(R.id.button);
         prodId = view.findViewById(R.id.prodID);
+        logout = view.findViewById(R.id.btnLogout);
 
-        //TODO: ezt kivinni ebből a függvényből
-        teszt.setOnClickListener(view1 -> {
-            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-            String url = "https://oldal.vaganyzoltan.hu/api/product.php";
-
-            StringRequest getProd = new StringRequest(Request.Method.POST, url, response -> {
-                Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
-                //TODO: kapott választ át kell alakítani egy json objektummá, majd ebből hozzunk létre egy új fragmentet.
-            }, error -> Toast.makeText(getContext(), "Hiba történt!", Toast.LENGTH_LONG).show()) {
-                protected Map<String, String> getParams() {
-                    Map<String, String> MyData = new HashMap<>();
-                    MyData.put("id", prodId.getText().toString());
-                    MyData.put("token", MainActivity.getLoginToken());
-                    return MyData;
-                }
-            };
-            requestQueue.add(getProd);
-        });
+        teszt.setOnClickListener(tesztProd);
+        logout.setOnClickListener(logoutListen);
 
         return view;
     }
+
+    View.OnClickListener tesztProd = view1 -> {
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+        String url = "https://oldal.vaganyzoltan.hu/api/product.php";
+
+        StringRequest getProd = new StringRequest(Request.Method.POST, url, response -> {
+            Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
+        }, error -> Toast.makeText(getContext(), "Hiba történt!", Toast.LENGTH_LONG).show()) {
+            protected Map<String, String> getParams() {
+                Map<String, String> MyData = new HashMap<>();
+                MyData.put("id", prodId.getText().toString());
+                MyData.put("token", MainActivity.getLoginToken());
+                return MyData;
+            }
+        };
+        requestQueue.add(getProd);
+    };
+
+    View.OnClickListener logoutListen = view -> {
+        Toast.makeText(getContext(), "Sikeres kijelentkezés", Toast.LENGTH_LONG).show();
+        MainActivity.setToken("");
+        new FileManager().FileKi("false", requireContext(), "saveMe.txt");
+        new FileManager().FileKi("", requireContext(), "loginToken.txt");
+        new Util().removeBars(requireActivity());
+        new Util().setFragment(getParentFragmentManager(), new LoginFragment());
+    };
 }
