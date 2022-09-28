@@ -3,6 +3,8 @@ package hu.marktmarkt.beadando;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +17,20 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import hu.marktmarkt.beadando.Collection.FileManager;
+import hu.marktmarkt.beadando.Collection.Util;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Profil#newInstance} factory method to
+ * Use the {@link ProfilFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Profil extends Fragment {
+public class ProfilFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,7 +41,7 @@ public class Profil extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public Profil() {
+    public ProfilFragment() {
         // Required empty public constructor
     }
 
@@ -48,8 +54,8 @@ public class Profil extends Fragment {
      * @return A new instance of fragment Profil.
      */
     // TODO: Rename and change types and number of parameters
-    public static Profil newInstance(String param1, String param2) {
-        Profil fragment = new Profil();
+    public static ProfilFragment newInstance(String param1, String param2) {
+        ProfilFragment fragment = new ProfilFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -67,6 +73,7 @@ public class Profil extends Fragment {
     }
 
     private Button teszt;
+    private Button logout;
     private EditText prodId;
 
     @Override
@@ -75,27 +82,37 @@ public class Profil extends Fragment {
 
         teszt = view.findViewById(R.id.button);
         prodId = view.findViewById(R.id.prodID);
+        logout = view.findViewById(R.id.btnLogout);
 
-
-        //TODO: ezt kivinni ebből a függvényből
-        teszt.setOnClickListener(view1 -> {
-            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-            String url = "https://oldal.vaganyzoltan.hu/api/product.php";
-
-            StringRequest getProd = new StringRequest(Request.Method.POST, url, response -> {
-                Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
-                //TODO: kapott választ át kell alakítani egy json objektummá, majd ebből hozzunk létre egy új fragmentet.
-            }, error -> Toast.makeText(getContext(), "Hiba történt!", Toast.LENGTH_LONG).show()) {
-                protected Map<String, String> getParams() {
-                    Map<String, String> MyData = new HashMap<>();
-                    MyData.put("id", prodId.getText().toString());
-                    MyData.put("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjY2NzA0OTgyfQ.CRuB5v02bJ4wOnKKCcz3MepWDQ94_6AIajVXkXfw_6Q");
-                    return MyData;
-                }
-            };
-            requestQueue.add(getProd);
-        });
+        teszt.setOnClickListener(tesztProd);
+        logout.setOnClickListener(logoutListen);
 
         return view;
     }
+
+    View.OnClickListener tesztProd = view1 -> {
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+        String url = "https://oldal.vaganyzoltan.hu/api/product.php";
+
+        StringRequest getProd = new StringRequest(Request.Method.POST, url, response -> {
+            Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
+        }, error -> Toast.makeText(getContext(), "Hiba történt!", Toast.LENGTH_LONG).show()) {
+            protected Map<String, String> getParams() {
+                Map<String, String> MyData = new HashMap<>();
+                MyData.put("id", prodId.getText().toString());
+                MyData.put("token", MainActivity.getLoginToken());
+                return MyData;
+            }
+        };
+        requestQueue.add(getProd);
+    };
+
+    View.OnClickListener logoutListen = view -> {
+        Toast.makeText(getContext(), "Sikeres kijelentkezés", Toast.LENGTH_LONG).show();
+        MainActivity.setToken("");
+        new FileManager().FileKi("false", requireContext(), "saveMe.txt");
+        new FileManager().FileKi("", requireContext(), "loginToken.txt");
+        new Util().removeBars(requireActivity());
+        new Util().setFragment(getParentFragmentManager(), new LoginFragment());
+    };
 }
