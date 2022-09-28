@@ -11,5 +11,6 @@
     <string name="marktmart_login">MarktMarkt Bejelentkezés</string>
     <string name="login">Bejelentkezés</string>
     <string name="remember_me">Jegyezz meg</string>
-    <string name="loading">MarktMarkt\\nBetöltés...</string>
+    <string name="loading">Betöltés...</string>
+    <string name="marktmarkt">MarktMarkt</string>
 </resources>

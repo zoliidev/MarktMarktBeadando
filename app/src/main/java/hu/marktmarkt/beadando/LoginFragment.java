@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCaller;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -30,6 +32,8 @@ import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import hu.marktmarkt.beadando.Collection.FileManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -93,31 +97,41 @@ public class LoginFragment extends Fragment {
         Button logIn = view.findViewById(R.id.loginBt);
         EditText name = view.findViewById(R.id.loginUsername);
         EditText pass = view.findViewById(R.id.loginPassword);
+        Switch sw = view.findViewById(R.id.login_sw);
+
+        if (Objects.equals(new FileManager().fileOlvas(requireContext(), "saveMe.txt"), "\ntrue")) {
+            sw.setChecked(true);
+        }
+
+            sw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(requireContext(), sw.isChecked() + " teszt", Toast.LENGTH_LONG).show();
+                new FileManager().FileKi(sw.isChecked() + "", requireContext(), "saveMe.txt");
+            }
+        });
 
         logIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("Login", "Katt");
                 RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
                 String url = "https://oldal.vaganyzoltan.hu/api/login.php";
 
                 StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
-                    //MainActivity.loginToken = response;
-
                     JSONObject object;
                     String logToken = null;
                     String resp = "Hiba";
                     try {
                         object = new JSONObject(response);
-                        if(!object.isNull("token")) logToken = object.get("token").toString();
-                        if(!object.isNull("resp")) resp = object.get("resp").toString();
+                        if (!object.isNull("token")) logToken = object.get("token").toString();
+                        if (!object.isNull("resp")) resp = object.get("resp").toString();
                     } catch (JSONException e) {
                         Log.e("SetToken @ LoginFragment.java", e.getMessage());
                     }
 
                     if (logToken != null) {
                         MainActivity.setToken(logToken);
-                        Toast.makeText(getContext(), "Sikeres bejelentkezés!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(), "Sikeres bejelentkezés!", Toast.LENGTH_LONG).show();
 
                         FragmentManager fragmentManager = getParentFragmentManager();
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -126,8 +140,8 @@ public class LoginFragment extends Fragment {
                         search.setVisibility(View.VISIBLE);
                         navBar.setVisibility(View.VISIBLE);
                         transaction.commit();
-                        FileKi(logToken, requireContext());
-                    }else{
+                        new FileManager().FileKi(logToken, requireContext(), "loginToken.txt");
+                    } else {
                         Toast.makeText(getContext(), resp, Toast.LENGTH_LONG).show();
                     }
 
@@ -143,15 +157,5 @@ public class LoginFragment extends Fragment {
             }
         });
         return view;
-    }
-    private void FileKi(String data, Context context) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("loginToken.txt", Context.MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
     }
 }
