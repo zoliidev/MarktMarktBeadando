@@ -1,5 +1,6 @@
 package hu.marktmarkt.beadando;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -96,6 +98,42 @@ public class ProfilFragment extends Fragment {
 
         StringRequest getProd = new StringRequest(Request.Method.POST, url, response -> {
             Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
+                //JSON product objektum (még nincs kész)
+                String name = "\n";
+                String price = "\n";
+                String description = "\n";
+                String img = "";
+                String testText = "Product:\n\t";
+
+                try {
+                    JSONObject productObject = new JSONObject(response);
+                    //ez itt nem vizsgál megfelelően jelenleg
+                    if(!productObject.isNull("name")) name = productObject.get("name").toString();
+                    if(!productObject.isNull("price")) price = productObject.get("price").toString();
+                    if(!productObject.isNull("description")) description = productObject.get("description").toString();
+                    if(!productObject.isNull("img")) img = productObject.get("img").toString();
+
+                    Fragment fragment = new ProductFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("name", name);
+                    bundle.putString("price", price);
+                    bundle.putString("desc", description);
+                    bundle.putString("img", img);
+                    fragment.setArguments(bundle);
+
+                    //fragment váltás productra
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setReorderingAllowed(true);
+                    transaction.replace(R.id.fragmentView, fragment, null);
+
+                    transaction.commit();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //testText += name + price + description + img;
+                //Toast.makeText(getContext(), testText, Toast.LENGTH_LONG).show();
+
         }, error -> Toast.makeText(getContext(), "Hiba történt!", Toast.LENGTH_LONG).show()) {
             protected Map<String, String> getParams() {
                 Map<String, String> MyData = new HashMap<>();
