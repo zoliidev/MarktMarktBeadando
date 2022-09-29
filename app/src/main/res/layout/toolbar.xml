@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/design_default_color_primary"
+    android:theme="@style/ToolbarColoredBackArrow"
+    android:gravity="center"
+    android:titleMarginTop="13dp"
+    android:titleTextColor="@color/white"
+    android:fitsSystemWindows="true"
+    android:elevation="4dp">
+
+</android.widget.Toolbar>
