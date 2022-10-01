@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.InputStream;
@@ -64,9 +65,10 @@ public class ProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
         BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
         EditText search = requireActivity().findViewById(R.id.searchBar);
+        ImageView imageView = (ImageView) view.findViewById(R.id.productImageView);
         search.setVisibility(View.GONE);
         navBar.setVisibility(View.GONE);
-        Fragment fragment = new MainFragment();
+        Fragment fragment = new ProfilFragment();
 
         //Toolbar + gomb
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -74,13 +76,11 @@ public class ProductFragment extends Fragment {
         toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
-            public void onBackPressed() {
+            private void onBackPressed() {
                 FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setReorderingAllowed(true);
                 transaction.replace(R.id.fragmentView, fragment, null);
-                search.setVisibility(View.VISIBLE);
-                navBar.setVisibility(View.VISIBLE);
                 transaction.commit();
             }
 
@@ -90,8 +90,13 @@ public class ProductFragment extends Fragment {
             }
         });
 
-        new DownloadImageTask((ImageView) view.findViewById(R.id.productImageView))
-                .execute(imgUrl);
+        //Kép megjelenítés Glide
+        //alapértelmezetten aszinkronban fut
+        Glide.with(this)
+                .load(imgUrl)
+                .fitCenter()
+                .error(R.drawable.placeholder_image)
+                .into(imageView);
 
         TextView productPriceTextView = view.findViewById(R.id.productPriceTextView);
         productPriceTextView.setText("Ár: " + price + " Ft");
@@ -99,29 +104,5 @@ public class ProductFragment extends Fragment {
         productTextView.setText(description);
 
         return view;
-    }
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView image;
-
-        public DownloadImageTask(ImageView image) {
-            this.image = image;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap bitmap= null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                bitmap = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Hiba: ", e.getMessage());
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            image.setImageBitmap(result);
-        }
     }
 }
