@@ -1,7 +1,5 @@
 package hu.marktmarkt.beadando;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -13,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.fragment.app.Fragment;
@@ -22,13 +19,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.android.volley.VolleyError;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.util.Objects;
 
 public class ProductFragment extends Fragment {
 
@@ -60,7 +53,6 @@ public class ProductFragment extends Fragment {
             price = bundle.getString("price", price);
             description = bundle.getString("desc", description);
             img = bundle.getString("img", img);
-            //img file-ok directory: https://oldal.vaganyzoltan.hu/prod-img/
             imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/".concat(img);
         }
 
@@ -68,9 +60,7 @@ public class ProductFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
         BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
         EditText search = requireActivity().findViewById(R.id.searchBar);
