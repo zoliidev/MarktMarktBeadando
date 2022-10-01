@@ -13,6 +13,15 @@
 >Kimenet -> Json tábla:
 > - JsonWebToken (30 napos lejárati idővel)
 
+> #### Validate-API
+> https://oldal.vaganyzoltan.hu/api/validate
+> POST-request-ben kell elküldeni:
+> - token
+
+>Kimenet -> Json tábla:
+> - loggedIN -> true || false
+> - resp -> felhasználó számára olvasható hibaüzenet
+
 > #### Product-API
 > https://oldal.vaganyzoltan.hu/api/product.php
 > POST-request-ben kell elküldeni:
