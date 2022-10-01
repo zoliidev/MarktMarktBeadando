@@ -25,5 +25,15 @@
 > - termék leírása
 > - termék képe (a webszerverre mutat azaz: https://oldal.vaganyzoltan.hu/prod-img/<IMG változó>
 
+> #### ProductList-API
+> https://oldal.vaganyzoltan.hu/api/getProdList.php
+> POST-request-ben kell elküldeni:
+> - limit (hány termék jöjjön vissza egy lekéréssel)
+> - offset (kezdőpont, pld ha 20 terméket lekértél akkor a 20-adiktól kezdjen)
+> - token
+>
+>Kimenet -> Json tábla:
+> - termék-id lista
+
 >Tervezés: Figma
 > - https://www.figma.com/file/LpYaS9CWV5I1zuZ5ZhE4kT/MarktMarkt-tervek?node-id=0%3A1
