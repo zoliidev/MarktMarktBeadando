@@ -17,6 +17,7 @@
 > https://oldal.vaganyzoltan.hu/api/validate
 > POST-request-ben kell elküldeni:
 > - token
+> 
 >Kimenet -> Json tábla:
 > - loggedIN -> true || false
 > - resp -> felhasználó számára olvasható hibaüzenet
