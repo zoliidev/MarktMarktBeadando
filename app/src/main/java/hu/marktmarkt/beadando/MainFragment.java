@@ -189,45 +189,6 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void loadMore() {
-        Log.i("Görgetés", "Betöltés...");
-        offset = offset + 20;
-        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-        String url = "https://oldal.vaganyzoltan.hu/api/getProdList.php";
-
-        StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
-            JSONArray loadmoreProd = new JSONArray();
-            try {
-                loadmoreProd = new JSONArray(response);
-            } catch (JSONException e) {
-                Log.e("GetProduct @ MainFragment.java", e.getMessage());
-            }
-
-            try {
-                for (int i = 0; i < loadmoreProd.length(); i++) {
-                    String obj = loadmoreProd.getString(i);
-                    object.put(obj);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            adapter = new RecycleViewAdapter(requireContext(), object);
-            adapter.setClickListener(itemClickListener);
-            recyclerView.setAdapter(adapter);
-
-        }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
-            protected Map<String, String> getParams() {
-                Map<String, String> MyData = new HashMap<>();
-                MyData.put("token", MainActivity.getLoginToken());
-                MyData.put("limit", String.valueOf(limit));
-                MyData.put("offset", String.valueOf(offset));
-                return MyData;
-            }
-        };
-        requestQueue.add(getToken);
-    }
-
     RecycleViewAdapter.ItemClickListener itemClickListener = new RecycleViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
