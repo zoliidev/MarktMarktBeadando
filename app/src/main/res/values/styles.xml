@@ -3,4 +3,8 @@
     <style name="ToolbarColoredBackArrow" parent="android:Widget.Toolbar">
         <item name="android:textColorSecondary">#fff</item>
     </style>
+    <style name="Widget.Theme.MarktMarktBeadando.MyView" parent="">
+        <item name="android:background">@color/gray_400</item>
+        <item name="exampleColor">@color/light_blue_400</item>
+    </style>
 </resources>
