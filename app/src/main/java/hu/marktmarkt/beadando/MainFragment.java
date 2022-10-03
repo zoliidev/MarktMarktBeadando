@@ -1,5 +1,6 @@
 package hu.marktmarkt.beadando;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -108,7 +109,8 @@ public class MainFragment extends Fragment {
                     if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                         count++;
                         if (count < 10) {
-                            loadMore();
+                            //loadMore();
+                            new loadMoreAsync().execute();
                         }
                     }
                 }
@@ -126,6 +128,65 @@ public class MainFragment extends Fragment {
         };
         requestQueue.add(loadProds);
         return view;
+    }
+
+    class loadMoreAsync extends AsyncTask<Void, Integer, String> {
+        String TAG = getClass().getSimpleName();
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.d(TAG + " PreExceute","pre Exceute......");
+        }
+
+        protected String doInBackground(Void...arg0) {
+            Log.i("Görgetés", "Betöltés...");
+            offset = offset + 20;
+            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+            String url = "https://oldal.vaganyzoltan.hu/api/getProdList.php";
+
+            StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+                JSONArray loadmoreProd = new JSONArray();
+                try {
+                    loadmoreProd = new JSONArray(response);
+                } catch (JSONException e) {
+                    Log.e("GetProduct @ MainFragment.java", e.getMessage());
+                }
+
+                try {
+                    for (int i = 0; i < loadmoreProd.length(); i++) {
+                        String obj = loadmoreProd.getString(i);
+                        object.put(obj);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                adapter = new RecycleViewAdapter(requireContext(), object);
+                adapter.setClickListener(itemClickListener);
+                recyclerView.setAdapter(adapter);
+
+            }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> MyData = new HashMap<>();
+                    MyData.put("token", MainActivity.getLoginToken());
+                    MyData.put("limit", String.valueOf(limit));
+                    MyData.put("offset", String.valueOf(offset));
+                    return MyData;
+                }
+            };
+            requestQueue.add(getToken);
+            return "Lefutott!";
+        }
+
+        protected void onProgressUpdate(Integer...a) {
+            super.onProgressUpdate(a);
+            Log.d(TAG + " onProgressUpdate", "ELŐREHALADÁS: " + a[0]);
+        }
+
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.d(TAG + " onPostExecute", "" + result);
+        }
     }
 
     private void loadMore() {

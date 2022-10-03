@@ -41,7 +41,11 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             e.printStackTrace();
         }
         String[] darab = info.split("@");
-        holder.myTextView.setText(darab[0] + " " + darab[1] + " " + darab[2] + " " + darab[3]); //Terméknév
+        //0 - id
+        //1 - név
+        //2 - ár
+        //3 - kép
+        holder.myTextView.setText(darab[1] + "\n" + darab[2] + "Ft"); //Terméknév
     }
 
     @Override
