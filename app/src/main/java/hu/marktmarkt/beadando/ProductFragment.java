@@ -1,14 +1,12 @@
 package hu.marktmarkt.beadando;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
@@ -21,8 +19,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.io.InputStream;
 
 public class ProductFragment extends Fragment {
 
@@ -66,6 +62,8 @@ public class ProductFragment extends Fragment {
         BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
         EditText search = requireActivity().findViewById(R.id.searchBar);
         ImageView imageView = (ImageView) view.findViewById(R.id.productImageView);
+        Button buy = (Button) view.findViewById(R.id.buyBt);
+        ImageButton favourite = (ImageButton) view.findViewById(R.id.favBt);
         search.setVisibility(View.GONE);
         navBar.setVisibility(View.GONE);
         Fragment fragment = new ProfilFragment();
@@ -95,13 +93,38 @@ public class ProductFragment extends Fragment {
         Glide.with(this)
                 .load(imgUrl)
                 .fitCenter()
-                .error(R.drawable.placeholder_image)
+                .placeholder(R.drawable.placeholder_image)
+                .fallback(R.drawable.placeholder_image)
                 .into(imageView);
 
-        TextView productPriceTextView = view.findViewById(R.id.productPriceTextView);
-        productPriceTextView.setText("Ár: " + price + " Ft");
+        TextView productTitleTextView = view.findViewById(R.id.productTitleTextView);
+        productTitleTextView.setText(name + "\nÁr: " + price + " Ft");
         TextView productTextView = view.findViewById(R.id.productTextView);
         productTextView.setText(description);
+
+        buy.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        favourite.setOnClickListener(new View.OnClickListener() {
+            private int count = 0;
+
+            @Override
+            public void onClick(View view) {
+                count++;
+                if(count % 2 == 0)
+                {
+                    favourite.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                }
+                else
+                {
+                    favourite.setImageResource(R.drawable.ic_baseline_favorite_24);
+                }
+            }
+        });
 
         return view;
     }

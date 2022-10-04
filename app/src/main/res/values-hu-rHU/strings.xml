@@ -14,4 +14,7 @@
     <string name="loading">Betöltés...</string>
     <string name="marktmarkt">MarktMarkt</string>
     <string name="logout">Kijelenetkezés</string>
+    <string name="buy">Kosárba</string>
+    <string name="favourite">szív</string>
+    <string name="textview">TextView</string>
 </resources>

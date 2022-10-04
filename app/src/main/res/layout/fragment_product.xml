@@ -31,41 +31,67 @@
 
                 <ImageView
                     android:id="@+id/productImageView"
-                    android:adjustViewBounds="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxHeight="200dp"
                     android:layout_marginTop="25dp"
-                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                    android:adjustViewBounds="true"
+                    android:maxHeight="200dp"
+                    tools:srcCompat="@drawable/placeholder_image" />
 
                 <TextView
-                    android:id="@+id/productPriceTextView"
+                    android:id="@+id/productTitleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
                     android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textSize="25dp"
-                    android:textStyle="bold"
+                    android:layout_margin="15dp"
                     android:fontFamily="sans-serif-medium"
-                    />
+                    android:gravity="center"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/productTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
                     android:layout_gravity="center"
-                    android:textSize="30px"
+                    android:layout_margin="15dp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="TextView" />
+                    android:text="@string/textview"
+                    android:textSize="18sp" />
 
-                <Button
-                    android:id="@+id/inCartBt"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Kosárba"
-                    android:visibility="visible" />
+                    android:layout_height="60dp"
+                    android:layout_margin="10dp"
+                    android:gravity="center|center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:textAlignment="center">
+
+                    <Button
+                        android:id="@+id/buyBt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".05"
+                        android:text="@string/buy"
+                        android:visibility="visible" />
+
+                    <ImageButton
+                        android:id="@+id/favBt"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight=".025"
+                        android:background="@drawable/rounded_button"
+                        android:minHeight="48dp"
+                        android:padding="5dp"
+                        android:scaleType="fitCenter"
+
+                        app:srcCompat="@drawable/ic_baseline_favorite_border_24"
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+                </LinearLayout>
 
             </LinearLayout>
         </ScrollView>

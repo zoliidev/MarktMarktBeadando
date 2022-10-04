@@ -13,4 +13,7 @@
     <string name="loading">Loading...</string>
     <string name="marktmarkt">MarktMarkt</string>
     <string name="logout">Logout</string>
+    <string name="buy">To cart</string>
+    <string name="favourite">hearth</string>
+    <string name="textview">TextView</string>
 </resources>
