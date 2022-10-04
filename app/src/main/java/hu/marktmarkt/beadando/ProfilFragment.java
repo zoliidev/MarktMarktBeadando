@@ -102,7 +102,7 @@ public class ProfilFragment extends Fragment {
         String url = "https://oldal.vaganyzoltan.hu/api/product.php";
 
         StringRequest getProd = new StringRequest(Request.Method.POST, url, response -> {
-            Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
                 //JSON product objektum (még nincs kész)
                 String name = "\n";
                 String price = "\n";
