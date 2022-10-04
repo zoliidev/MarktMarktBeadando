@@ -83,6 +83,12 @@
         <action
             android:id="@+id/action_productFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_productFragment_to_ProfilFragment"
+            app:destination="@id/ProfilFragment" />
+        <action
+            android:id="@+id/action_productFragment_to_akciókFragment"
+            app:destination="@id/akciókFragment" />
     </fragment>
     <fragment
         android:id="@+id/spashScreen"

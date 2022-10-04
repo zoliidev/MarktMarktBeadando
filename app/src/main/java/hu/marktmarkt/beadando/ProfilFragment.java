@@ -17,6 +17,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,6 +82,10 @@ public class ProfilFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profil, container, false);
+        BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
+        EditText search = requireActivity().findViewById(R.id.searchBar);
+        search.setVisibility(View.VISIBLE);
+        navBar.setVisibility(View.VISIBLE);
 
         teszt = view.findViewById(R.id.button);
         prodId = view.findViewById(R.id.prodID);
@@ -127,7 +132,7 @@ public class ProfilFragment extends Fragment {
                     transaction.setReorderingAllowed(true);
                     transaction.replace(R.id.fragmentView, fragment, null);
 
-                    transaction.commit();
+                    transaction.addToBackStack(null).commit();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

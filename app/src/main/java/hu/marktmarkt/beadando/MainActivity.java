@@ -28,11 +28,6 @@ import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -45,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private final AkciokFragment akciokFragment = new AkciokFragment();
     private final ProfilFragment profilFragment = new ProfilFragment();
     private static String loginToken;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentView, frg);
-        fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack(null).commit();
     }
 
     public static void setToken(String token) {

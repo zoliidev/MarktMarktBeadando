@@ -1,14 +1,12 @@
 package hu.marktmarkt.beadando;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
@@ -19,9 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.io.InputStream;
 
 public class ProductFragment extends Fragment {
 
@@ -64,9 +61,12 @@ public class ProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
         BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
         EditText search = requireActivity().findViewById(R.id.searchBar);
+        ImageView imageView = (ImageView) view.findViewById(R.id.productImageView);
+        Button buy = (Button) view.findViewById(R.id.buyBt);
+        ImageButton favourite = (ImageButton) view.findViewById(R.id.favBt);
         search.setVisibility(View.GONE);
         navBar.setVisibility(View.GONE);
-        Fragment fragment = new MainFragment();
+        Fragment fragment = new ProfilFragment();
 
         //Toolbar + gomb
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -74,13 +74,11 @@ public class ProductFragment extends Fragment {
         toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
-            public void onBackPressed() {
+            private void onBackPressed() {
                 FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setReorderingAllowed(true);
                 transaction.replace(R.id.fragmentView, fragment, null);
-                search.setVisibility(View.VISIBLE);
-                navBar.setVisibility(View.VISIBLE);
                 transaction.commit();
             }
 
@@ -90,38 +88,44 @@ public class ProductFragment extends Fragment {
             }
         });
 
-        new DownloadImageTask((ImageView) view.findViewById(R.id.productImageView))
-                .execute(imgUrl);
+        //Kép megjelenítés Glide
+        //alapértelmezetten aszinkronban fut
+        Glide.with(this)
+                .load(imgUrl)
+                .fitCenter()
+                .placeholder(R.drawable.placeholder_image)
+                .fallback(R.drawable.placeholder_image)
+                .into(imageView);
 
-        TextView productPriceTextView = view.findViewById(R.id.productPriceTextView);
-        productPriceTextView.setText("Ár: " + price + " Ft");
+        TextView productTitleTextView = view.findViewById(R.id.productTitleTextView);
+        productTitleTextView.setText(name + "\nÁr: " + price + " Ft");
         TextView productTextView = view.findViewById(R.id.productTextView);
         productTextView.setText(description);
 
-        return view;
-    }
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView image;
+        buy.setOnClickListener(new View.OnClickListener() {
 
-        public DownloadImageTask(ImageView image) {
-            this.image = image;
-        }
+            @Override
+            public void onClick(View view) {
 
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap bitmap= null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                bitmap = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Hiba: ", e.getMessage());
-                e.printStackTrace();
             }
-            return bitmap;
-        }
+        });
+        favourite.setOnClickListener(new View.OnClickListener() {
+            private int count = 0;
 
-        protected void onPostExecute(Bitmap result) {
-            image.setImageBitmap(result);
-        }
+            @Override
+            public void onClick(View view) {
+                count++;
+                if(count % 2 == 0)
+                {
+                    favourite.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                }
+                else
+                {
+                    favourite.setImageResource(R.drawable.ic_baseline_favorite_24);
+                }
+            }
+        });
+
+        return view;
     }
 }
