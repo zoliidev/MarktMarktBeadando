@@ -105,11 +105,11 @@ public class ProfilFragment extends Fragment {
         StringRequest getProd = new StringRequest(Request.Method.POST, url, response -> {
             //Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
             //JSON product objektum (még nincs kész)
-            String name = "\n";
-            String price = "\n";
-            String description = "\n";
-            String img = "";
-            String testText = "Product:\n\t";
+            //String name = "\n";
+            //String price = "\n";
+            //String description = "\n";
+            //String img = "";
+            //String testText = "Product:\n\t";
 
             Product product = null;
             try {
@@ -122,9 +122,11 @@ public class ProfilFragment extends Fragment {
                 if (!productObject.isNull("img") &&
                         !productObject.isNull("description") &&
                         !productObject.isNull("price") &&
-                        !productObject.isNull("name")) {
+                        !productObject.isNull("name") &&
+                        !productObject.isNull("id")) {
 
-                    product = new Product(productObject.getString("name"),
+                    product = new Product(productObject.getInt("id"),
+                            productObject.getString("name"),
                             productObject.getInt("price"),
                             productObject.getString("description"),
                             productObject.getString("img"));
