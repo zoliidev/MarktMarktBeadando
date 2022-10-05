@@ -5,23 +5,27 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
+
+import hu.marktmarkt.beadando.Model.Product;
 
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
 
-    private final JSONArray mData;
+    private final ArrayList<Product> products;
     private final LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
-    RecycleViewAdapter(Context context, JSONArray data) {
+    RecycleViewAdapter(Context context, ArrayList<Product> products) {
         this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+        this.products = products;
     }
 
     @Override
@@ -34,31 +38,33 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String info = "";
-        try {
-            info = mData.getString(position);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String[] darab = info.split("@");
-        //0 - id
-        //1 - név
-        //2 - ár
-        //3 - kép
-        holder.myTextView.setText(darab[1] + "\n" + darab[2] + "Ft"); //Terméknév
+
+        String imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/";
+
+        imgUrl = imgUrl.concat(products.get(position).getImg());
+        holder.myTextView.setText(products.get(position).getName() + "\n" + products.get(position).getPrice() + "Ft"); //Terméknév
+        //holder.myImageView.setImageResource();
+        Glide.with(holder.myImageView.getContext())
+                .load(imgUrl)
+                .fitCenter()
+                .placeholder(R.drawable.placeholder_image)
+                .fallback(R.drawable.placeholder_image)
+                .into(holder.myImageView);//Termékkép
     }
 
     @Override
     public int getItemCount() {
-        return mData.length();
+        return products.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView myTextView;
+        ImageView myImageView;
 
         ViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.prodName);
+            myImageView = itemView.findViewById(R.id.cardImageView);
             itemView.setOnClickListener(this);
         }
 
@@ -68,8 +74,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         }
     }
 
-    String getItem(int id) throws JSONException {
-        return mData.getString(id);
+    Product getItem(int id) {
+        return products.get(id);
     }
 
     void setClickListener(ItemClickListener itemClickListener) {

@@ -27,6 +27,7 @@ import java.util.Map;
 
 import hu.marktmarkt.beadando.Collection.FileManager;
 import hu.marktmarkt.beadando.Collection.Util;
+import hu.marktmarkt.beadando.Model.Product;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -103,41 +104,39 @@ public class ProfilFragment extends Fragment {
 
         StringRequest getProd = new StringRequest(Request.Method.POST, url, response -> {
             //Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
-                //JSON product objektum (még nincs kész)
-                String name = "\n";
-                String price = "\n";
-                String description = "\n";
-                String img = "";
-                String testText = "Product:\n\t";
+            Product product = null;
+            try {
+                JSONObject productObject = new JSONObject(response);
+                if (!productObject.isNull("img") &&
+                        !productObject.isNull("description") &&
+                        !productObject.isNull("price") &&
+                        !productObject.isNull("name") &&
+                        !productObject.isNull("id")) {
 
-                try {
-                    JSONObject productObject = new JSONObject(response);
-                    //ez itt nem vizsgál megfelelően jelenleg
-                    if(!productObject.isNull("name")) name = productObject.get("name").toString();
-                    if(!productObject.isNull("price")) price = productObject.get("price").toString();
-                    if(!productObject.isNull("description")) description = productObject.get("description").toString();
-                    if(!productObject.isNull("img")) img = productObject.get("img").toString();
-
-                    Fragment fragment = new ProductFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("name", name);
-                    bundle.putString("price", price);
-                    bundle.putString("desc", description);
-                    bundle.putString("img", img);
-                    fragment.setArguments(bundle);
-
-                    //fragment váltás productra
-                    FragmentManager fragmentManager = getParentFragmentManager();
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.setReorderingAllowed(true);
-                    transaction.replace(R.id.fragmentView, fragment, null);
-
-                    transaction.addToBackStack(null).commit();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    product = new Product(productObject.getInt("id"),
+                            productObject.getString("name"),
+                            productObject.getInt("price"),
+                            productObject.getString("description"),
+                            productObject.getString("img"));
                 }
-                //testText += name + price + description + img;
-                //Toast.makeText(getContext(), testText, Toast.LENGTH_LONG).show();
+
+                Fragment fragment = new ProductFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("product", product);
+                fragment.setArguments(bundle);
+
+                //fragment váltás productra
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setReorderingAllowed(true);
+                transaction.replace(R.id.fragmentView, fragment, null);
+
+                transaction.addToBackStack(null).commit();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //testText += name + price + description + img;
+            //Toast.makeText(getContext(), testText, Toast.LENGTH_LONG).show();
 
         }, error -> Toast.makeText(getContext(), "Hiba történt!", Toast.LENGTH_LONG).show()) {
             protected Map<String, String> getParams() {

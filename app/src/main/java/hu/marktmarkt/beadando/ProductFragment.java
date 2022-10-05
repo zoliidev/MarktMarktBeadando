@@ -1,6 +1,8 @@
 package hu.marktmarkt.beadando;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.fragment.app.Fragment;
@@ -17,19 +20,33 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import hu.marktmarkt.beadando.Model.Product;
 
 public class ProductFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String name;
-    private String price;
-    private String description;
-    private String img;
+    //private String name;
+    //private String price;
+    //private String description;
+    //private String img;
     private String imgUrl;
+    private Product product;
 
 
     public static ProductFragment newInstance(String param1, String param2) {
@@ -46,15 +63,21 @@ public class ProductFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            name = bundle.getString("name", name);
-            price = bundle.getString("price", price);
-            description = bundle.getString("desc", description);
-            img = bundle.getString("img", img);
-            imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/".concat(img);
+            //name = bundle.getString("name", name);
+            //price = bundle.getString("price", price);
+            //description = bundle.getString("desc", description);
+            //img = bundle.getString("img", img);
+
+            product = (Product) bundle.getSerializable("product");
+            imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/".concat(product.getImg());
         }
 
     }
 
+    private ImageButton favourite;
+    private boolean buttonState = false;
+
+    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,14 +86,14 @@ public class ProductFragment extends Fragment {
         EditText search = requireActivity().findViewById(R.id.searchBar);
         ImageView imageView = (ImageView) view.findViewById(R.id.productImageView);
         Button buy = (Button) view.findViewById(R.id.buyBt);
-        ImageButton favourite = (ImageButton) view.findViewById(R.id.favBt);
+        favourite = (ImageButton) view.findViewById(R.id.favBt);
         search.setVisibility(View.GONE);
         navBar.setVisibility(View.GONE);
-        Fragment fragment = new ProfilFragment();
+        Fragment fragment = new MainFragment();
 
         //Toolbar + gomb
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle(name);
+        toolbar.setTitle(product.getName());
         toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -98,34 +121,78 @@ public class ProductFragment extends Fragment {
                 .into(imageView);
 
         TextView productTitleTextView = view.findViewById(R.id.productTitleTextView);
-        productTitleTextView.setText(name + "\nÁr: " + price + " Ft");
+        productTitleTextView.setText(product.getName() + "\nÁr: " + product.getPrice() + " Ft");
         TextView productTextView = view.findViewById(R.id.productTextView);
-        productTextView.setText(description);
+        productTextView.setText(product.getDesc());
 
-        buy.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        favourite.setOnClickListener(new View.OnClickListener() {
-            private int count = 0;
-
-            @Override
-            public void onClick(View view) {
-                count++;
-                if(count % 2 == 0)
-                {
-                    favourite.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                }
-                else
-                {
-                    favourite.setImageResource(R.drawable.ic_baseline_favorite_24);
-                }
-            }
-        });
+        buy.setOnClickListener(buyButton);
+        favourite.setOnClickListener(favButton);
 
         return view;
     }
+
+    View.OnClickListener buyButton = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+            String url = "https://oldal.vaganyzoltan.hu/api/addCart.php";
+
+            StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+                JSONArray cart = new JSONArray();
+                try {
+                    cart = new JSONArray(response);
+                } catch (JSONException e) {
+                    Log.e("GetProduct @ MainFragment.java", e.getMessage());
+                }
+
+                Toast.makeText(getContext(), cart + "" + cart.length(), Toast.LENGTH_LONG).show();
+
+
+            }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> MyData = new HashMap<>();
+                    MyData.put("token", MainActivity.getLoginToken());
+                    MyData.put("id", String.valueOf(product.getId()));
+                    return MyData;
+                }
+            };
+            requestQueue.add(getToken);
+        }
+    };
+
+    View.OnClickListener favButton = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (buttonState) {
+                favourite.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                buttonState = false;
+            } else {
+                favourite.setImageResource(R.drawable.ic_baseline_favorite_24);
+                buttonState = true;
+            }
+
+            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+            String url = "https://oldal.vaganyzoltan.hu/api/addFav.php";
+
+            StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+                JSONArray fav = new JSONArray();
+                try {
+                    fav = new JSONArray(response);
+                } catch (JSONException e) {
+                    Log.e("GetProduct @ MainFragment.java", e.getMessage());
+                }
+
+                Toast.makeText(getContext(), fav + "" + fav.length(), Toast.LENGTH_LONG).show();
+
+            }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> MyData = new HashMap<>();
+                    MyData.put("token", MainActivity.getLoginToken());
+                    MyData.put("id", String.valueOf(product.getId()));
+                    return MyData;
+                }
+            };
+            requestQueue.add(getToken);
+        }
+    };
 }
