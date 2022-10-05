@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -22,9 +25,14 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import hu.marktmarkt.beadando.Collection.Util;
+import hu.marktmarkt.beadando.Model.Product;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +49,7 @@ public class MainFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ArrayList<Product> products = new ArrayList<>();
 
     public MainFragment() {
         // Required empty public constructor
@@ -73,6 +82,12 @@ public class MainFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        if (savedInstanceState != null) {
+            //Ha el lett mentve az állapot mentés akkor restoroljunk
+        } else {
+            //Ha nem volt állapot mentés akkor shuffle megint
+        }
+
     }
 
     private JSONArray object = new JSONArray();
@@ -87,6 +102,8 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         nestedSV = view.findViewById(R.id.idNestedSV);
         recyclerView = view.findViewById(R.id.prodMain);
+        Util util = new Util();
+        util.addBars(requireActivity());
 
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         String url = "https://oldal.vaganyzoltan.hu/api/getProdList.php";
@@ -94,13 +111,17 @@ public class MainFragment extends Fragment {
         StringRequest loadProds = new StringRequest(Request.Method.POST, url, response -> {
             try {
                 object = new JSONArray(response);
+                for (int i = 0; i < object.length(); i++) {
+                    String[] darab = object.getString(i).split("@");
+                    products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4]));
+                }
             } catch (JSONException e) {
                 Log.e("GetProduct @ MainFragment.java", e.getMessage());
             }
 
             GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
             recyclerView.setLayoutManager(gridManager);
-            adapter = new RecycleViewAdapter(requireContext(), object);
+            adapter = new RecycleViewAdapter(requireContext(), products);
             adapter.setClickListener(itemClickListener);
 
             nestedSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
@@ -135,10 +156,10 @@ public class MainFragment extends Fragment {
 
         protected void onPreExecute() {
             super.onPreExecute();
-            Log.d(TAG + " PreExceute","pre Exceute......");
+            Log.d(TAG + " PreExceute", "pre Exceute......");
         }
 
-        protected String doInBackground(Void...arg0) {
+        protected String doInBackground(Void... arg0) {
             Log.i("Görgetés", "Betöltés...");
             offset = offset + 20;
             RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
@@ -156,12 +177,15 @@ public class MainFragment extends Fragment {
                     for (int i = 0; i < loadmoreProd.length(); i++) {
                         String obj = loadmoreProd.getString(i);
                         object.put(obj);
+                        String[] darab = obj.split("@");
+                        products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4]));
+                        Log.i("ArrayList", products.get(i).toString());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                adapter = new RecycleViewAdapter(requireContext(), object);
+                adapter = new RecycleViewAdapter(requireContext(), products);
                 adapter.setClickListener(itemClickListener);
                 recyclerView.setAdapter(adapter);
 
@@ -178,7 +202,7 @@ public class MainFragment extends Fragment {
             return "Lefutott!";
         }
 
-        protected void onProgressUpdate(Integer...a) {
+        protected void onProgressUpdate(Integer... a) {
             super.onProgressUpdate(a);
             Log.d(TAG + " onProgressUpdate", "ELŐREHALADÁS: " + a[0]);
         }
@@ -192,12 +216,24 @@ public class MainFragment extends Fragment {
     RecycleViewAdapter.ItemClickListener itemClickListener = new RecycleViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            try {
-                Log.i("GRID", "Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position);
-                Toast.makeText(getContext(), "[I] Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position, Toast.LENGTH_LONG).show();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Log.i("GRID", "Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position);
+            Toast.makeText(getContext(), "[I] Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position, Toast.LENGTH_LONG).show();
+            Product product = adapter.getItem(position);
+            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+            String url = "https://oldal.vaganyzoltan.hu/api/product.php";
+
+            Fragment fragment = new ProductFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("product", product);
+            fragment.setArguments(bundle);
+
+            //fragment váltás productra
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setReorderingAllowed(true);
+            transaction.replace(R.id.fragmentView, fragment, null);
+
+            transaction.addToBackStack(null).commit();
         }
     };
 }

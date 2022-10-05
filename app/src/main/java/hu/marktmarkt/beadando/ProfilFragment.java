@@ -104,21 +104,9 @@ public class ProfilFragment extends Fragment {
 
         StringRequest getProd = new StringRequest(Request.Method.POST, url, response -> {
             //Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
-            //JSON product objektum (még nincs kész)
-            //String name = "\n";
-            //String price = "\n";
-            //String description = "\n";
-            //String img = "";
-            //String testText = "Product:\n\t";
-
             Product product = null;
             try {
                 JSONObject productObject = new JSONObject(response);
-                //ez itt nem vizsgál megfelelően jelenleg
-                //if(!productObject.isNull("name")) name = productObject.get("name").toString();
-                //if(!productObject.isNull("price")) price = productObject.get("price").toString();
-                //if(!productObject.isNull("description")) description = productObject.get("description").toString();
-                //if(!productObject.isNull("img")) img = productObject.get("img").toString();
                 if (!productObject.isNull("img") &&
                         !productObject.isNull("description") &&
                         !productObject.isNull("price") &&
@@ -134,10 +122,6 @@ public class ProfilFragment extends Fragment {
 
                 Fragment fragment = new ProductFragment();
                 Bundle bundle = new Bundle();
-                //bundle.putString("name", name);
-                //bundle.putString("price", price);
-                //bundle.putString("desc", description);
-                //bundle.putString("img", img);
                 bundle.putSerializable("product", product);
                 fragment.setArguments(bundle);
 

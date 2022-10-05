@@ -31,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import hu.marktmarkt.beadando.Model.Product;
@@ -76,7 +77,6 @@ public class ProductFragment extends Fragment {
     private ImageButton favourite;
     private boolean buttonState = false;
 
-
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
@@ -89,7 +89,7 @@ public class ProductFragment extends Fragment {
         favourite = (ImageButton) view.findViewById(R.id.favBt);
         search.setVisibility(View.GONE);
         navBar.setVisibility(View.GONE);
-        Fragment fragment = new ProfilFragment();
+        Fragment fragment = new MainFragment();
 
         //Toolbar + gomb
         Toolbar toolbar = view.findViewById(R.id.toolbar);

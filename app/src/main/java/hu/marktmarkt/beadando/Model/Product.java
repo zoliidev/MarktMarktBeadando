@@ -36,4 +36,15 @@ public class Product implements Serializable {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", desc='" + desc + '\'' +
+                ", img='" + img + '\'' +
+                '}';
+    }
 }

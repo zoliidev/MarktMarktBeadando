@@ -13,18 +13,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import java.util.ArrayList;
+
+import hu.marktmarkt.beadando.Model.Product;
 
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
 
-    private final JSONArray mData;
+    private final ArrayList<Product> products;
     private final LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
-    RecycleViewAdapter(Context context, JSONArray data) {
+    RecycleViewAdapter(Context context, ArrayList<Product> products) {
         this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+        this.products = products;
     }
 
     @Override
@@ -37,20 +38,11 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String info = "";
+
         String imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/";
-        try {
-            info = mData.getString(position);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String[] darab = info.split("@");
-        //0 - id
-        //1 - név
-        //2 - ár
-        //3 - kép
-        imgUrl = imgUrl.concat(darab[3]);
-        holder.myTextView.setText(darab[1] + "\n" + darab[2] + "Ft"); //Terméknév
+
+        imgUrl = imgUrl.concat(products.get(position).getImg());
+        holder.myTextView.setText(products.get(position).getName() + "\n" + products.get(position).getPrice() + "Ft"); //Terméknév
         //holder.myImageView.setImageResource();
         Glide.with(holder.myImageView.getContext())
                 .load(imgUrl)
@@ -62,7 +54,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
     @Override
     public int getItemCount() {
-        return mData.length();
+        return products.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -82,8 +74,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         }
     }
 
-    String getItem(int id) throws JSONException {
-        return mData.getString(id);
+    Product getItem(int id) {
+        return products.get(id);
     }
 
     void setClickListener(ItemClickListener itemClickListener) {
