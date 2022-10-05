@@ -1,5 +1,6 @@
 package hu.marktmarkt.beadando;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,16 +21,19 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import hu.marktmarkt.beadando.Model.Product;
+
 public class ProductFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String name;
-    private String price;
-    private String description;
-    private String img;
+    //private String name;
+    //private String price;
+    //private String description;
+    //private String img;
     private String imgUrl;
+    private Product product;
 
 
     public static ProductFragment newInstance(String param1, String param2) {
@@ -46,15 +50,18 @@ public class ProductFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            name = bundle.getString("name", name);
-            price = bundle.getString("price", price);
-            description = bundle.getString("desc", description);
-            img = bundle.getString("img", img);
-            imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/".concat(img);
+            //name = bundle.getString("name", name);
+            //price = bundle.getString("price", price);
+            //description = bundle.getString("desc", description);
+            //img = bundle.getString("img", img);
+
+            product = (Product) bundle.getSerializable("product");
+            imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/".concat(product.getImg());
         }
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -70,7 +77,7 @@ public class ProductFragment extends Fragment {
 
         //Toolbar + gomb
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle(name);
+        toolbar.setTitle(product.getName());
         toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -98,9 +105,9 @@ public class ProductFragment extends Fragment {
                 .into(imageView);
 
         TextView productTitleTextView = view.findViewById(R.id.productTitleTextView);
-        productTitleTextView.setText(name + "\nÁr: " + price + " Ft");
+        productTitleTextView.setText(product.getName() + "\nÁr: " + product.getPrice() + " Ft");
         TextView productTextView = view.findViewById(R.id.productTextView);
-        productTextView.setText(description);
+        productTextView.setText(product.getDesc());
 
         buy.setOnClickListener(new View.OnClickListener() {
 
