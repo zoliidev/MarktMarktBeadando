@@ -5,10 +5,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +38,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String info = "";
+        String imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/";
         try {
             info = mData.getString(position);
         } catch (JSONException e) {
@@ -45,7 +49,15 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         //1 - név
         //2 - ár
         //3 - kép
+        imgUrl = imgUrl.concat(darab[3]);
         holder.myTextView.setText(darab[1] + "\n" + darab[2] + "Ft"); //Terméknév
+        //holder.myImageView.setImageResource();
+        Glide.with(holder.myImageView.getContext())
+                .load(imgUrl)
+                .fitCenter()
+                .placeholder(R.drawable.placeholder_image)
+                .fallback(R.drawable.placeholder_image)
+                .into(holder.myImageView);//Termékkép
     }
 
     @Override
@@ -55,10 +67,12 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView myTextView;
+        ImageView myImageView;
 
         ViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.prodName);
+            myImageView = itemView.findViewById(R.id.cardImageView);
             itemView.setOnClickListener(this);
         }
 
