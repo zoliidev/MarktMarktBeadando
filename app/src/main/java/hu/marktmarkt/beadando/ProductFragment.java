@@ -91,6 +91,39 @@ public class ProductFragment extends Fragment {
         navBar.setVisibility(View.GONE);
         Fragment fragment = new ProfilFragment();
 
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+        String url = "https://oldal.vaganyzoltan.hu/api/listFav.php";
+
+        StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+            JSONArray favList = new JSONArray();
+            try {
+                favList = new JSONArray(response);
+            } catch (JSONException e) {
+                Log.e("ListFav @ ProductFragment.java", e.getMessage());
+            }
+
+            //Toast.makeText(getContext(), favList + "" + favList.length(), Toast.LENGTH_LONG).show();
+
+            for (int i = 0; i < favList.length(); i++) {
+                try {
+                    if(favList.getInt(i) == product.getId()){
+                        favourite.setImageResource(R.drawable.ic_baseline_favorite_24);
+                        buttonState = true;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+            protected Map<String, String> getParams() {
+                Map<String, String> MyData = new HashMap<>();
+                MyData.put("token", MainActivity.getLoginToken());
+                return MyData;
+            }
+        };
+        requestQueue.add(getToken);
+
         //Toolbar + gomb
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(product.getName());
