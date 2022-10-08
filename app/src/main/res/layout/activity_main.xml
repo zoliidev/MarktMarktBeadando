@@ -63,7 +63,17 @@
             android:tag="frgContainerView"
             app:defaultNavHost="true"
             app:navGraph="@navigation/main_nav" />
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BuildNO: main/origin\n f254137 2022.10.05"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
