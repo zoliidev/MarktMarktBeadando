@@ -76,9 +76,7 @@ public class ProfilFragment extends Fragment {
         }
     }
 
-    private Button teszt;
     private Button logout;
-    private EditText prodId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,66 +86,11 @@ public class ProfilFragment extends Fragment {
         search.setVisibility(View.VISIBLE);
         navBar.setVisibility(View.VISIBLE);
 
-        teszt = view.findViewById(R.id.button);
-        prodId = view.findViewById(R.id.prodID);
         logout = view.findViewById(R.id.btnLogout);
-
-        teszt.setOnClickListener(tesztProd);
         logout.setOnClickListener(logoutListen);
 
         return view;
     }
-
-    View.OnClickListener tesztProd = view1 -> {
-        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-        String url = "https://oldal.vaganyzoltan.hu/api/product.php";
-
-        StringRequest getProd = new StringRequest(Request.Method.POST, url, response -> {
-            //Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
-            Product product = null;
-            try {
-                JSONObject productObject = new JSONObject(response);
-                if (!productObject.isNull("img") &&
-                        !productObject.isNull("description") &&
-                        !productObject.isNull("price") &&
-                        !productObject.isNull("name") &&
-                        !productObject.isNull("id")) {
-
-                    product = new Product(productObject.getInt("id"),
-                            productObject.getString("name"),
-                            productObject.getInt("price"),
-                            productObject.getString("description"),
-                            productObject.getString("img"));
-                }
-
-                Fragment fragment = new ProductFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("product", product);
-                fragment.setArguments(bundle);
-
-                //fragment váltás productra
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setReorderingAllowed(true);
-                transaction.replace(R.id.fragmentView, fragment, null);
-
-                transaction.addToBackStack(null).commit();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            //testText += name + price + description + img;
-            //Toast.makeText(getContext(), testText, Toast.LENGTH_LONG).show();
-
-        }, error -> Toast.makeText(getContext(), "Hiba történt!", Toast.LENGTH_LONG).show()) {
-            protected Map<String, String> getParams() {
-                Map<String, String> MyData = new HashMap<>();
-                MyData.put("id", prodId.getText().toString());
-                MyData.put("token", MainActivity.getLoginToken());
-                return MyData;
-            }
-        };
-        requestQueue.add(getProd);
-    };
 
     View.OnClickListener logoutListen = view -> {
         Toast.makeText(getContext(), "Sikeres kijelentkezés", Toast.LENGTH_LONG).show();

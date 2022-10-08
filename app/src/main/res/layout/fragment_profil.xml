@@ -17,31 +17,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Profil fragment"
+            android:text="@string/profil_fragment"
             android:textSize="26sp" />
-
-        <EditText
-            android:id="@+id/prodID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:ems="10"
-            android:inputType="number"
-            android:minHeight="48dp"
-            android:hint="@string/term_kk"
-            android:importantForAutofill="no" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30dp"
-            android:text="Tesztelj!" />
 
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20sp"
             android:text="@string/logout" />
     </LinearLayout>
 
