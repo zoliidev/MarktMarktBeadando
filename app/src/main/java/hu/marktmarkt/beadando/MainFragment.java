@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,7 +24,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,7 +111,7 @@ public class MainFragment extends Fragment {
                 object = new JSONArray(response);
                 for (int i = 0; i < object.length(); i++) {
                     String[] darab = object.getString(i).split("@");
-                    products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4]));
+                    products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4], 0));
                 }
             } catch (JSONException e) {
                 Log.e("GetProduct @ MainFragment.java", e.getMessage());
@@ -178,7 +176,7 @@ public class MainFragment extends Fragment {
                         String obj = loadmoreProd.getString(i);
                         object.put(obj);
                         String[] darab = obj.split("@");
-                        products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4]));
+                        products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4], 0));
                         Log.i("ArrayList", products.get(i).toString());
                     }
                 } catch (JSONException e) {
