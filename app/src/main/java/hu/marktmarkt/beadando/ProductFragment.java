@@ -31,7 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.HashMap;
-import java.util.List;
+
 import java.util.Map;
 
 import hu.marktmarkt.beadando.Model.Product;
@@ -40,11 +40,6 @@ public class ProductFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    //private String name;
-    //private String price;
-    //private String description;
-    //private String img;
     private String imgUrl;
     private Product product;
 
@@ -52,8 +47,6 @@ public class ProductFragment extends Fragment {
     public static ProductFragment newInstance(String param1, String param2) {
         ProductFragment fragment = new ProductFragment();
         Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,10 +56,6 @@ public class ProductFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            //name = bundle.getString("name", name);
-            //price = bundle.getString("price", price);
-            //description = bundle.getString("desc", description);
-            //img = bundle.getString("img", img);
 
             product = (Product) bundle.getSerializable("product");
             imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/".concat(product.getImg());
@@ -154,7 +143,16 @@ public class ProductFragment extends Fragment {
                 .into(imageView);
 
         TextView productTitleTextView = view.findViewById(R.id.productTitleTextView);
-        productTitleTextView.setText(product.getName() + "\nÁr: " + product.getPrice() + " Ft");
+
+        if(product.getDiscount() == 0){
+            productTitleTextView.setText(product.getName() + "\nÁr: " + product.getPrice() + " Ft");
+        }else{
+            double akcio = product.getPrice() / 100.0;
+            double szorzas = akcio * product.getDiscount();
+            double eredmeny = product.getPrice() - szorzas;
+            productTitleTextView.setText(product.getName() + "\nMost CSAK " + (int) eredmeny + "Ft\n" + szorzas + "Ft MEGTAKARÍTÁS!!!");
+        }
+
         TextView productTextView = view.findViewById(R.id.productTextView);
         productTextView.setText(product.getDesc());
 
@@ -214,7 +212,6 @@ public class ProductFragment extends Fragment {
                 } catch (JSONException e) {
                     Log.e("GetProduct @ MainFragment.java", e.getMessage());
                 }
-
                 Toast.makeText(getContext(), fav + "" + fav.length(), Toast.LENGTH_LONG).show();
 
             }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {

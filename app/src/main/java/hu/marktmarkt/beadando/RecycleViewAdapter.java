@@ -45,10 +45,10 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         if(products.get(position).getDiscount() == 0){
             holder.myTextView.setText(products.get(position).getName() + "\n" + products.get(position).getPrice() + "Ft"); //Terméknév
         }else{
-            double akcio = products.get(position).getPrice() / 100;
+            double akcio = products.get(position).getPrice() / 100.0;
             double szorzas = akcio * products.get(position).getDiscount();
             double eredmeny = products.get(position).getPrice() - szorzas;
-            holder.myTextView.setText(products.get(position).getName() + "\n" + eredmeny + "Ft " + products.get(position).getDiscount() + "% MEGTAKARÍTÁS!!!"); //Terméknév
+            holder.myTextView.setText(products.get(position).getName() + "\n" + (int) eredmeny + "Ft " + products.get(position).getDiscount() + "% MEGTAKARÍTÁS!!!"); //Terméknév
         }
         //holder.myImageView.setImageResource();
         Glide.with(holder.myImageView.getContext())
