@@ -28,6 +28,12 @@
         <action
             android:id="@+id/action_ProfilFragment_to_productFragment"
             app:destination="@id/productFragment" />
+        <action
+            android:id="@+id/action_ProfilFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_ProfilFragment_to_favouriteFragment"
+            app:destination="@id/favouriteFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -101,5 +107,23 @@
         <action
             android:id="@+id/action_spashScreen_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="hu.marktmarkt.beadando.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_ProfilFragment"
+            app:destination="@id/ProfilFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteFragment"
+        android:name="hu.marktmarkt.beadando.FavouriteFragment"
+        android:label="fragment_favourite"
+        tools:layout="@layout/fragment_favourite" >
+        <action
+            android:id="@+id/action_favouriteFragment_to_ProfilFragment"
+            app:destination="@id/ProfilFragment" />
     </fragment>
 </navigation>

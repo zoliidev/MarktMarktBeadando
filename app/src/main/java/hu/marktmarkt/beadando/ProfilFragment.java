@@ -77,17 +77,25 @@ public class ProfilFragment extends Fragment {
     }
 
     private Button logout;
+    private Button cart;
+    private Button favourites;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profil, container, false);
         BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
         EditText search = requireActivity().findViewById(R.id.searchBar);
-        search.setVisibility(View.VISIBLE);
+        search.setVisibility(View.GONE);
         navBar.setVisibility(View.VISIBLE);
 
         logout = view.findViewById(R.id.btnLogout);
         logout.setOnClickListener(logoutListen);
+
+        cart = view.findViewById(R.id.btCart);
+        cart.setOnClickListener(changeToCart);
+
+        favourites = view.findViewById(R.id.btFavourite);
+        favourites.setOnClickListener(changeToFavourite);
 
         return view;
     }
@@ -99,5 +107,15 @@ public class ProfilFragment extends Fragment {
         new FileManager().FileKi("", requireContext(), "loginToken.txt");
         new Util().removeBars(requireActivity());
         new Util().setFragment(getParentFragmentManager(), new LoginFragment());
+    };
+
+    View.OnClickListener changeToCart = v -> {
+        Fragment fragment = new CartFragment();
+        new Util().setFragment(getParentFragmentManager(),fragment);
+    };
+
+    View.OnClickListener changeToFavourite = v -> {
+        Fragment fragment = new FavouriteFragment();
+        new Util().setFragment(getParentFragmentManager(),fragment);
     };
 }

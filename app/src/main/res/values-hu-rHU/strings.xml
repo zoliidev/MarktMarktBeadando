@@ -19,4 +19,6 @@
     <string name="textview">TextView</string>
     <string name="prodImg">Termékkép</string>
     <string name="profil_fragment">Profil</string>
+    <string name="cart">🛒Kosár</string>
+    <string name="favourites">❤Kedvencek</string>
 </resources>

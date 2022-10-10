@@ -217,7 +217,7 @@ public class MainFragment extends Fragment {
         @Override
         public void onItemClick(View view, int position) {
             Log.i("GRID", "Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position);
-            Toast.makeText(getContext(), "[I] Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), "[I] Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position, Toast.LENGTH_LONG).show();
             Product product = adapter.getItem(position);
             RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
             String url = "https://oldal.vaganyzoltan.hu/api/product.php";
