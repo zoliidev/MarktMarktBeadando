@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="300dp"
     android:layout_margin="10dp"
-    android:background="@color/gray_600"
+    android:background="@drawable/card_bg"
     android:orientation="vertical"
     android:padding="5dp">
 
@@ -14,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:ignore="ImageContrastCheck" />
+        tools:ignore="ImageContrastCheck"
+        android:contentDescription="@string/product_card" />
 
     <TextView
         android:id="@+id/prodName"
@@ -22,6 +22,7 @@
         android:layout_height="80dp"
         android:layout_gravity="bottom|center"
         android:gravity="center"
-        android:textSize="20sp" />
+        android:textSize="18sp"
+        android:textColor="@color/black"/>
 
 </LinearLayout>
