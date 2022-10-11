@@ -1,6 +1,7 @@
 package hu.marktmarkt.beadando;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -117,14 +118,13 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (item.getItemId()) {
                     case R.id.itmMain:
-                        replaceFragment(mainFragment);
+                        replaceFragment(mainFragment,item.getItemId());
                         break;
                     case R.id.itmAkcio:
-                        replaceFragment(akciokFragment);
+                        replaceFragment(akciokFragment,item.getItemId());
                         break;
                     case R.id.itmProfil:
-                        replaceFragment(profilFragment);
-                        break;
+                        replaceFragment(profilFragment,item.getItemId());
                 }
                 return false;
             }
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void replaceFragment(Fragment frg) {
+    private void replaceFragment(Fragment frg, Integer item) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentView, frg);

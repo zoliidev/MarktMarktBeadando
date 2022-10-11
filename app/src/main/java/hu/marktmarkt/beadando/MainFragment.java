@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -11,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,6 +102,12 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         nestedSV = view.findViewById(R.id.idNestedSV);
         recyclerView = view.findViewById(R.id.prodMain);
+
+        //Itt restoroljuk a recycleviewt de valamiért nullpointer exeption van :(
+        //if(adapter.getItemCount() > 0)
+        //{
+            //adapter.setStateRestorationPolicy(recyclerView.getAdapter().getStateRestorationPolicy().PREVENT_WHEN_EMPTY);
+        //}
         Util util = new Util();
         util.addBars(requireActivity());
 
