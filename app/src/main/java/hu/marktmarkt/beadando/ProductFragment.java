@@ -150,7 +150,7 @@ public class ProductFragment extends Fragment {
             double akcio = product.getPrice() / 100.0;
             double szorzas = akcio * product.getDiscount();
             double eredmeny = product.getPrice() - szorzas;
-            productTitleTextView.setText(product.getName() + "\nMost CSAK " + (int) eredmeny + "Ft\n" + szorzas + "Ft MEGTAKARÍTÁS!!!");
+            productTitleTextView.setText(product.getName() + "\nMost CSAK " + (int) eredmeny + "Ft\n" + (int) szorzas + "Ft MEGTAKARÍTÁS!!!");
         }
 
         TextView productTextView = view.findViewById(R.id.productTextView);
