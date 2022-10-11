@@ -8,13 +8,15 @@ public class Product implements Serializable {
     private final int price;
     private final String desc;
     private final String img;
+    private final int discount;
 
-    public Product(int id, String name, int price, String desc, String img){
+    public Product(int id, String name, int price, String desc, String img, int discount){
         this.id = id;
         this.name = name;
         this.price = price;
         this.desc = desc;
         this.img = img;
+        this.discount = discount;
     }
 
     public String getImg() {
@@ -45,6 +47,11 @@ public class Product implements Serializable {
                 ", price=" + price +
                 ", desc='" + desc + '\'' +
                 ", img='" + img + '\'' +
+                ", img='" + discount + '\'' +
                 '}';
+    }
+
+    public int getDiscount() {
+        return discount;
     }
 }
