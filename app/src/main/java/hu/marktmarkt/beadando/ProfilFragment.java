@@ -29,6 +29,10 @@ import hu.marktmarkt.beadando.Collection.FileManager;
 import hu.marktmarkt.beadando.Collection.Util;
 import hu.marktmarkt.beadando.Model.Product;
 
+import static hu.marktmarkt.beadando.MainActivity.isMain;
+import static hu.marktmarkt.beadando.MainActivity.isAkciok;
+import static hu.marktmarkt.beadando.MainActivity.isProfil;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ProfilFragment#newInstance} factory method to
@@ -85,6 +89,10 @@ public class ProfilFragment extends Fragment {
         EditText search = requireActivity().findViewById(R.id.searchBar);
         search.setVisibility(View.VISIBLE);
         navBar.setVisibility(View.VISIBLE);
+
+        isMain = false;
+        isAkciok = false;
+        isProfil = true;
 
         logout = view.findViewById(R.id.btnLogout);
         logout.setOnClickListener(logoutListen);

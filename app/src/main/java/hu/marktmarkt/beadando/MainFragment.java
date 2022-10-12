@@ -36,6 +36,10 @@ import java.util.Map;
 import hu.marktmarkt.beadando.Collection.Util;
 import hu.marktmarkt.beadando.Model.Product;
 
+import static hu.marktmarkt.beadando.MainActivity.isMain;
+import static hu.marktmarkt.beadando.MainActivity.isAkciok;
+import static hu.marktmarkt.beadando.MainActivity.isProfil;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MainFragment#newInstance} factory method to
@@ -105,6 +109,10 @@ public class MainFragment extends Fragment {
 
         Util util = new Util();
         util.addBars(requireActivity());
+
+        isMain = true;
+        isAkciok = false;
+        isProfil = false;
 
         if(products.isEmpty()) {
             RequestQueue requestQueue = Volley.newRequestQueue(requireContext());

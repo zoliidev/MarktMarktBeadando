@@ -15,8 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager2.adapter.FragmentViewHolder;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -43,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private final AkciokFragment akciokFragment = new AkciokFragment();
     private final ProfilFragment profilFragment = new ProfilFragment();
     private static String loginToken;
+    public static boolean isMain;
+    public static boolean isAkciok;
+    public static boolean isProfil;
     public static int offset;
     public static ArrayList<Product> products = new ArrayList<>();
     public static ArrayList<Product> discountedProducts = new ArrayList<>();
@@ -133,6 +138,27 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return false;
             }
+        });
+
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            Log.i("BackStackChanged","Back Stack Changed!!!");
+            //FragmentContainerView fragmentInstance = (FragmentContainerView) findViewById(R.id.fragmentView);
+//            Fragment fragmentInstance = getSupportFragmentManager().findFragmentById(R.id.fragmentView);
+//            Log.i("currentFragment","Fragment ID: " + fragmentInstance.getId());
+//            Log.i("findFragmentID","find Fragment ID:" + findViewById(R.id.mainFragment).getId());
+            if (isMain){
+                navigationView.getMenu().findItem(R.id.itmMain).setChecked(true);
+                Log.i("setCheckedItmMain","MainChecked");
+            }else
+                if(isAkciok){
+                    navigationView.getMenu().findItem(R.id.itmAkcio).setChecked(true);
+                    Log.i("setCheckedItmAkciok","AkciokChecked");
+                }else
+                    if(isProfil){
+                        navigationView.getMenu().findItem(R.id.itmProfil).setChecked(true);
+                        Log.i("setCheckedItmProfil","ProfilChecked");
+                    }
+
         });
 
     }

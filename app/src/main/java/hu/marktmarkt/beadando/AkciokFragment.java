@@ -32,6 +32,10 @@ import java.util.Map;
 import hu.marktmarkt.beadando.Collection.Util;
 import hu.marktmarkt.beadando.Model.Product;
 
+import static hu.marktmarkt.beadando.MainActivity.isMain;
+import static hu.marktmarkt.beadando.MainActivity.isAkciok;
+import static hu.marktmarkt.beadando.MainActivity.isProfil;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AkciokFragment#newInstance} factory method to
@@ -91,6 +95,10 @@ public class AkciokFragment extends Fragment {
         recyclerView = view.findViewById(R.id.prodMain);
         Util util = new Util();
         util.addBars(requireActivity());
+
+        isMain = false;
+        isAkciok = true;
+        isProfil = false;
 
        if(discountedProducts.isEmpty()){
            loadData();
