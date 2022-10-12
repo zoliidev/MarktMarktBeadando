@@ -29,11 +29,13 @@ import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import hu.marktmarkt.beadando.Collection.FileManager;
+import hu.marktmarkt.beadando.Model.Product;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
@@ -41,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     private final AkciokFragment akciokFragment = new AkciokFragment();
     private final ProfilFragment profilFragment = new ProfilFragment();
     private static String loginToken;
+    public static int offset;
+    public static ArrayList<Product> products = new ArrayList<>();
+    public static ArrayList<Product> discountedProducts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
