@@ -1,5 +1,7 @@
 package hu.marktmarkt.beadando;
 
+import static hu.marktmarkt.beadando.MainActivity.discountedProducts;
+
 import android.os.Bundle;
 
 import androidx.core.widget.NestedScrollView;
@@ -22,7 +24,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,55 +80,23 @@ public class AkciokFragment extends Fragment {
         }
     }
 
-    private ArrayList<Product> products;
     private RecyclerView recyclerView;
     private NestedScrollView nestedSV;
     RecycleViewAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        products = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_akciok, container, false);
         nestedSV = view.findViewById(R.id.idNestedSVAkcio);
         recyclerView = view.findViewById(R.id.prodMain);
         Util util = new Util();
         util.addBars(requireActivity());
 
-        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-        String urlProds = "https://oldal.vaganyzoltan.hu/api/getDiscounted.php";
-
-        StringRequest getProd = new StringRequest(Request.Method.POST, urlProds, response -> {
-            JSONArray Prod = new JSONArray();
-            try {
-                Prod = new JSONArray(response);
-            } catch (JSONException e) {
-                Log.e("GetProduct @ AkciokFragment.java", e.getMessage());
-            }
-
-            for (int i = 0; i < Prod.length(); i++) {
-                try {
-                    String product = Prod.getString(i);
-                    String[] splitProd = product.split("@");
-                    products.add(new Product(Integer.parseInt(splitProd[0]), splitProd[1], Integer.parseInt(splitProd[2]), splitProd[3], splitProd[4], Integer.parseInt(splitProd[5])));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
-            recyclerView.setLayoutManager(gridManager);
-            adapter = new RecycleViewAdapter(requireContext(), products);
-            adapter.setClickListener(itemClickListener);
-            recyclerView.setAdapter(adapter);
-
-        }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
-            protected Map<String, String> getParams() {
-                Map<String, String> MyData = new HashMap<>();
-                MyData.put("token", MainActivity.getLoginToken());
-                return MyData;
-            }
-        };
-        requestQueue.add(getProd);
+       if(discountedProducts.isEmpty()){
+           loadData();
+       }else{
+           showLayout();
+       }
 
         return view;
     }
@@ -136,10 +105,8 @@ public class AkciokFragment extends Fragment {
         @Override
         public void onItemClick(View view, int position) {
             //Log.i("GRID", "Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position);
-            Toast.makeText(getContext(), "[I] Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), "[I] Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position, Toast.LENGTH_LONG).show();
             Product product = adapter.getItem(position);
-            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-            String url = "https://oldal.vaganyzoltan.hu/api/product.php";
 
             Fragment fragment = new ProductFragment();
             Bundle bundle = new Bundle();
@@ -155,4 +122,45 @@ public class AkciokFragment extends Fragment {
             transaction.addToBackStack(null).commit();
         }
     };
+    private void loadData(){
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+        String urlProds = "https://oldal.vaganyzoltan.hu/api/getDiscounted.php";
+
+        StringRequest getProd = new StringRequest(Request.Method.POST, urlProds, response -> {
+            JSONArray Prod = new JSONArray();
+            try {
+                Prod = new JSONArray(response);
+            } catch (JSONException e) {
+                Log.e("GetProduct @ AkciokFragment.java", e.getMessage());
+            }
+
+            for (int i = 0; i < Prod.length(); i++) {
+                try {
+                    String product = Prod.getString(i);
+                    String[] splitProd = product.split("@");
+                    discountedProducts.add(new Product(Integer.parseInt(splitProd[0]), splitProd[1], Integer.parseInt(splitProd[2]), splitProd[3], splitProd[4], Integer.parseInt(splitProd[5])));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            showLayout();
+
+        }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+            protected Map<String, String> getParams() {
+                Map<String, String> MyData = new HashMap<>();
+                MyData.put("token", MainActivity.getLoginToken());
+                return MyData;
+            }
+        };
+        requestQueue.add(getProd);
+    }
+
+    private void showLayout(){
+        GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
+        recyclerView.setLayoutManager(gridManager);
+        adapter = new RecycleViewAdapter(requireContext(), discountedProducts);
+        adapter.setClickListener(itemClickListener);
+        recyclerView.setAdapter(adapter);
+    }
 }
