@@ -17,7 +17,7 @@ public class Util {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setReorderingAllowed(true);
         transaction.replace(R.id.fragmentView, fragment, null);
-        transaction.commit();
+        transaction.addToBackStack(null).commit();
     }
     public void removeBars(Activity activity){
         BottomNavigationView navBar = activity.findViewById(R.id.bottomNavigationView);

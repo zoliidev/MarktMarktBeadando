@@ -24,4 +24,6 @@
     <string name="main_page">Főoldal</string>
     <string name="product_card">Termékkártya</string>
     <string name="marktmarktlogo">MarktMarkLogo</string>
+    <string name="cart">🛒Kosár</string>
+    <string name="favourites">❤Kedvencek</string>
 </resources>

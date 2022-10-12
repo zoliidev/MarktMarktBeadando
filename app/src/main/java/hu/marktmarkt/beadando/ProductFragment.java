@@ -79,8 +79,6 @@ public class ProductFragment extends Fragment {
         favourite = (ImageButton) view.findViewById(R.id.favBt);
         search.setVisibility(View.GONE);
         navBar.setVisibility(View.GONE);
-        //Fragment fragment = new MainFragment();
-
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         String url = "https://oldal.vaganyzoltan.hu/api/listFav.php";
 
@@ -174,7 +172,7 @@ public class ProductFragment extends Fragment {
                     Log.e("GetProduct @ MainFragment.java", e.getMessage());
                 }
 
-                Toast.makeText(getContext(), cart + "" + cart.length(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), cart + "" + cart.length(), Toast.LENGTH_LONG).show();
 
 
             }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
@@ -210,7 +208,8 @@ public class ProductFragment extends Fragment {
                 } catch (JSONException e) {
                     Log.e("GetProduct @ MainFragment.java", e.getMessage());
                 }
-                Toast.makeText(getContext(), fav + "" + fav.length(), Toast.LENGTH_LONG).show();
+
+                //Toast.makeText(getContext(), fav + "" + fav.length(), Toast.LENGTH_LONG).show();
 
             }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
                 protected Map<String, String> getParams() {
