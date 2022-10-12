@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+<menu
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Main"
+    <item android:title="@string/main_page"
         android:icon="@drawable/ic_baseline_home_24"
         android:id="@+id/itmMain"/>
-    <item android:title="Akcio"
+    <item android:title="@string/discount"
         android:id="@+id/itmAkcio"
         android:icon="@drawable/ic_baseline_percent_24"/>
-    <item android:title="Profil"
+    <item android:title="@string/profile"
         android:id="@+id/itmProfil"
         android:icon="@drawable/ic_baseline_person_24"/>
 </menu>

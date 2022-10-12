@@ -1,9 +1,13 @@
 package hu.marktmarkt.beadando;
 
+import static hu.marktmarkt.beadando.MainActivity.offset;
+import static hu.marktmarkt.beadando.MainActivity.products;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -11,11 +15,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,9 +29,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +51,6 @@ public class MainFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private ArrayList<Product> products = new ArrayList<>();
 
     public MainFragment() {
         // Required empty public constructor
@@ -92,7 +93,6 @@ public class MainFragment extends Fragment {
 
     private JSONArray object = new JSONArray();
     private final int limit = 20;
-    private int offset = 0;
     private RecyclerView recyclerView;
     private NestedScrollView nestedSV;
     int count = 0;
@@ -102,56 +102,45 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         nestedSV = view.findViewById(R.id.idNestedSV);
         recyclerView = view.findViewById(R.id.prodMain);
+
         Util util = new Util();
         util.addBars(requireActivity());
 
-        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-        String url = "https://oldal.vaganyzoltan.hu/api/getProdList.php";
+        if(products.isEmpty()) {
+            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+            String url = "https://oldal.vaganyzoltan.hu/api/getProdList.php";
 
-        StringRequest loadProds = new StringRequest(Request.Method.POST, url, response -> {
-            try {
-                object = new JSONArray(response);
-                for (int i = 0; i < object.length(); i++) {
-                    String[] darab = object.getString(i).split("@");
-                    products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4]));
-                }
-            } catch (JSONException e) {
-                Log.e("GetProduct @ MainFragment.java", e.getMessage());
-            }
-
-            GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
-            recyclerView.setLayoutManager(gridManager);
-            adapter = new RecycleViewAdapter(requireContext(), products);
-            adapter.setClickListener(itemClickListener);
-
-            nestedSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-                        count++;
-                        if (count < 10) {
-                            //loadMore();
-                            new loadMoreAsync().execute();
-                        }
+            StringRequest loadProds = new StringRequest(Request.Method.POST, url, response -> {
+                try {
+                    object = new JSONArray(response);
+                    for (int i = 0; i < object.length(); i++) {
+                        String[] darab = object.getString(i).split("@");
+                        products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4], 0));
                     }
+                } catch (JSONException e) {
+                    Log.e("GetProduct @ MainFragment.java", e.getMessage());
                 }
-            });
-            recyclerView.setAdapter(adapter);
 
-        }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
-            protected Map<String, String> getParams() {
-                Map<String, String> MyData = new HashMap<>();
-                MyData.put("token", MainActivity.getLoginToken());
-                MyData.put("limit", String.valueOf(limit));
-                MyData.put("offset", String.valueOf(offset));
-                return MyData;
-            }
-        };
-        requestQueue.add(loadProds);
+                createGrids();
+
+            }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> MyData = new HashMap<>();
+                    MyData.put("token", MainActivity.getLoginToken());
+                    MyData.put("limit", String.valueOf(limit));
+                    MyData.put("offset", String.valueOf(offset));
+                    return MyData;
+                }
+            };
+            requestQueue.add(loadProds);
+        }else{
+            createGrids();
+        }
+
         return view;
     }
 
-    class loadMoreAsync extends AsyncTask<Void, Integer, String> {
+    private class loadMoreAsync extends AsyncTask<Void, Integer, String> {
         String TAG = getClass().getSimpleName();
 
         protected void onPreExecute() {
@@ -178,8 +167,8 @@ public class MainFragment extends Fragment {
                         String obj = loadmoreProd.getString(i);
                         object.put(obj);
                         String[] darab = obj.split("@");
-                        products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4]));
-                        Log.i("ArrayList", products.get(i).toString());
+                        products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4], 0));
+                        //Log.i("ArrayList", products.get(i).toString());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -219,8 +208,6 @@ public class MainFragment extends Fragment {
             Log.i("GRID", "Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position);
             //Toast.makeText(getContext(), "[I] Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position, Toast.LENGTH_LONG).show();
             Product product = adapter.getItem(position);
-            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-            String url = "https://oldal.vaganyzoltan.hu/api/product.php";
 
             Fragment fragment = new ProductFragment();
             Bundle bundle = new Bundle();
@@ -236,4 +223,30 @@ public class MainFragment extends Fragment {
             transaction.addToBackStack(null).commit();
         }
     };
+    private void createGrids(){
+        GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
+        recyclerView.setLayoutManager(gridManager);
+        adapter = new RecycleViewAdapter(requireContext(), products);
+        adapter.setClickListener(itemClickListener);
+
+        if(adapter.getItemCount() > 0)
+        {
+            //recyclerView.getAdapter().getStateRestorationPolicy();
+            adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
+        }
+
+        nestedSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
+                    count++;
+                    if (count < 10) {
+                        //loadMore();
+                        new loadMoreAsync().execute();
+                    }
+                }
+            }
+        });
+        recyclerView.setAdapter(adapter);
+    }
 }

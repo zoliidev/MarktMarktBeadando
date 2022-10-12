@@ -11,7 +11,7 @@
     <string name="marktmart_login">MarktMarkt Bejelentkezés</string>
     <string name="login">Bejelentkezés</string>
     <string name="remember_me">Jegyezz meg</string>
-    <string name="loading">Betöltés...</string>
+    <string name="loading">Betöltés…</string>
     <string name="marktmarkt">MarktMarkt</string>
     <string name="logout">Kijelenetkezés</string>
     <string name="buy">Kosárba</string>
@@ -19,6 +19,11 @@
     <string name="textview">TextView</string>
     <string name="prodImg">Termékkép</string>
     <string name="profil_fragment">Profil</string>
+    <string name="profile">Profil</string>
+    <string name="discount">Akció</string>
+    <string name="main_page">Főoldal</string>
+    <string name="product_card">Termékkártya</string>
+    <string name="marktmarktlogo">MarktMarkLogo</string>
     <string name="cart">🛒Kosár</string>
     <string name="favourites">❤Kedvencek</string>
 </resources>

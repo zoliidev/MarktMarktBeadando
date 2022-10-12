@@ -1,6 +1,7 @@
 package hu.marktmarkt.beadando;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,11 +29,13 @@ import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import hu.marktmarkt.beadando.Collection.FileManager;
+import hu.marktmarkt.beadando.Model.Product;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
@@ -40,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     private final AkciokFragment akciokFragment = new AkciokFragment();
     private final ProfilFragment profilFragment = new ProfilFragment();
     private static String loginToken;
+    public static int offset;
+    public static ArrayList<Product> products = new ArrayList<>();
+    public static ArrayList<Product> discountedProducts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,14 +123,13 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (item.getItemId()) {
                     case R.id.itmMain:
-                        replaceFragment(mainFragment);
+                        replaceFragment(mainFragment,item.getItemId());
                         break;
                     case R.id.itmAkcio:
-                        replaceFragment(akciokFragment);
+                        replaceFragment(akciokFragment,item.getItemId());
                         break;
                     case R.id.itmProfil:
-                        replaceFragment(profilFragment);
-                        break;
+                        replaceFragment(profilFragment,item.getItemId());
                 }
                 return false;
             }
@@ -132,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void replaceFragment(Fragment frg) {
+    private void replaceFragment(Fragment frg, Integer item) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentView, frg);

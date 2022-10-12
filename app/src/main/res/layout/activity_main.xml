@@ -70,10 +70,11 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="BuildNO: main/origin\n0240799 2022.10.08"
-        android:textSize="10sp"
+        android:text="BuildNO: Design_touchup/origin\n96f9008 2022.10.10"
+        android:textSize="11sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
