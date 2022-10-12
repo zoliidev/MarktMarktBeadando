@@ -103,7 +103,7 @@ public class MainFragment extends Fragment {
         Util util = new Util();
         util.addBars(requireActivity());
 
-        if(offset == 0) {
+        if(products.isEmpty()) {
             RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
             String url = "https://oldal.vaganyzoltan.hu/api/getProdList.php";
 
