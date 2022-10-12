@@ -225,6 +225,12 @@ public class MainFragment extends Fragment {
         recyclerView.setLayoutManager(gridManager);
         adapter = new RecycleViewAdapter(requireContext(), products);
         adapter.setClickListener(itemClickListener);
+        //Itt restoroljuk a recycleviewt de valamiért nullpointer exeption van :(
+        if(adapter.getItemCount() > 0)
+        {
+            //recyclerView.getAdapter().getStateRestorationPolicy();
+            adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
+        }
 
         nestedSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
