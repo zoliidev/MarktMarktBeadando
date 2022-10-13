@@ -231,6 +231,7 @@ public class MainFragment extends Fragment {
             transaction.addToBackStack(null).commit();
         }
     };
+
     private void createGrids(){
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);

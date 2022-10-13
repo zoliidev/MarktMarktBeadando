@@ -7,7 +7,7 @@
         <deviceKey>
           <Key>
             <type value="SERIAL_NUMBER" />
-            <value value="adb-R58N30KAJ1K-AZ8ZHr._adb-tls-connect._tcp" />
+            <value value="d704d8110312" />
           </Key>
         </deviceKey>
       </Target>
@@ -16,7 +16,7 @@
         <deviceKey>
           <Key>
             <type value="SERIAL_NUMBER" />
-            <value value="adb-d704d8110312-E8dTPA._adb-tls-connect._tcp" />
+            <value value="IHUNT0013273" />
           </Key>
         </deviceKey>
       </Target>
