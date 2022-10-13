@@ -2,7 +2,6 @@ package hu.marktmarkt.beadando;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -79,8 +77,6 @@ public class ProductFragment extends Fragment {
         favourite = (ImageButton) view.findViewById(R.id.favBt);
         search.setVisibility(View.GONE);
         navBar.setVisibility(View.GONE);
-        //Fragment fragment = new MainFragment();
-
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         String url = "https://oldal.vaganyzoltan.hu/api/listFav.php";
 
@@ -96,7 +92,8 @@ public class ProductFragment extends Fragment {
 
             for (int i = 0; i < favList.length(); i++) {
                 try {
-                    if(favList.getInt(i) == product.getId()){
+                    String[] prodID = favList.getString(i).split("@");
+                    if(Integer.parseInt(prodID[0]) == product.getId()){
                         favourite.setImageResource(R.drawable.ic_baseline_favorite_24);
                         buttonState = true;
                     }
@@ -174,7 +171,7 @@ public class ProductFragment extends Fragment {
                     Log.e("GetProduct @ MainFragment.java", e.getMessage());
                 }
 
-                Toast.makeText(getContext(), cart + "" + cart.length(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), cart + "" + cart.length(), Toast.LENGTH_LONG).show();
 
 
             }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
@@ -210,7 +207,8 @@ public class ProductFragment extends Fragment {
                 } catch (JSONException e) {
                     Log.e("GetProduct @ MainFragment.java", e.getMessage());
                 }
-                Toast.makeText(getContext(), fav + "" + fav.length(), Toast.LENGTH_LONG).show();
+
+                //Toast.makeText(getContext(), fav + "" + fav.length(), Toast.LENGTH_LONG).show();
 
             }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
                 protected Map<String, String> getParams() {

@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Product> products = new ArrayList<>();
     public static ArrayList<Product> discountedProducts = new ArrayList<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -19,7 +19,18 @@
             android:layout_gravity="center"
             android:text="@string/profil_fragment"
             android:textSize="26sp" />
-
+        <Button
+            android:id="@+id/btCart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20sp"
+            android:text="@string/cart" />
+        <Button
+            android:id="@+id/btFavourite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20sp"
+            android:text="@string/favourites" />
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"
