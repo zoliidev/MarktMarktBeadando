@@ -1,7 +1,9 @@
 package hu.marktmarkt.beadando;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -13,14 +15,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,35 +34,18 @@ import java.util.Map;
 import hu.marktmarkt.beadando.Collection.Util;
 import hu.marktmarkt.beadando.Model.Product;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CartFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class CartFragment extends Fragment {
+public class orderFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    public CartFragment() {
+    public orderFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CartFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static CartFragment newInstance(String param1, String param2) {
         CartFragment fragment = new CartFragment();
         Bundle args = new Bundle();
@@ -79,29 +64,37 @@ public class CartFragment extends Fragment {
         }
     }
 
-    private RecyclerView recyclerView;
-    private NestedScrollView nestedSV;
+    class teszt extends RecycleViewAdapter {
+        private TextView myTextView;
+        private ImageView myImageView;
+        teszt(Context context, ArrayList<Product> products) {
+            super(context, products);
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = mInflater.inflate(R.layout.prod_card2, parent, false);
+            return new ViewHolder(view);
+        }
+    }
+
+    private RecyclerView orderRecycleView;
+    private NestedScrollView orderNestedScrollView;
     private ArrayList<Product> cartItem;
-    FloatingActionButton floatingActionButton;
     RecycleViewAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        cartItem=new ArrayList<>();
-        View view = inflater.inflate(R.layout.fragment_cart, container, false);
-        nestedSV = view.findViewById(R.id.idNestedSVAkcio);
-        recyclerView = view.findViewById(R.id.prodMain);
-        floatingActionButton = view.findViewById(R.id.floatingOrderBt);
+        cartItem = new ArrayList<>();
+        View view = inflater.inflate(R.layout.fragment_order, container, false);
+        orderNestedScrollView = view.findViewById(R.id.orderNestedScrollView);
+        orderRecycleView = view.findViewById(R.id.orderRecyclerView);
         new Util().removeBars(requireActivity());
 
-        floatingActionButton.setOnClickListener(v -> {
-            new Util().setFragment(getParentFragmentManager(),new orderFragment());
-        });
 
-
-        if(cartItem.isEmpty()){
+        if (cartItem.isEmpty()) {
             loadData();
-        }else{
+        } else {
             showLayout();
         }
 
@@ -129,7 +122,8 @@ public class CartFragment extends Fragment {
             transaction.addToBackStack(null).commit();
         }
     };
-    private void loadData(){
+
+    private void loadData() {
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         String urlProds = "https://oldal.vaganyzoltan.hu/api/listCart.php";
 
@@ -163,11 +157,11 @@ public class CartFragment extends Fragment {
         requestQueue.add(getProd);
     }
 
-    private void showLayout(){
-        GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
-        recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), cartItem);
+    private void showLayout() {
+        GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 1);
+        orderRecycleView.setLayoutManager(gridManager);
+        adapter = new teszt(requireContext(), cartItem);
         adapter.setClickListener(itemClickListener);
-        recyclerView.setAdapter(adapter);
+        orderRecycleView.setAdapter(adapter);
     }
 }

@@ -20,8 +20,8 @@ import hu.marktmarkt.beadando.Model.Product;
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
 
     private final ArrayList<Product> products;
-    private final LayoutInflater mInflater;
-    private ItemClickListener mClickListener;
+    protected final LayoutInflater mInflater;
+    protected ItemClickListener mClickListener;
 
     RecycleViewAdapter(Context context, ArrayList<Product> products) {
         this.mInflater = LayoutInflater.from(context);
