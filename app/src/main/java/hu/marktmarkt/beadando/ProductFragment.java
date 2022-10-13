@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -25,6 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +43,6 @@ public class ProductFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private String imgUrl;
     private Product product;
-
 
     public static ProductFragment newInstance(String param1, String param2) {
         ProductFragment fragment = new ProductFragment();
@@ -64,6 +65,9 @@ public class ProductFragment extends Fragment {
 
     private ImageButton favourite;
     private boolean buttonState = false;
+    private LinearLayout searchResult;
+    private LinearLayout lnvNav;
+    private NavigationBarView bar;
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -77,6 +81,11 @@ public class ProductFragment extends Fragment {
         favourite = (ImageButton) view.findViewById(R.id.favBt);
         search.setVisibility(View.GONE);
         navBar.setVisibility(View.GONE);
+
+        searchResult = view.findViewById(R.id.searchResults);
+        lnvNav = view.findViewById(R.id.lnvNav);
+        bar = view.findViewById(R.id.bottomNavigationView);
+
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         String url = "https://oldal.vaganyzoltan.hu/api/listFav.php";
 
