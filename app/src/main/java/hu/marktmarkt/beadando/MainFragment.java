@@ -123,7 +123,7 @@ public class MainFragment extends Fragment {
                     object = new JSONArray(response);
                     for (int i = 0; i < object.length(); i++) {
                         String[] darab = object.getString(i).split("@");
-                        products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4], 0));
+                        products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4], Integer.parseInt(darab[5])));
                     }
                 } catch (JSONException e) {
                     Log.e("GetProduct @ MainFragment.java", e.getMessage());
