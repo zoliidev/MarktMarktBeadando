@@ -85,6 +85,7 @@ public class CartFragment extends Fragment {
     private NestedScrollView nestedSV;
     private ArrayList<Product> cartItem;
     FloatingActionButton floatingActionButton;
+    FloatingActionButton removeButton;
     RecycleViewAdapter adapter;
 
     @Override
@@ -94,6 +95,7 @@ public class CartFragment extends Fragment {
         nestedSV = view.findViewById(R.id.idNestedSVAkcio);
         recyclerView = view.findViewById(R.id.prodMain);
         floatingActionButton = view.findViewById(R.id.floatingOrderBt);
+        removeButton = recyclerView.findViewById(R.id.floatingActionButton2);
         new Util().removeBars(requireActivity());
         showRemove = true;
 
@@ -101,13 +103,11 @@ public class CartFragment extends Fragment {
             new Util().setFragment(getParentFragmentManager(),new orderFragment());
         });
 
-
         if(cartItem.isEmpty()){
             loadData();
         }else{
             showLayout();
         }
-
         return view;
     }
 

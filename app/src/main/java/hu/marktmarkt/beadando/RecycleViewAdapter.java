@@ -2,19 +2,31 @@ package hu.marktmarkt.beadando;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import hu.marktmarkt.beadando.Model.Product;
 
@@ -25,6 +37,10 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     private final ArrayList<Product> products;
     protected final LayoutInflater mInflater;
     protected ItemClickListener mClickListener;
+    FloatingActionButton floatingActionButton;
+    RecycleViewAdapter adapter;
+    RecyclerView recyclerView;
+
 
     RecycleViewAdapter(Context context, ArrayList<Product> products) {
         this.mInflater = LayoutInflater.from(context);
@@ -40,11 +56,13 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position){
 
         String imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/";
 
         imgUrl = imgUrl.concat(products.get(position).getImg());
+        floatingActionButton = holder.itemView.findViewById(R.id.floatingActionButton2);
+        holder.itemView.findViewById(R.id.prodMain);
         if(products.get(position).getDiscount() == 0){
             holder.myTextView.setText(products.get(position).getName() + "\n" + products.get(position).getPrice() + "Ft"); //Terméknév
         }else{
@@ -60,6 +78,23 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 .placeholder(R.drawable.placeholder_image)
                 .fallback(R.drawable.placeholder_image)
                 .into(holder.myImageView);//Termékkép
+
+        floatingActionButton.setOnClickListener(v -> {
+
+            RequestQueue requestQueue = Volley.newRequestQueue(v.getContext());
+            String url = "https://oldal.vaganyzoltan.hu/api/addCart.php";
+
+            StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+            }, error -> Toast.makeText(v.getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> MyData = new HashMap<>();
+                    MyData.put("token", MainActivity.getLoginToken());
+                    MyData.put("id", String.valueOf(products.get(holder.getAdapterPosition()).getId()));
+                    return MyData;
+                }
+            };
+            requestQueue.add(getToken);
+        });
     }
 
     @Override
@@ -70,7 +105,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView myTextView;
         ImageView myImageView;
-        FloatingActionButton floatingActionButton;
 
         ViewHolder(View itemView) {
             super(itemView);
