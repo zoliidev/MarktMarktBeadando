@@ -26,4 +26,6 @@
     <string name="marktmarktlogo">MarktMarkLogo</string>
     <string name="cart">🛒Kosár</string>
     <string name="favourites">❤Kedvencek</string>
+    <string name="delivery">Kiszállítási módok:</string>
+    <string name="placeorder">Megrendelem!</string>
 </resources>

@@ -25,4 +25,15 @@
     <string name="marktmarktlogo">MarktMarktLogo</string>
     <string name="cart">🛒Cart</string>
     <string name="favourites">❤Favourites</string>
+    <string name="delivery">Delivery Methods</string>
+    <string name="placeorder">Place Order!</string>
+
+    <string-array name="deliveryItems">
+        <item>Personal reception</item>
+        <item>GLS courier</item>
+        <item>GLS package point</item>
+        <item>FoxPost</item>
+        <item>DHL</item>
+        <item>Magyar Posta</item>
+    </string-array>
 </resources>
