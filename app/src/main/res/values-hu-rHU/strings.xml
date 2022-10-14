@@ -26,4 +26,7 @@
     <string name="marktmarktlogo">MarktMarkLogo</string>
     <string name="cart">🛒Kosár</string>
     <string name="favourites">❤Kedvencek</string>
+    <string name="favEmpty">Ez a lista üres\\nAdj hozzá terméket a \"♥\" ikonnal</string>
+    <string name="empty_cart">Ez a lista üres\\\\nAdj hozzá terméket a \"kosárba\" gombbal</string>
+    <string name="searchEmpty">Nincs találat a keresett szövegre</string>
 </resources>

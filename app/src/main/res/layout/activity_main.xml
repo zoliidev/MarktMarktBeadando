@@ -49,13 +49,23 @@
         android:id="@+id/searchResults"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#424242"
+        android:background="@color/gray_600"
         android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchBar">
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/searchEmpty"
+            android:visibility="gone"
+            android:textAlignment="center"
+            android:textColor="#212121"
+            android:textSize="20sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/resultList"

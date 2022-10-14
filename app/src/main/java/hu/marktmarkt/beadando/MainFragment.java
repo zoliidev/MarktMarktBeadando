@@ -3,6 +3,7 @@ package hu.marktmarkt.beadando;
 import static hu.marktmarkt.beadando.MainActivity.offset;
 import static hu.marktmarkt.beadando.MainActivity.products;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -33,6 +34,7 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.util.Map;
 
+import hu.marktmarkt.beadando.Collection.ProdManager;
 import hu.marktmarkt.beadando.Collection.Util;
 import hu.marktmarkt.beadando.Model.Product;
 
@@ -115,32 +117,16 @@ public class MainFragment extends Fragment {
         isProfil = false;
 
         if(products.isEmpty()) {
-            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-            String url = "https://oldal.vaganyzoltan.hu/api/getProdList.php";
 
-            StringRequest loadProds = new StringRequest(Request.Method.POST, url, response -> {
-                try {
-                    object = new JSONArray(response);
-                    for (int i = 0; i < object.length(); i++) {
-                        String[] darab = object.getString(i).split("@");
-                        products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4], Integer.parseInt(darab[5])));
-                    }
-                } catch (JSONException e) {
-                    Log.e("GetProduct @ MainFragment.java", e.getMessage());
-                }
+            ProdManager prodManager = new ProdManager(requireContext());
+            Map<String, String> data = new HashMap<>();
+            data.put("token", MainActivity.getLoginToken());
+            data.put("limit", String.valueOf(limit));
+            data.put("offset", String.valueOf(offset));
 
-                createGrids();
+            ProdManager.VolleyCallBack callBack = this::createGrids;
 
-            }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
-                protected Map<String, String> getParams() {
-                    Map<String, String> MyData = new HashMap<>();
-                    MyData.put("token", MainActivity.getLoginToken());
-                    MyData.put("limit", String.valueOf(limit));
-                    MyData.put("offset", String.valueOf(offset));
-                    return MyData;
-                }
-            };
-            requestQueue.add(loadProds);
+            prodManager.populateProds("https://oldal.vaganyzoltan.hu/api/getProdList.php", products, data, callBack);
         }else{
             createGrids();
         }
@@ -159,43 +145,20 @@ public class MainFragment extends Fragment {
         protected String doInBackground(Void... arg0) {
             Log.i("Görgetés", "Betöltés...");
             offset = offset + 20;
-            RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-            String url = "https://oldal.vaganyzoltan.hu/api/getProdList.php";
 
-            StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
-                JSONArray loadmoreProd = new JSONArray();
-                try {
-                    loadmoreProd = new JSONArray(response);
-                } catch (JSONException e) {
-                    Log.e("GetProduct @ MainFragment.java", e.getMessage());
-                }
+            ProdManager prodManager = new ProdManager(requireContext());
+            Map<String, String> data = new HashMap<>();
+            data.put("token", MainActivity.getLoginToken());
+            data.put("limit", String.valueOf(limit));
+            data.put("offset", String.valueOf(offset));
 
-                try {
-                    for (int i = 0; i < loadmoreProd.length(); i++) {
-                        String obj = loadmoreProd.getString(i);
-                        object.put(obj);
-                        String[] darab = obj.split("@");
-                        products.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4], 0));
-                        //Log.i("ArrayList", products.get(i).toString());
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+            ProdManager.VolleyCallBack callBack = () -> {
                 adapter = new RecycleViewAdapter(requireContext(), products);
                 adapter.setClickListener(itemClickListener);
                 recyclerView.setAdapter(adapter);
-
-            }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
-                protected Map<String, String> getParams() {
-                    Map<String, String> MyData = new HashMap<>();
-                    MyData.put("token", MainActivity.getLoginToken());
-                    MyData.put("limit", String.valueOf(limit));
-                    MyData.put("offset", String.valueOf(offset));
-                    return MyData;
-                }
             };
-            requestQueue.add(getToken);
+
+            prodManager.populateProds("https://oldal.vaganyzoltan.hu/api/getProdList.php", products, data, callBack);
             return "Lefutott!";
         }
 
