@@ -1,12 +1,18 @@
 package hu.marktmarkt.beadando;
 
+import android.app.UiModeManager;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Spinner;
+import android.widget.Switch;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,10 +61,35 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    private Spinner nyelv;
+    private Button jlszReset;
+    private Switch hubMode;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        nyelv = view.findViewById(R.id.spNyelv);
+
+        jlszReset=view.findViewById(R.id.btnJelszoValtas);
+        jlszReset.setOnClickListener(btnJelszoValtasOnClick);
+
+        hubMode=view.findViewById(R.id.swDarkMode);
+        hubMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                }
+                else{
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                }
+            }
+        });
+        return view;
     }
+    View.OnClickListener btnJelszoValtasOnClick= view ->{
+
+    };
+
 }

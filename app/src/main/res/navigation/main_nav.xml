@@ -17,9 +17,6 @@
             android:id="@+id/action_profil_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_profil_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
             android:id="@+id/action_profil_to_információkFragment"
             app:destination="@id/információkFragment" />
         <action
@@ -34,6 +31,9 @@
         <action
             android:id="@+id/action_ProfilFragment_to_favouriteFragment"
             app:destination="@id/favouriteFragment" />
+        <action
+            android:id="@+id/action_ProfilFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -69,15 +69,6 @@
         tools:layout="@layout/fragment_informaciok" >
         <action
             android:id="@+id/action_információkFragment_to_profil"
-            app:destination="@id/ProfilFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="hu.marktmarkt.beadando.SettingsFragment"
-        android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" >
-        <action
-            android:id="@+id/action_settingsFragment_to_profil"
             app:destination="@id/ProfilFragment" />
     </fragment>
     <action android:id="@+id/action_global_ProfilFragment" app:destination="@id/ProfilFragment" />
@@ -124,6 +115,15 @@
         tools:layout="@layout/fragment_favourite" >
         <action
             android:id="@+id/action_favouriteFragment_to_ProfilFragment"
+            app:destination="@id/ProfilFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="hu.marktmarkt.beadando.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_ProfilFragment"
             app:destination="@id/ProfilFragment" />
     </fragment>
 </navigation>

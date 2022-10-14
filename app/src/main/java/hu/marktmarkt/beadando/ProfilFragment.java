@@ -2,11 +2,14 @@ package hu.marktmarkt.beadando;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -83,6 +86,9 @@ public class ProfilFragment extends Fragment {
     private Button logout;
     private Button cart;
     private Button favourites;
+    private Button settings;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -102,11 +108,15 @@ public class ProfilFragment extends Fragment {
         cart = view.findViewById(R.id.btCart);
         cart.setOnClickListener(changeToCart);
 
+        settings=view.findViewById(R.id.btnSettings);
+        settings.setOnClickListener(onSettingsClick);
+
         favourites = view.findViewById(R.id.btFavourite);
         favourites.setOnClickListener(changeToFavourite);
 
         return view;
     }
+
 
     View.OnClickListener logoutListen = view -> {
         Toast.makeText(getContext(), "Sikeres kijelentkezés", Toast.LENGTH_LONG).show();
@@ -125,5 +135,9 @@ public class ProfilFragment extends Fragment {
     View.OnClickListener changeToFavourite = v -> {
         Fragment fragment = new FavouriteFragment();
         new Util().setFragment(getParentFragmentManager(),fragment);
+    };
+
+    View.OnClickListener onSettingsClick= view ->{
+        new Util().setFragment(getParentFragmentManager(),new SettingsFragment());
     };
 }
