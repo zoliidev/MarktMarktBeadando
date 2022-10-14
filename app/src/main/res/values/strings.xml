@@ -25,4 +25,7 @@
     <string name="marktmarktlogo">MarktMarktLogo</string>
     <string name="cart">🛒Cart</string>
     <string name="favourites">❤Favourites</string>
+    <string name="favEmpty">This list is empty\nAdd products here with the \"♥\" icon</string>
+    <string name="empty_cart">This list is empty\nAdd products here with the \'to cart\' button</string>
+    <string name="searchEmpty">There are no results for the following query</string>
 </resources>
