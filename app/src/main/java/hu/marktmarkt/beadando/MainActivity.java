@@ -25,6 +25,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isMain;
     public static boolean isAkciok;
     public static boolean isProfil;
+    public static boolean showRemove;
     public static int offset;
     public static ArrayList<Product> products = new ArrayList<>();
     public static ArrayList<Product> discountedProducts = new ArrayList<>();
@@ -143,10 +145,6 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             Log.i("BackStackChanged","Back Stack Changed!!!");
-            //FragmentContainerView fragmentInstance = (FragmentContainerView) findViewById(R.id.fragmentView);
-//            Fragment fragmentInstance = getSupportFragmentManager().findFragmentById(R.id.fragmentView);
-//            Log.i("currentFragment","Fragment ID: " + fragmentInstance.getId());
-//            Log.i("findFragmentID","find Fragment ID:" + findViewById(R.id.mainFragment).getId());
             if (isMain){
                 navigationView.getMenu().findItem(R.id.itmMain).setChecked(true);
                 Log.i("setCheckedItmMain","MainChecked");
@@ -159,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
                         navigationView.getMenu().findItem(R.id.itmProfil).setChecked(true);
                         Log.i("setCheckedItmProfil","ProfilChecked");
                     }
-
         });
 
     }

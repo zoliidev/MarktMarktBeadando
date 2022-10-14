@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +35,7 @@ import hu.marktmarkt.beadando.Model.Product;
 import static hu.marktmarkt.beadando.MainActivity.isMain;
 import static hu.marktmarkt.beadando.MainActivity.isAkciok;
 import static hu.marktmarkt.beadando.MainActivity.isProfil;
+import static hu.marktmarkt.beadando.MainActivity.showRemove;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,13 +100,13 @@ public class AkciokFragment extends Fragment {
         isMain = false;
         isAkciok = true;
         isProfil = false;
+        showRemove = false;
 
        if(discountedProducts.isEmpty()){
            loadData();
        }else{
            showLayout();
        }
-
         return view;
     }
 
@@ -152,7 +154,6 @@ public class AkciokFragment extends Fragment {
             }
 
             showLayout();
-
         }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
             protected Map<String, String> getParams() {
                 Map<String, String> MyData = new HashMap<>();

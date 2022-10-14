@@ -26,6 +26,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +40,7 @@ import hu.marktmarkt.beadando.Model.Product;
 import static hu.marktmarkt.beadando.MainActivity.isMain;
 import static hu.marktmarkt.beadando.MainActivity.isAkciok;
 import static hu.marktmarkt.beadando.MainActivity.isProfil;
+import static hu.marktmarkt.beadando.MainActivity.showRemove;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -99,6 +101,7 @@ public class MainFragment extends Fragment {
     private final int limit = 20;
     private RecyclerView recyclerView;
     private NestedScrollView nestedSV;
+    private FloatingActionButton floatingActionButton;
     int count = 0;
 
     @Override
@@ -113,6 +116,7 @@ public class MainFragment extends Fragment {
         isMain = true;
         isAkciok = false;
         isProfil = false;
+        showRemove = false;
 
         if(products.isEmpty()) {
             RequestQueue requestQueue = Volley.newRequestQueue(requireContext());

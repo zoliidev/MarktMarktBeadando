@@ -1,5 +1,7 @@
 package hu.marktmarkt.beadando;
 
+import static hu.marktmarkt.beadando.MainActivity.showRemove;
+
 import android.os.Bundle;
 
 import androidx.core.widget.NestedScrollView;
@@ -93,6 +95,7 @@ public class CartFragment extends Fragment {
         recyclerView = view.findViewById(R.id.prodMain);
         floatingActionButton = view.findViewById(R.id.floatingOrderBt);
         new Util().removeBars(requireActivity());
+        showRemove = true;
 
         floatingActionButton.setOnClickListener(v -> {
             new Util().setFragment(getParentFragmentManager(),new orderFragment());

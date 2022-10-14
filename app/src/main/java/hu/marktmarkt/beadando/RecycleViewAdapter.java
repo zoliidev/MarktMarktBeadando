@@ -12,10 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 import hu.marktmarkt.beadando.Model.Product;
+
+import static hu.marktmarkt.beadando.MainActivity.showRemove;
 
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
 
@@ -67,11 +70,19 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView myTextView;
         ImageView myImageView;
+        FloatingActionButton floatingActionButton;
 
         ViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.prodName);
             myImageView = itemView.findViewById(R.id.cardImageView);
+            floatingActionButton = itemView.findViewById(R.id.floatingActionButton2);
+            if(!showRemove){
+                floatingActionButton.setVisibility(View.GONE);
+            }else{
+                floatingActionButton.setVisibility(View.VISIBLE);
+            }
+
             itemView.setOnClickListener(this);
         }
 

@@ -1,6 +1,8 @@
 package hu.marktmarkt.beadando;
 
 
+import static hu.marktmarkt.beadando.MainActivity.showRemove;
+
 import android.os.Bundle;
 
 import androidx.core.widget.NestedScrollView;
@@ -20,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,6 +84,7 @@ public class FavouriteFragment extends Fragment {
     private RecyclerView recyclerView;
     private NestedScrollView nestedSV;
     private ArrayList<Product> favouriteProducts;
+    FloatingActionButton floatingActionButton;
     RecycleViewAdapter adapter;
 
     @Override
@@ -91,6 +95,7 @@ public class FavouriteFragment extends Fragment {
         recyclerView = view.findViewById(R.id.prodMain);
         Util util = new Util();
         util.addBars(requireActivity());
+        showRemove = true;
 
         if(favouriteProducts.isEmpty()){
             loadData();
