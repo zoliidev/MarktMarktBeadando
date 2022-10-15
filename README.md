@@ -1,6 +1,16 @@
 # MarktMartktBeadando / DROID APP
 **Classification: internal & partners only**
 
+> #### Markt Markt android webshop
+> Funkciók a felhasználó számára:
+> - Fiókba történő bejelentkezés (automatikus opcionálisan)
+> - Termékek kedvenchez hozzáadása
+> - Termékek kosárhoz hozzáadása
+> - Kosárból történő megrendelés
+> - Téma változtatás
+> - Jelszóváltoztatás
+> - Kijelentkezés
+
 # Api Segéd-software: POSTMAN!
 > #### Login-API
 > https://oldal.vaganyzoltan.hu/api/login.php
