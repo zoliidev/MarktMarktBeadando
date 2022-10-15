@@ -40,7 +40,7 @@ import hu.marktmarkt.beadando.Model.Product;
  * Use the {@link FavouriteFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FavouriteFragment extends Fragment {
+public class FavouriteFragment extends Fragment implements RecycleViewAdapter.CallBack{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -166,8 +166,14 @@ public class FavouriteFragment extends Fragment {
     private void showLayout(){
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), favouriteProducts);
+        adapter = new RecycleViewAdapter(requireContext(), favouriteProducts, this);
         adapter.setClickListener(itemClickListener);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClose() {
+        Util util = new Util();
+        util.setFragment(getParentFragmentManager(), new FavouriteFragment());
     }
 }

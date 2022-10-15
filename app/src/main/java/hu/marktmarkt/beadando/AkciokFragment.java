@@ -102,11 +102,11 @@ public class AkciokFragment extends Fragment {
         isProfil = false;
         showRemove = false;
 
-       if(discountedProducts.isEmpty()){
-           loadData();
-       }else{
-           showLayout();
-       }
+        if(discountedProducts.isEmpty()){
+            loadData();
+        }else{
+            showLayout();
+        }
         return view;
     }
 
@@ -167,8 +167,15 @@ public class AkciokFragment extends Fragment {
     private void showLayout(){
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), discountedProducts);
+        adapter = new RecycleViewAdapter(requireContext(), discountedProducts, callBack);
         adapter.setClickListener(itemClickListener);
         recyclerView.setAdapter(adapter);
     }
+
+    RecycleViewAdapter.CallBack callBack = new RecycleViewAdapter.CallBack() {
+        @Override
+        public void onClose() {
+
+        }
+    };
 }

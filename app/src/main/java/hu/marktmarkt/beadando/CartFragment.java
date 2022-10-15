@@ -41,7 +41,7 @@ import hu.marktmarkt.beadando.Model.Product;
  * Use the {@link CartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CartFragment extends Fragment {
+public class CartFragment extends Fragment implements RecycleViewAdapter.CallBack {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -181,25 +181,18 @@ public class CartFragment extends Fragment {
         requestQueue.add(getProd);
     }
 
-//    static FragmentManager tesztFrg = getParentFragmentManager();
-//    public static FragmentManager getParentFrgManager(){
-//        return tesztFrg;
-//    }
-//
-//    public void showAllLayout(){
-//        Fragment frg = null;
-//        frg = getParentFragmentManager().findFragmentById(R.id.cartFragment);
-//        final FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-//        ft.detach(frg);
-//        ft.attach(frg);
-//        ft.commit();
-//    }
     private void showLayout(){
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), cartItem);
+        adapter = new RecycleViewAdapter(requireContext(), cartItem, this);
         adapter.setClickListener(itemClickListener);
         //adapter.registerAdapterDataObserver(defaultObserver);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClose() {
+        Util util = new Util();
+        util.setFragment(getParentFragmentManager(), new CartFragment());
     }
 }

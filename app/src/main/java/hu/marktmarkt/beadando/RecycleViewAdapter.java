@@ -42,11 +42,12 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     FloatingActionButton floatingActionButton;
     RecycleViewAdapter adapter;
     RecyclerView recyclerView;
+    CallBack callBack;
 
-
-    RecycleViewAdapter(Context context, ArrayList<Product> products) {
+    RecycleViewAdapter(Context context, ArrayList<Product> products, CallBack callBack) {
         this.mInflater = LayoutInflater.from(context);
         this.products = products;
+        this.callBack = callBack;
     }
 
     @Override
@@ -59,9 +60,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position){
-
         String imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/";
-
         imgUrl = imgUrl.concat(products.get(position).getImg());
         floatingActionButton = holder.itemView.findViewById(R.id.floatingActionButton2);
         holder.itemView.findViewById(R.id.prodMain);
@@ -88,13 +87,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 String url = "https://oldal.vaganyzoltan.hu/api/addCart.php";
 
                 StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
-//                Fragment frg = null;
-//                frg = getParentFragmentManager().findFragmentById(R.id.cartFragment);
-//                final FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-//                ft.detach(frg);
-//                ft.attach(frg);
-//                ft.commit();
-
+                    callBack.onClose();
                 }, error -> Toast.makeText(v.getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
                     protected Map<String, String> getParams() {
                         Map<String, String> MyData = new HashMap<>();
@@ -109,6 +102,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 RequestQueue requestQueue = Volley.newRequestQueue(v.getContext());
                 String url = "https://oldal.vaganyzoltan.hu/api/addFav.php";
                 StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+                    callBack.onClose();
+
                 }, error -> Toast.makeText(v.getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
                     protected Map<String, String> getParams() {
                         Map<String, String> MyData = new HashMap<>();
@@ -120,6 +115,10 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 requestQueue.add(getToken);
             }
         });
+    }
+
+    interface CallBack {
+        void onClose();
     }
 
     @Override

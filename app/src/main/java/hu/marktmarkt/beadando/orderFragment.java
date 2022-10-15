@@ -37,7 +37,7 @@ import java.util.Map;
 import hu.marktmarkt.beadando.Collection.Util;
 import hu.marktmarkt.beadando.Model.Product;
 
-public class orderFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
+public class orderFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, RecycleViewAdapter.CallBack {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -86,8 +86,8 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
     class teszt extends RecycleViewAdapter {
         private TextView myTextView;
         private ImageView myImageView;
-        teszt(Context context, ArrayList<Product> products) {
-            super(context, products);
+        teszt(Context context, ArrayList<Product> products, CallBack callBack) {
+            super(context, products, callBack);
         }
 
         @Override
@@ -209,8 +209,14 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
     private void showLayout() {
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 1);
         orderRecycleView.setLayoutManager(gridManager);
-        adapter = new teszt(requireContext(), cartItem);
+        adapter = new teszt(requireContext(), cartItem, this);
         adapter.setClickListener(itemClickListener);
         orderRecycleView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClose() {
+        Util util = new Util();
+        util.setFragment(getParentFragmentManager(), new orderFragment());
     }
 }

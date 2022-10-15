@@ -186,7 +186,7 @@ public class MainFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                adapter = new RecycleViewAdapter(requireContext(), products);
+                adapter = new RecycleViewAdapter(requireContext(), products, callBack);
                 adapter.setClickListener(itemClickListener);
                 recyclerView.setAdapter(adapter);
 
@@ -235,10 +235,18 @@ public class MainFragment extends Fragment {
             transaction.addToBackStack(null).commit();
         }
     };
+
+    RecycleViewAdapter.CallBack callBack = new RecycleViewAdapter.CallBack() {
+        @Override
+        public void onClose() {
+
+        }
+    };
+
     private void createGrids(){
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), products);
+        adapter = new RecycleViewAdapter(requireContext(), products, callBack);
         adapter.setClickListener(itemClickListener);
 
         if(adapter.getItemCount() > 0)
