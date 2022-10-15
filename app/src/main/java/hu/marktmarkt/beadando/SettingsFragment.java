@@ -2,10 +2,6 @@ package hu.marktmarkt.beadando;
 
 
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +14,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -97,46 +96,39 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
         nyelv.setAdapter(adapter);
         nyelv.setOnItemSelectedListener(this);
 
-        jlszReset=view.findViewById(R.id.btnJelszoValtas);
+        jlszReset = view.findViewById(R.id.btnJelszoValtas);
         jlszReset.setOnClickListener(btnJelszoValtasOnClick);
-        regi=view.findViewById(R.id.editTextTextPasswordRegi1);
-        uj1=view.findViewById(R.id.editTextTextPasswordNew);
-        uj2=view.findViewById(R.id.editTextTextPasswordNew2);
-        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-        String url = "https://oldal.vaganyzoltan.hu/api/passChange.php";
+        regi = view.findViewById(R.id.editTextTextPasswordRegi1);
+        uj1 = view.findViewById(R.id.editTextTextPasswordNew);
+        uj2 = view.findViewById(R.id.editTextTextPasswordNew2);
 
-        StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
-            //lekérés után itt fut a kód
-        }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
-            protected Map<String, String> getParams() {
-                Map<String, String> MyData = new HashMap<>();
-                MyData.put("Régi jelszó", regi.getText().toString());
-                MyData.put("új jelszó", uj1.getText().toString());
-                MyData.put("új jelszó", uj2.getText().toString());
-                return MyData;
-            }
-        };
-        requestQueue.add(getToken);
-
-
-        hubMode=view.findViewById(R.id.swDarkMode);
+        hubMode = view.findViewById(R.id.swDarkMode);
         int csekd = 0;
-        csekd=AppCompatDelegate.getDefaultNightMode();
-        if(csekd==0)hubMode.setChecked(false);
+        csekd = AppCompatDelegate.getDefaultNightMode();
+        if (csekd == 0) hubMode.setChecked(false);
         else hubMode.setChecked(true);
 
         hubMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    new FileManager().FileKi("true", requireActivity(), "mode.txt");}
-                else {AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    new FileManager().FileKi("false", requireActivity(), "mode.txt");}
+                if (isChecked) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    new FileManager().FileKi("true", requireActivity(), "mode.txt");
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    new FileManager().FileKi("false", requireActivity(), "mode.txt");
+                }
             }
         });
         return view;
     }
-    View.OnClickListener btnJelszoValtasOnClick= view ->{
+
+    View.OnClickListener btnJelszoValtasOnClick = view -> {
+
+        if(!uj1.getText().toString().equals(uj2.getText().toString())){
+            Toast.makeText(requireContext(), "Új jelszó: A két jelszó nem egyerzik meg.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         String url = "https://oldal.vaganyzoltan.hu/api/passChange.php";
@@ -147,29 +139,18 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
             String resp = "Hiba";
             try {
                 object = new JSONObject(response);
-                if (!object.isNull("token")) logToken = object.get("token").toString();
+                //if (!object.isNull("token")) logToken = object.get("token").toString();
                 if (!object.isNull("resp")) resp = object.get("resp").toString();
             } catch (JSONException e) {
                 Log.e("SetToken @ LoginFragment.java", e.getMessage());
             }
 
-            if (logToken != null) {
-                MainActivity.setToken(logToken);
-                Toast.makeText(requireContext(), "Sikeres bejelentkezés!", Toast.LENGTH_LONG).show();
-
-                //change.addBars(requireActivity());
-                //change.setFragment(getParentFragmentManager(), new MainFragment());
-                new FileManager().FileKi(logToken, requireContext(), "loginToken.txt");
-            } else {
-                Toast.makeText(getContext(), resp, Toast.LENGTH_LONG).show();
-            }
-
         }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
             protected Map<String, String> getParams() {
                 Map<String, String> MyData = new HashMap<>();
-                MyData.put("Régi jelszó", regi.getText().toString());
-                MyData.put("új jelszó", uj1.getText().toString());
-                MyData.put("új jelszó", uj2.getText().toString());
+                MyData.put("token", MainActivity.getLoginToken());
+                MyData.put("oldPass", regi.getText().toString());
+                MyData.put("newPass", uj1.getText().toString());
                 return MyData;
             }
         };
@@ -178,7 +159,7 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String text=parent.getItemAtPosition(position).toString();
+        String text = parent.getItemAtPosition(position).toString();
 
     }
 
