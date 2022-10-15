@@ -2,6 +2,7 @@ package hu.marktmarkt.beadando;
 
 import static hu.marktmarkt.beadando.MainActivity.showRemove;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.core.widget.NestedScrollView;
@@ -111,6 +112,19 @@ public class CartFragment extends Fragment {
         return view;
     }
 
+    RecyclerView.AdapterDataObserver defaultObserver = new RecyclerView.AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            super.onChanged();
+            Log.i("onItemRangeRemoved","Lista frissítve");
+        }
+        @Override
+        public void onItemRangeRemoved(int positionStart, int itemCount){
+            Log.i("onItemRangeRemoved","Lista frissítve");
+            super.onItemRangeRemoved(positionStart,itemCount);
+        }
+    };
+
     RecycleViewAdapter.ItemClickListener itemClickListener = new RecycleViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
@@ -153,7 +167,6 @@ public class CartFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-
             showLayout();
 
         }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
@@ -166,11 +179,25 @@ public class CartFragment extends Fragment {
         requestQueue.add(getProd);
     }
 
+//    static FragmentManager tesztFrg = getParentFragmentManager();
+//    public static FragmentManager getParentFrgManager(){
+//        return tesztFrg;
+//    }
+//
+//    public void showAllLayout(){
+//        Fragment frg = null;
+//        frg = getParentFragmentManager().findFragmentById(R.id.cartFragment);
+//        final FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+//        ft.detach(frg);
+//        ft.attach(frg);
+//        ft.commit();
+//    }
     private void showLayout(){
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
         adapter = new RecycleViewAdapter(requireContext(), cartItem);
         adapter.setClickListener(itemClickListener);
+        //adapter.registerAdapterDataObserver(defaultObserver);
         recyclerView.setAdapter(adapter);
     }
 }

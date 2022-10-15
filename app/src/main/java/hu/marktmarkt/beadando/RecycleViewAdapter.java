@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import hu.marktmarkt.beadando.Collection.Util;
 import hu.marktmarkt.beadando.Model.Product;
 
 import static hu.marktmarkt.beadando.MainActivity.showRemove;
@@ -85,6 +86,13 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             String url = "https://oldal.vaganyzoltan.hu/api/addCart.php";
 
             StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+//                Fragment frg = null;
+//                frg = getParentFragmentManager().findFragmentById(R.id.cartFragment);
+//                final FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+//                ft.detach(frg);
+//                ft.attach(frg);
+//                ft.commit();
+
             }, error -> Toast.makeText(v.getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
                 protected Map<String, String> getParams() {
                     Map<String, String> MyData = new HashMap<>();
