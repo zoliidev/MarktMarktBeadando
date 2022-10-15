@@ -22,11 +22,12 @@
         android:id="@+id/btnJelszoValtas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="ChangePassord"
+        android:layout_marginTop="16dp"
+        android:text="ChangePassword"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/swDarkMode" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
 
     <Spinner
         android:id="@+id/spNyelv"
@@ -38,5 +39,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnJelszoValtas" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/swDarkMode" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,6 @@
 package hu.marktmarkt.beadando;
 
-import android.app.UiModeManager;
+
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+
+import hu.marktmarkt.beadando.Collection.FileManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,15 +77,18 @@ public class SettingsFragment extends Fragment {
         jlszReset.setOnClickListener(btnJelszoValtasOnClick);
 
         hubMode=view.findViewById(R.id.swDarkMode);
+        int csekd = 0;
+        csekd=AppCompatDelegate.getDefaultNightMode();
+        if(csekd==0)hubMode.setChecked(false);
+        else hubMode.setChecked(true);
+
         hubMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                }
-                else{
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                }
+                if(isChecked) {AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    new FileManager().FileKi("true", requireActivity(), "mode.txt");}
+                else {AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    new FileManager().FileKi("false", requireActivity(), "mode.txt");}
             }
         });
         return view;
