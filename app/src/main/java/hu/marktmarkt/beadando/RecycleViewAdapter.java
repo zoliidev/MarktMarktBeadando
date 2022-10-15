@@ -32,6 +32,7 @@ import hu.marktmarkt.beadando.Collection.Util;
 import hu.marktmarkt.beadando.Model.Product;
 
 import static hu.marktmarkt.beadando.MainActivity.showRemove;
+import static hu.marktmarkt.beadando.MainActivity.isCart;
 
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
 
@@ -81,11 +82,12 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 .into(holder.myImageView);//Termékkép
 
         floatingActionButton.setOnClickListener(v -> {
+            if(isCart){
+                //Kosár
+                RequestQueue requestQueue = Volley.newRequestQueue(v.getContext());
+                String url = "https://oldal.vaganyzoltan.hu/api/addCart.php";
 
-            RequestQueue requestQueue = Volley.newRequestQueue(v.getContext());
-            String url = "https://oldal.vaganyzoltan.hu/api/addCart.php";
-
-            StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+                StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
 //                Fragment frg = null;
 //                frg = getParentFragmentManager().findFragmentById(R.id.cartFragment);
 //                final FragmentTransaction ft = getParentFragmentManager().beginTransaction();
@@ -93,15 +95,30 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 //                ft.attach(frg);
 //                ft.commit();
 
-            }, error -> Toast.makeText(v.getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
-                protected Map<String, String> getParams() {
-                    Map<String, String> MyData = new HashMap<>();
-                    MyData.put("token", MainActivity.getLoginToken());
-                    MyData.put("id", String.valueOf(products.get(holder.getAdapterPosition()).getId()));
-                    return MyData;
-                }
-            };
-            requestQueue.add(getToken);
+                }, error -> Toast.makeText(v.getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+                    protected Map<String, String> getParams() {
+                        Map<String, String> MyData = new HashMap<>();
+                        MyData.put("token", MainActivity.getLoginToken());
+                        MyData.put("id", String.valueOf(products.get(holder.getAdapterPosition()).getId()));
+                        return MyData;
+                    }
+                };
+                requestQueue.add(getToken);
+            }else{
+                //Kedvencek
+                RequestQueue requestQueue = Volley.newRequestQueue(v.getContext());
+                String url = "https://oldal.vaganyzoltan.hu/api/addFav.php";
+                StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+                }, error -> Toast.makeText(v.getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+                    protected Map<String, String> getParams() {
+                        Map<String, String> MyData = new HashMap<>();
+                        MyData.put("token", MainActivity.getLoginToken());
+                        MyData.put("id", String.valueOf(products.get(holder.getAdapterPosition()).getId()));
+                        return MyData;
+                    }
+                };
+                requestQueue.add(getToken);
+            }
         });
     }
 

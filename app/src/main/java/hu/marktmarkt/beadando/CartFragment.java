@@ -1,6 +1,7 @@
 package hu.marktmarkt.beadando;
 
 import static hu.marktmarkt.beadando.MainActivity.showRemove;
+import static hu.marktmarkt.beadando.MainActivity.isCart;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -99,6 +100,7 @@ public class CartFragment extends Fragment {
         removeButton = recyclerView.findViewById(R.id.floatingActionButton2);
         new Util().removeBars(requireActivity());
         showRemove = true;
+        isCart = true;
 
         floatingActionButton.setOnClickListener(v -> {
             new Util().setFragment(getParentFragmentManager(),new orderFragment());

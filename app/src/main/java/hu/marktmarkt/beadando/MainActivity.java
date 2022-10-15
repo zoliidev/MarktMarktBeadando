@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isAkciok;
     public static boolean isProfil;
     public static boolean showRemove;
+    public static boolean isCart;
     public static int offset;
     public static ArrayList<Product> products = new ArrayList<>();
     public static ArrayList<Product> discountedProducts = new ArrayList<>();

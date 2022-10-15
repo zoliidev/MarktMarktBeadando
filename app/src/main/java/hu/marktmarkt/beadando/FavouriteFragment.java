@@ -2,6 +2,7 @@ package hu.marktmarkt.beadando;
 
 
 import static hu.marktmarkt.beadando.MainActivity.showRemove;
+import static hu.marktmarkt.beadando.MainActivity.isCart;
 
 import android.os.Bundle;
 
@@ -96,6 +97,7 @@ public class FavouriteFragment extends Fragment {
         Util util = new Util();
         util.addBars(requireActivity());
         showRemove = true;
+        isCart = false;
 
         if(favouriteProducts.isEmpty()){
             loadData();
