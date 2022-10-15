@@ -6,13 +6,29 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import hu.marktmarkt.beadando.Collection.FileManager;
 
@@ -21,7 +37,7 @@ import hu.marktmarkt.beadando.Collection.FileManager;
  * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -66,15 +82,42 @@ public class SettingsFragment extends Fragment {
     private Spinner nyelv;
     private Button jlszReset;
     private Switch hubMode;
+    private EditText regi;
+    private EditText uj2;
+    private EditText uj1;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         nyelv = view.findViewById(R.id.spNyelv);
+        ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(getContext(), R.array.Nyelvek, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        nyelv.setAdapter(adapter);
+        nyelv.setOnItemSelectedListener(this);
 
         jlszReset=view.findViewById(R.id.btnJelszoValtas);
         jlszReset.setOnClickListener(btnJelszoValtasOnClick);
+        regi=view.findViewById(R.id.editTextTextPasswordRegi1);
+        uj1=view.findViewById(R.id.editTextTextPasswordNew);
+        uj2=view.findViewById(R.id.editTextTextPasswordNew2);
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+        String url = "https://oldal.vaganyzoltan.hu/api/passChange.php";
+
+        StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+            //lekérés után itt fut a kód
+        }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+            protected Map<String, String> getParams() {
+                Map<String, String> MyData = new HashMap<>();
+                MyData.put("Régi jelszó", regi.getText().toString());
+                MyData.put("új jelszó", uj1.getText().toString());
+                MyData.put("új jelszó", uj2.getText().toString());
+                return MyData;
+            }
+        };
+        requestQueue.add(getToken);
+
 
         hubMode=view.findViewById(R.id.swDarkMode);
         int csekd = 0;
@@ -95,6 +138,52 @@ public class SettingsFragment extends Fragment {
     }
     View.OnClickListener btnJelszoValtasOnClick= view ->{
 
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+        String url = "https://oldal.vaganyzoltan.hu/api/passChange.php";
+
+        StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+            JSONObject object;
+            String logToken = null;
+            String resp = "Hiba";
+            try {
+                object = new JSONObject(response);
+                if (!object.isNull("token")) logToken = object.get("token").toString();
+                if (!object.isNull("resp")) resp = object.get("resp").toString();
+            } catch (JSONException e) {
+                Log.e("SetToken @ LoginFragment.java", e.getMessage());
+            }
+
+            if (logToken != null) {
+                MainActivity.setToken(logToken);
+                Toast.makeText(requireContext(), "Sikeres bejelentkezés!", Toast.LENGTH_LONG).show();
+
+                //change.addBars(requireActivity());
+                //change.setFragment(getParentFragmentManager(), new MainFragment());
+                new FileManager().FileKi(logToken, requireContext(), "loginToken.txt");
+            } else {
+                Toast.makeText(getContext(), resp, Toast.LENGTH_LONG).show();
+            }
+
+        }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
+            protected Map<String, String> getParams() {
+                Map<String, String> MyData = new HashMap<>();
+                MyData.put("Régi jelszó", regi.getText().toString());
+                MyData.put("új jelszó", uj1.getText().toString());
+                MyData.put("új jelszó", uj2.getText().toString());
+                return MyData;
+            }
+        };
+        requestQueue.add(getToken);
     };
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String text=parent.getItemAtPosition(position).toString();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

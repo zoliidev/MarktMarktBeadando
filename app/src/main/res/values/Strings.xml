@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Nyelvek">
+        <item>Magyar</item>
+        <item>Angol</item>
+    </string-array>
+</resources>
