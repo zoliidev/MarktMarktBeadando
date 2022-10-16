@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
     private void createGrids(ArrayList<Product> resultList){
         GridLayoutManager gridManager = new GridLayoutManager(getBaseContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(getBaseContext(), resultList);
+        adapter = new RecycleViewAdapter(getBaseContext(), resultList, callBack);
         adapter.setClickListener(itemClickListener);
         recyclerView.setAdapter(adapter);
     }
@@ -279,6 +279,12 @@ public class MainActivity extends AppCompatActivity {
             lnvNav.setVisibility(View.VISIBLE);
             bar.setVisibility(View.VISIBLE);
             searchBar.setText("");
+        }
+    };
+    RecycleViewAdapter.CallBack callBack = new RecycleViewAdapter.CallBack() {
+        @Override
+        public void onClose() {
+
         }
     };
 }
