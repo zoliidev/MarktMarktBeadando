@@ -69,7 +69,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             double eredmeny = products.get(position).getPrice() - szorzas;
             holder.myTextView.setText(products.get(position).getName() + "\n" + (int) eredmeny + "Ft " + products.get(position).getDiscount() + "% MEGTAKARÍTÁS!!!"); //Terméknév
         }
-        //holder.myImageView.setImageResource();
+
         Glide.with(holder.myImageView.getContext())
                 .load(imgUrl)
                 .fitCenter()
@@ -114,7 +114,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 }
             });
         }
-
     }
 
     interface CallBack {

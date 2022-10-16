@@ -11,20 +11,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,55 +27,21 @@ import static hu.marktmarkt.beadando.MainActivity.isMain;
 import static hu.marktmarkt.beadando.MainActivity.isAkciok;
 import static hu.marktmarkt.beadando.MainActivity.isProfil;
 import static hu.marktmarkt.beadando.MainActivity.showRemove;
-import static hu.marktmarkt.beadando.MainActivity.offset;
-import static hu.marktmarkt.beadando.MainActivity.products;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AkciokFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AkciokFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     View rootView;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public AkciokFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AkciókFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AkciokFragment newInstance(String param1, String param2) {
+    public static AkciokFragment newInstance() {
         AkciokFragment fragment = new AkciokFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     private RecyclerView recyclerView;
@@ -118,8 +73,6 @@ public class AkciokFragment extends Fragment {
     RecycleViewAdapter.ItemClickListener itemClickListener = new RecycleViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            //Log.i("GRID", "Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position);
-            //Toast.makeText(getContext(), "[I] Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position, Toast.LENGTH_LONG).show();
             Product product = adapter.getItem(position);
 
             Fragment fragment = new ProductFragment();
@@ -157,7 +110,6 @@ public class AkciokFragment extends Fragment {
     RecycleViewAdapter.CallBack callBack = new RecycleViewAdapter.CallBack() {
         @Override
         public void onClose() {
-
         }
     };
 }

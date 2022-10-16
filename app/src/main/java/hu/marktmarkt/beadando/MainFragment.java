@@ -35,41 +35,13 @@ import static hu.marktmarkt.beadando.MainActivity.isAkciok;
 import static hu.marktmarkt.beadando.MainActivity.isProfil;
 import static hu.marktmarkt.beadando.MainActivity.showRemove;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MainFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MainFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public MainFragment() {}
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public MainFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
+    public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -78,23 +50,12 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        if (savedInstanceState != null) {
-            //Ha el lett mentve az állapot mentés akkor restoroljunk
-        } else {
-            //Ha nem volt állapot mentés akkor shuffle megint
-        }
-
     }
 
     private JSONArray object = new JSONArray();
     private final int limit = 20;
     private RecyclerView recyclerView;
     private NestedScrollView nestedSV;
-    private FloatingActionButton floatingActionButton;
     int count = 0;
 
     @Override
@@ -126,7 +87,6 @@ public class MainFragment extends Fragment {
         }else{
             createGrids();
         }
-
         return view;
     }
 
@@ -172,8 +132,6 @@ public class MainFragment extends Fragment {
     RecycleViewAdapter.ItemClickListener itemClickListener = new RecycleViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            Log.i("GRID", "Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position);
-            //Toast.makeText(getContext(), "[I] Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position, Toast.LENGTH_LONG).show();
             Product product = adapter.getItem(position);
 
             Fragment fragment = new ProductFragment();
@@ -199,7 +157,6 @@ public class MainFragment extends Fragment {
 
         if(adapter.getItemCount() > 0)
         {
-            //recyclerView.getAdapter().getStateRestorationPolicy();
             adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         }
 
@@ -209,7 +166,6 @@ public class MainFragment extends Fragment {
                 if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                     count++;
                     if (count < 10) {
-                        //loadMore();
                         new loadMoreAsync().execute();
                     }
                 }

@@ -41,15 +41,11 @@ import hu.marktmarkt.beadando.Model.Product;
 
 public class ProductFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private String imgUrl;
     private Product product;
 
-    public static ProductFragment newInstance(String param1, String param2) {
+    public static ProductFragment newInstance() {
         ProductFragment fragment = new ProductFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -58,11 +54,9 @@ public class ProductFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-
             product = (Product) bundle.getSerializable("product");
             imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/".concat(product.getImg());
         }
-
     }
 
     private ImageButton favourite;
@@ -99,8 +93,6 @@ public class ProductFragment extends Fragment {
             } catch (JSONException e) {
                 Log.e("ListFav @ ProductFragment.java", e.getMessage());
             }
-
-            //Toast.makeText(getContext(), favList + "" + favList.length(), Toast.LENGTH_LONG).show();
 
             for (int i = 0; i < favList.length(); i++) {
                 try {
@@ -195,8 +187,6 @@ public class ProductFragment extends Fragment {
                     Log.e("GetProduct @ MainFragment.java", e.getMessage());
                 }
 
-                //Toast.makeText(getContext(), cart + "" + cart.length(), Toast.LENGTH_LONG).show();
-
             }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
                 protected Map<String, String> getParams() {
                     Map<String, String> MyData = new HashMap<>();
@@ -224,15 +214,6 @@ public class ProductFragment extends Fragment {
             String url = "https://oldal.vaganyzoltan.hu/api/addFav.php";
 
             StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
-                /*JSONArray fav = new JSONArray();
-                try {
-                    fav = new JSONArray(response);
-                } catch (JSONException e) {
-                    Log.e("GetProduct @ MainFragment.java", e.getMessage());
-                }
-
-                Toast.makeText(getContext(), fav + "" + fav.length(), Toast.LENGTH_LONG).show();*/
-
             }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
                 protected Map<String, String> getParams() {
                     Map<String, String> data = new HashMap<>();

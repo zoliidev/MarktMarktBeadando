@@ -41,33 +41,17 @@ import hu.marktmarkt.beadando.Model.Product;
 
 public class orderFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, RecycleViewAdapter.CallBack {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
     public orderFragment() {
-        // Required empty public constructor
     }
 
-    public static CartFragment newInstance(String param1, String param2) {
+    public static CartFragment newInstance() {
         CartFragment fragment = new CartFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        isCart = true;
     }
     //Delivery Spinner kiválasztott item
     @Override
@@ -121,6 +105,7 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
         orderTextView = view.findViewById(R.id.orderTextView);
         prodCountTextView = view.findViewById(R.id.prodCountTextView);
         new Util().removeBars(requireActivity());
+        isCart = true;
 
         //Spinner
         String[] arraySpinner = new String[] {
@@ -155,16 +140,13 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
         } else {
             showLayout();
         }
-
         return view;
     }
 
     RecycleViewAdapter.ItemClickListener itemClickListener = new RecycleViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            //Log.i("GRID", "Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position);
-            //Toast.makeText(getContext(), "[I] Katitntás érzékelve: " + adapter.getItem(position) + ", pozíció: " + position, Toast.LENGTH_LONG).show();
-            Product product = adapter.getItem(position);
+           Product product = adapter.getItem(position);
 
             Fragment fragment = new ProductFragment();
             Bundle bundle = new Bundle();
@@ -191,7 +173,6 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
                 Prod = new JSONArray(response);
                 prodAmount += Prod.length();
                 prodCountTextView.setText("Kosárban: "+prodAmount);
-                //Toast.makeText(getContext(),prodAmount.toString(),Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 Log.e("GetProduct @ AkciokFragment.java", e.getMessage());
             }
@@ -201,7 +182,6 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
                     String product = Prod.getString(i);
                     String[] splitProd = product.split("@");
                     prodTotal+= Integer.parseInt(splitProd[2])-((Integer.parseInt(splitProd[2])/100)*Integer.parseInt(splitProd[5]));
-                    //Toast.makeText(getContext(),prodTotal.toString(),Toast.LENGTH_LONG).show();
                     cartItem.add(new Product(Integer.parseInt(splitProd[0]), splitProd[1], Integer.parseInt(splitProd[2]), splitProd[3], splitProd[4], Integer.parseInt(splitProd[5])));
                 } catch (JSONException e) {
                     e.printStackTrace();
