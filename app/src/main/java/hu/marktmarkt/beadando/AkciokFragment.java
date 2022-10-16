@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,9 +33,11 @@ import hu.marktmarkt.beadando.Collection.ProdManager;
 import hu.marktmarkt.beadando.Collection.Util;
 import hu.marktmarkt.beadando.Model.Product;
 
+import static hu.marktmarkt.beadando.MainActivity.isCart;
 import static hu.marktmarkt.beadando.MainActivity.isMain;
 import static hu.marktmarkt.beadando.MainActivity.isAkciok;
 import static hu.marktmarkt.beadando.MainActivity.isProfil;
+import static hu.marktmarkt.beadando.MainActivity.showRemove;
 import static hu.marktmarkt.beadando.MainActivity.offset;
 import static hu.marktmarkt.beadando.MainActivity.products;
 
@@ -101,13 +104,14 @@ public class AkciokFragment extends Fragment {
         isMain = false;
         isAkciok = true;
         isProfil = false;
+        showRemove = false;
+        isCart = false;
 
-       if(discountedProducts.isEmpty()){
-           loadData();
-       }else{
-           showLayout();
-       }
-
+        if(discountedProducts.isEmpty()){
+            loadData();
+        }else{
+            showLayout();
+        }
         return view;
     }
 
@@ -145,8 +149,15 @@ public class AkciokFragment extends Fragment {
     private void showLayout(){
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), discountedProducts);
+        adapter = new RecycleViewAdapter(requireContext(), discountedProducts, callBack);
         adapter.setClickListener(itemClickListener);
         recyclerView.setAdapter(adapter);
     }
+
+    RecycleViewAdapter.CallBack callBack = new RecycleViewAdapter.CallBack() {
+        @Override
+        public void onClose() {
+
+        }
+    };
 }

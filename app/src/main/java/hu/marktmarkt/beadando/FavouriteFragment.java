@@ -1,6 +1,9 @@
 package hu.marktmarkt.beadando;
 
 
+import static hu.marktmarkt.beadando.MainActivity.showRemove;
+import static hu.marktmarkt.beadando.MainActivity.isCart;
+
 import android.os.Bundle;
 
 import androidx.core.widget.NestedScrollView;
@@ -21,6 +24,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +42,7 @@ import hu.marktmarkt.beadando.Model.Product;
  * Use the {@link FavouriteFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FavouriteFragment extends Fragment {
+public class FavouriteFragment extends Fragment implements RecycleViewAdapter.CallBack{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,6 +87,7 @@ public class FavouriteFragment extends Fragment {
     private RecyclerView recyclerView;
     private NestedScrollView nestedSV;
     private ArrayList<Product> favouriteProducts;
+    FloatingActionButton floatingActionButton;
     RecycleViewAdapter adapter;
 
     @Override
@@ -93,6 +98,8 @@ public class FavouriteFragment extends Fragment {
         recyclerView = view.findViewById(R.id.prodMain);
         Util util = new Util();
         util.addBars(requireActivity());
+        showRemove = true;
+        isCart = false;
 
         if(favouriteProducts.isEmpty()){
             loadData(view);
@@ -146,8 +153,14 @@ public class FavouriteFragment extends Fragment {
     private void showLayout(){
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), favouriteProducts);
+        adapter = new RecycleViewAdapter(requireContext(), favouriteProducts, this);
         adapter.setClickListener(itemClickListener);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClose() {
+        favouriteProducts = new ArrayList<Product>();
+        loadData();
     }
 }

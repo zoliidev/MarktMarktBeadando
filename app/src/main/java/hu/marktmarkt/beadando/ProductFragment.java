@@ -1,5 +1,7 @@
 package hu.marktmarkt.beadando;
 
+import static hu.marktmarkt.beadando.MainActivity.isCart;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,6 +83,7 @@ public class ProductFragment extends Fragment {
         favourite = (ImageButton) view.findViewById(R.id.favBt);
         search.setVisibility(View.GONE);
         navBar.setVisibility(View.GONE);
+        isCart = false;
 
         searchResult = view.findViewById(R.id.searchResults);
         lnvNav = view.findViewById(R.id.lnvNav);

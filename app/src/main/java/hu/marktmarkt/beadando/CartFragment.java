@@ -1,5 +1,9 @@
 package hu.marktmarkt.beadando;
 
+import static hu.marktmarkt.beadando.MainActivity.showRemove;
+import static hu.marktmarkt.beadando.MainActivity.isCart;
+
+import android.content.Context;
 import static hu.marktmarkt.beadando.MainActivity.offset;
 import static hu.marktmarkt.beadando.MainActivity.products;
 
@@ -23,6 +27,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +46,7 @@ import hu.marktmarkt.beadando.Model.Product;
  * Use the {@link CartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CartFragment extends Fragment {
+public class CartFragment extends Fragment implements RecycleViewAdapter.CallBack {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -85,6 +91,8 @@ public class CartFragment extends Fragment {
     private RecyclerView recyclerView;
     private NestedScrollView nestedSV;
     private ArrayList<Product> cartItem;
+    FloatingActionButton floatingActionButton;
+    FloatingActionButton removeButton;
     RecycleViewAdapter adapter;
 
     @Override
@@ -93,17 +101,36 @@ public class CartFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
         nestedSV = view.findViewById(R.id.idNestedSVCart);
         recyclerView = view.findViewById(R.id.prodMain);
-        Util util = new Util();
-        util.addBars(requireActivity());
+        floatingActionButton = view.findViewById(R.id.floatingOrderBt);
+        removeButton = recyclerView.findViewById(R.id.floatingActionButton2);
+        new Util().removeBars(requireActivity());
+        showRemove = true;
+        isCart = true;
+
+        floatingActionButton.setOnClickListener(v -> {
+            new Util().setFragment(getParentFragmentManager(),new orderFragment());
+        });
 
         if (cartItem.isEmpty()) {
             loadData(view);
         } else {
             showLayout();
         }
-
         return view;
     }
+
+    RecyclerView.AdapterDataObserver defaultObserver = new RecyclerView.AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            super.onChanged();
+            Log.i("onItemRangeRemoved","Lista frissítve");
+        }
+        @Override
+        public void onItemRangeRemoved(int positionStart, int itemCount){
+            Log.i("onItemRangeRemoved","Lista frissítve");
+            super.onItemRangeRemoved(positionStart,itemCount);
+        }
+    };
 
     RecycleViewAdapter.ItemClickListener itemClickListener = new RecycleViewAdapter.ItemClickListener() {
         @Override
@@ -149,8 +176,15 @@ public class CartFragment extends Fragment {
     private void showLayout() {
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), cartItem);
+        adapter = new RecycleViewAdapter(requireContext(), cartItem, this);
         adapter.setClickListener(itemClickListener);
+        //adapter.registerAdapterDataObserver(defaultObserver);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClose() {
+        cartItem = new ArrayList<Product>();
+        loadData();
     }
 }
