@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -97,6 +98,7 @@ public class MainFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
     int count = 0;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
@@ -126,7 +128,6 @@ public class MainFragment extends Fragment {
         }else{
             createGrids();
         }
-
         return view;
     }
 

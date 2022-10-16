@@ -25,9 +25,18 @@
     <string name="marktmarktlogo">MarktMarktLogo</string>
     <string name="cart">🛒Cart</string>
     <string name="favourites">❤Favourites</string>
+    <string name="customer_service">Customer service:</string>
+    <string name="tel">TEL.:06–30–889–9667</string>
+    <string name="our_toll_free_number">Our toll-free number:</string>
+    <string name="fax">FAX.:36–1–336–6552</string>
+    <string name="department_store_opening_hours">Department store opening hours:</string>
+    <string name="monday_08_00_18_00">Monday: 08:00–18:00</string>
+    <string name="tuesday_08_00_18_00">Tuesday: 08:00–18:00</string>
+    <string name="wednesday_08_00_18_00">Wednesday: 08:00–18:00</string>
+    <string name="thursday_08_00_18_00">Thursday: 08:00–18:00</string>
+    <string name="friday_08_00_18_00">Friday: 08:00–18:00</string>
     <string name="delivery">Delivery Methods</string>
     <string name="placeorder">Place Order!</string>
-
     <string-array name="deliveryItems">
         <item>Personal reception</item>
         <item>GLS courier</item>
