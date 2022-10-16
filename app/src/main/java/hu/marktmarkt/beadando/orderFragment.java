@@ -2,6 +2,7 @@ package hu.marktmarkt.beadando;
 
 import static hu.marktmarkt.beadando.MainActivity.isCart;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -131,7 +132,18 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if(((TextView) parent.getChildAt(0)) != null){
+                    ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         prodAmount = 0;
         prodTotal = 0;
@@ -219,6 +231,8 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void onClose() {
         cartItem = new ArrayList<Product>();
+        prodTotal = 0;
+        prodAmount = 0;
         loadData();
     }
 }
