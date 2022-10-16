@@ -177,7 +177,7 @@ public class CartFragment extends Fragment implements RecycleViewAdapter.CallBac
     private void showLayout() {
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), cartItem, this);
+        adapter = new RecycleViewAdapter(requireContext(), cartItem, this, R.layout.prod_card3);
         adapter.setClickListener(itemClickListener);
         //adapter.registerAdapterDataObserver(defaultObserver);
         recyclerView.setAdapter(adapter);

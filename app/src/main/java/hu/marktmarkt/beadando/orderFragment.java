@@ -89,8 +89,8 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
     class teszt extends RecycleViewAdapter {
         private TextView myTextView;
         private ImageView myImageView;
-        teszt(Context context, ArrayList<Product> products, CallBack callBack) {
-            super(context, products, callBack);
+        teszt(Context context, ArrayList<Product> products, CallBack callBack, int cardLayout) {
+            super(context, products, callBack, cardLayout);
         }
 
         @Override
@@ -223,7 +223,7 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
     private void showLayout() {
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 1);
         orderRecycleView.setLayoutManager(gridManager);
-        adapter = new teszt(requireContext(), cartItem, this);
+        adapter = new teszt(requireContext(), cartItem, this, R.layout.prod_card2);
         adapter.setClickListener(itemClickListener);
         orderRecycleView.setAdapter(adapter);
     }
