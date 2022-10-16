@@ -173,7 +173,7 @@ public class FavouriteFragment extends Fragment implements RecycleViewAdapter.Ca
 
     @Override
     public void onClose() {
-        Util util = new Util();
-        util.setFragment(getParentFragmentManager(), new FavouriteFragment());
+        favouriteProducts = new ArrayList<Product>();
+        loadData();
     }
 }

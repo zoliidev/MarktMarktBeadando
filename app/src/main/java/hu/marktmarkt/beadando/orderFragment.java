@@ -1,5 +1,6 @@
 package hu.marktmarkt.beadando;
 
+import static hu.marktmarkt.beadando.MainActivity.isCart;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -65,6 +66,7 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        isCart = true;
     }
     //Delivery Spinner kiválasztott item
     @Override
@@ -216,7 +218,7 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public void onClose() {
-        Util util = new Util();
-        util.setFragment(getParentFragmentManager(), new orderFragment());
+        cartItem = new ArrayList<Product>();
+        loadData();
     }
 }

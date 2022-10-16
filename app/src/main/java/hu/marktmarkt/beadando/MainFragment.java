@@ -1,5 +1,6 @@
 package hu.marktmarkt.beadando;
 
+import static hu.marktmarkt.beadando.MainActivity.isCart;
 import static hu.marktmarkt.beadando.MainActivity.offset;
 import static hu.marktmarkt.beadando.MainActivity.products;
 
@@ -117,6 +118,7 @@ public class MainFragment extends Fragment {
         isAkciok = false;
         isProfil = false;
         showRemove = false;
+        isCart = false;
 
         if(products.isEmpty()) {
             RequestQueue requestQueue = Volley.newRequestQueue(requireContext());

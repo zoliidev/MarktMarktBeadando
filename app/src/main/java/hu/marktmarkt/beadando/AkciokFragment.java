@@ -32,6 +32,7 @@ import java.util.Map;
 import hu.marktmarkt.beadando.Collection.Util;
 import hu.marktmarkt.beadando.Model.Product;
 
+import static hu.marktmarkt.beadando.MainActivity.isCart;
 import static hu.marktmarkt.beadando.MainActivity.isMain;
 import static hu.marktmarkt.beadando.MainActivity.isAkciok;
 import static hu.marktmarkt.beadando.MainActivity.isProfil;
@@ -101,6 +102,7 @@ public class AkciokFragment extends Fragment {
         isAkciok = true;
         isProfil = false;
         showRemove = false;
+        isCart = false;
 
         if(discountedProducts.isEmpty()){
             loadData();

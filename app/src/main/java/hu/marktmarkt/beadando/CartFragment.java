@@ -192,7 +192,7 @@ public class CartFragment extends Fragment implements RecycleViewAdapter.CallBac
 
     @Override
     public void onClose() {
-        Util util = new Util();
-        util.setFragment(getParentFragmentManager(), new CartFragment());
+        cartItem = new ArrayList<Product>();
+        loadData();
     }
 }
