@@ -1,13 +1,8 @@
 package hu.marktmarkt.beadando;
 
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,18 +28,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import hu.marktmarkt.beadando.Collection.FileManager;
-import hu.marktmarkt.beadando.Collection.MyContextWrapper;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class SettingsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -86,7 +79,7 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
         }
     }
 
-    private Spinner nyelv;
+
     private Button jlszReset;
     private Switch hubMode;
     private EditText regi;
@@ -98,11 +91,7 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        nyelv = view.findViewById(R.id.spNyelv);
-        ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(getContext(), R.array.Nyelvek, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        nyelv.setAdapter(adapter);
-        nyelv.setOnItemSelectedListener(this);
+
 
         jlszReset = view.findViewById(R.id.btnJelszoValtas);
         jlszReset.setOnClickListener(btnJelszoValtasOnClick);
@@ -165,42 +154,4 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
         requestQueue.add(getToken);
     };
 
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String text = parent.getItemAtPosition(position).toString();
-        switch(text) {
-            case "Magyar":
-                getMyContextHU();
-                break;
-            case "Angol":
-                getMyContextEN();
-                break;
-            default:
-                return;
-        }
-
-
-        //Context context = MyContextWrapper.wrap(this/*in fragment use getContext() instead of this*/, "en");
-        //getResources().updateConfiguration(context.getResources().getConfiguration(), context.getResources().getDisplayMetrics());
-
-        //new MyContextWrapper(Context context, String language);
-    }
-    public Context getMyContextEN(){
-        return MyContextWrapper.wrap(getContext(),"en");
-    }
-    public Context getMyContextHU(){
-        return MyContextWrapper.wrap(getContext(),"hu");
-    }
-/*@Override
-protected void attachBaseContext(Context newBase) {
-    super.attachBaseContext(MyContextWrapper.wrap(newBase,"fr"));
-}
-*/
-
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 }

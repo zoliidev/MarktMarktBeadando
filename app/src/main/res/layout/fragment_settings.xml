@@ -29,17 +29,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordNew" />
 
-    <Spinner
-        android:id="@+id/spNyelv"
-        android:layout_width="157dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnJelszoValtas" />
-
     <EditText
         android:id="@+id/editTextTextPasswordNew"
         android:layout_width="wrap_content"

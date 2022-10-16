@@ -87,6 +87,7 @@ public class ProfilFragment extends Fragment {
     private Button cart;
     private Button favourites;
     private Button settings;
+    private Button info;
 
 
 
@@ -114,10 +115,14 @@ public class ProfilFragment extends Fragment {
         favourites = view.findViewById(R.id.btFavourite);
         favourites.setOnClickListener(changeToFavourite);
 
+        info=view.findViewById(R.id.btnInfo);
+        info.setOnClickListener(OnInfoClick);
         return view;
     }
 
-
+    View.OnClickListener OnInfoClick= view->{
+      new Util().setFragment(getParentFragmentManager(), new InformaciokFragment());
+    };
     View.OnClickListener logoutListen = view -> {
         Toast.makeText(getContext(), "Sikeres kijelentkezés", Toast.LENGTH_LONG).show();
         MainActivity.setToken("");
