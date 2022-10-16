@@ -33,8 +33,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     protected final LayoutInflater mInflater;
     protected ItemClickListener mClickListener;
     FloatingActionButton floatingActionButton;
-    RecycleViewAdapter adapter;
-    RecyclerView recyclerView;
     CallBack callBack;
     int cardLayout;
 
@@ -57,10 +55,12 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String imgUrl = "https://oldal.vaganyzoltan.hu/prod-img/";
         imgUrl = imgUrl.concat(products.get(position).getImg());
-        if (cardLayout == R.layout.prod_card3) {
+
+        if (cardLayout == R.layout.prod_card3 || cardLayout == R.layout.prod_card2) {
             floatingActionButton = holder.itemView.findViewById(R.id.floatingActionButton2);
         }
         holder.itemView.findViewById(R.id.prodMain);
+
         if (products.get(position).getDiscount() == 0) {
             holder.myTextView.setText(products.get(position).getName() + "\n" + products.get(position).getPrice() + "Ft"); //Terméknév
         } else {
@@ -76,7 +76,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 .placeholder(R.drawable.placeholder_image)
                 .fallback(R.drawable.placeholder_image)
                 .into(holder.myImageView);//Termékkép
-        if (cardLayout == R.layout.prod_card3) {
+
+        if (cardLayout == R.layout.prod_card3 || cardLayout == R.layout.prod_card2) {
             floatingActionButton.setOnClickListener(v -> {
                 if (isCart) {
                     //Kosár
