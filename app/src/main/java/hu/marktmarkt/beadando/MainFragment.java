@@ -159,7 +159,7 @@ public class MainFragment extends Fragment {
             data.put("offset", String.valueOf(offset));
 
             ProdManager.VolleyCallBack callBack = () -> {
-                adapter = new RecycleViewAdapter(requireContext(), products, callBack);
+                adapter = new RecycleViewAdapter(requireContext(), products, callBack1);
                 adapter.setClickListener(itemClickListener);
                 recyclerView.setAdapter(adapter);
             };
@@ -201,16 +201,10 @@ public class MainFragment extends Fragment {
         }
     };
 
-    RecycleViewAdapter.CallBack callBack = new RecycleViewAdapter.CallBack() {
-        @Override
-        public void onClose() {
-        }
-    };
-
     private void createGrids(){
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), products, callBack);
+        adapter = new RecycleViewAdapter(requireContext(), products, callBack1);
         adapter.setClickListener(itemClickListener);
 
         if(adapter.getItemCount() > 0)
@@ -233,4 +227,9 @@ public class MainFragment extends Fragment {
         });
         recyclerView.setAdapter(adapter);
     }
+    RecycleViewAdapter.CallBack callBack1 = new RecycleViewAdapter.CallBack() {
+        @Override
+        public void onClose() {
+        }
+    };
 }

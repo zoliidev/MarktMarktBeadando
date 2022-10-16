@@ -89,11 +89,11 @@ public class FavouriteFragment extends Fragment implements RecycleViewAdapter.Ca
     private ArrayList<Product> favouriteProducts;
     FloatingActionButton floatingActionButton;
     RecycleViewAdapter adapter;
-
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         favouriteProducts=new ArrayList<>();
-        View view = inflater.inflate(R.layout.fragment_favourite, container, false);
+        view = inflater.inflate(R.layout.fragment_favourite, container, false);
         nestedSV = view.findViewById(R.id.idNestedSVFavourtie);
         recyclerView = view.findViewById(R.id.prodMain);
         Util util = new Util();
@@ -161,6 +161,6 @@ public class FavouriteFragment extends Fragment implements RecycleViewAdapter.Ca
     @Override
     public void onClose() {
         favouriteProducts = new ArrayList<Product>();
-        loadData();
+        loadData(view);
     }
 }

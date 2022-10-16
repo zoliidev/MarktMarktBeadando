@@ -94,11 +94,12 @@ public class CartFragment extends Fragment implements RecycleViewAdapter.CallBac
     FloatingActionButton floatingActionButton;
     FloatingActionButton removeButton;
     RecycleViewAdapter adapter;
+    View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         cartItem = new ArrayList<>();
-        View view = inflater.inflate(R.layout.fragment_cart, container, false);
+        view = inflater.inflate(R.layout.fragment_cart, container, false);
         nestedSV = view.findViewById(R.id.idNestedSVCart);
         recyclerView = view.findViewById(R.id.prodMain);
         floatingActionButton = view.findViewById(R.id.floatingOrderBt);
@@ -185,6 +186,6 @@ public class CartFragment extends Fragment implements RecycleViewAdapter.CallBac
     @Override
     public void onClose() {
         cartItem = new ArrayList<Product>();
-        loadData();
+        loadData(view);
     }
 }
