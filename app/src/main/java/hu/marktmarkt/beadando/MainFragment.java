@@ -4,12 +4,10 @@ import static hu.marktmarkt.beadando.MainActivity.isCart;
 import static hu.marktmarkt.beadando.MainActivity.offset;
 import static hu.marktmarkt.beadando.MainActivity.products;
 
-import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -17,21 +15,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -159,7 +149,7 @@ public class MainFragment extends Fragment {
             data.put("offset", String.valueOf(offset));
 
             ProdManager.VolleyCallBack callBack = () -> {
-                adapter = new RecycleViewAdapter(requireContext(), products, callBack1);
+                adapter = new RecycleViewAdapter(requireContext(), products, callBack1, R.layout.prod_card);
                 adapter.setClickListener(itemClickListener);
                 recyclerView.setAdapter(adapter);
             };
@@ -204,7 +194,7 @@ public class MainFragment extends Fragment {
     private void createGrids(){
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), products, callBack1);
+        adapter = new RecycleViewAdapter(requireContext(), products, callBack1, R.layout.prod_card);
         adapter.setClickListener(itemClickListener);
 
         if(adapter.getItemCount() > 0)

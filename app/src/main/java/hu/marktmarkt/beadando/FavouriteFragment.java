@@ -153,7 +153,7 @@ public class FavouriteFragment extends Fragment implements RecycleViewAdapter.Ca
     private void showLayout(){
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), favouriteProducts, this);
+        adapter = new RecycleViewAdapter(requireContext(), favouriteProducts, this, R.layout.prod_card3);
         adapter.setClickListener(itemClickListener);
         recyclerView.setAdapter(adapter);
     }

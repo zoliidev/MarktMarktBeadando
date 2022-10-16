@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     bar.setVisibility(View.VISIBLE);
                     return;
                 }
+                showRemove = false;
                 searchResult.setVisibility(View.VISIBLE);
                 lnvNav.setVisibility(View.GONE);
                 bar.setVisibility(View.GONE);
@@ -248,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
     private void createGrids(ArrayList<Product> resultList){
         GridLayoutManager gridManager = new GridLayoutManager(getBaseContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(getBaseContext(), resultList, callBack);
+        adapter = new RecycleViewAdapter(getBaseContext(), resultList, callBack, R.layout.prod_card);
         adapter.setClickListener(itemClickListener);
         recyclerView.setAdapter(adapter);
     }
