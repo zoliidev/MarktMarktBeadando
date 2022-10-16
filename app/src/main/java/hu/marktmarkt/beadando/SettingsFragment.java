@@ -1,7 +1,13 @@
 package hu.marktmarkt.beadando;
 
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +33,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import hu.marktmarkt.beadando.Collection.FileManager;
+import hu.marktmarkt.beadando.Collection.MyContextWrapper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -157,11 +165,39 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
         requestQueue.add(getToken);
     };
 
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String text = parent.getItemAtPosition(position).toString();
+        switch(text) {
+            case "Magyar":
+                getMyContextHU();
+                break;
+            case "Angol":
+                getMyContextEN();
+                break;
+            default:
+                return;
+        }
 
+
+        //Context context = MyContextWrapper.wrap(this/*in fragment use getContext() instead of this*/, "en");
+        //getResources().updateConfiguration(context.getResources().getConfiguration(), context.getResources().getDisplayMetrics());
+
+        //new MyContextWrapper(Context context, String language);
     }
+    public Context getMyContextEN(){
+        return MyContextWrapper.wrap(getContext(),"en");
+    }
+    public Context getMyContextHU(){
+        return MyContextWrapper.wrap(getContext(),"hu");
+    }
+/*@Override
+protected void attachBaseContext(Context newBase) {
+    super.attachBaseContext(MyContextWrapper.wrap(newBase,"fr"));
+}
+*/
+
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {

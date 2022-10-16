@@ -1,6 +1,8 @@
 package hu.marktmarkt.beadando.Collection;
 
 import android.app.Activity;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.view.View;
 import android.widget.EditText;
 
@@ -9,6 +11,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Locale;
 
 import hu.marktmarkt.beadando.R;
 
@@ -31,4 +35,6 @@ public class Util {
         navBar.setVisibility(View.VISIBLE);
         search.setVisibility(View.VISIBLE);
     }
+
+
 }
