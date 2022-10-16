@@ -37,4 +37,7 @@
         <item>Magyar Posta</item>
         <item>Markt Markt Express(24/7)</item>
     </string-array>
+    <string name="favEmpty">This list is empty\nAdd products here with the \"♥\" icon</string>
+    <string name="empty_cart">This list is empty\nAdd products here with the \'to cart\' button</string>
+    <string name="searchEmpty">There are no results for the following query</string>
 </resources>

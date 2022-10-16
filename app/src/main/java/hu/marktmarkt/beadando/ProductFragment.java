@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -27,6 +28,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +45,6 @@ public class ProductFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private String imgUrl;
     private Product product;
-
 
     public static ProductFragment newInstance(String param1, String param2) {
         ProductFragment fragment = new ProductFragment();
@@ -66,6 +67,9 @@ public class ProductFragment extends Fragment {
 
     private ImageButton favourite;
     private boolean buttonState = false;
+    private LinearLayout searchResult;
+    private LinearLayout lnvNav;
+    private NavigationBarView bar;
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -80,6 +84,11 @@ public class ProductFragment extends Fragment {
         search.setVisibility(View.GONE);
         navBar.setVisibility(View.GONE);
         isCart = false;
+
+        searchResult = view.findViewById(R.id.searchResults);
+        lnvNav = view.findViewById(R.id.lnvNav);
+        bar = view.findViewById(R.id.bottomNavigationView);
+
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         String url = "https://oldal.vaganyzoltan.hu/api/listFav.php";
 
@@ -170,12 +179,23 @@ public class ProductFragment extends Fragment {
                 JSONArray cart = new JSONArray();
                 try {
                     cart = new JSONArray(response);
+                    int num = 0;
+                    for (int i = 0; i < cart.length(); i++) {
+                        int item = cart.getInt(i);
+                        if(item == product.getId()){
+                            Toast.makeText(getContext(), "Termék hozzáadva a kosárhoz!", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        num++;
+                    }
+                    if(num == cart.length()){
+                        Toast.makeText(getContext(), "Termék eltávolítva a kosárból!", Toast.LENGTH_LONG).show();
+                    }
                 } catch (JSONException e) {
                     Log.e("GetProduct @ MainFragment.java", e.getMessage());
                 }
 
                 //Toast.makeText(getContext(), cart + "" + cart.length(), Toast.LENGTH_LONG).show();
-
 
             }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
                 protected Map<String, String> getParams() {
@@ -203,25 +223,25 @@ public class ProductFragment extends Fragment {
             RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
             String url = "https://oldal.vaganyzoltan.hu/api/addFav.php";
 
-            StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
-                JSONArray fav = new JSONArray();
+            StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+                /*JSONArray fav = new JSONArray();
                 try {
                     fav = new JSONArray(response);
                 } catch (JSONException e) {
                     Log.e("GetProduct @ MainFragment.java", e.getMessage());
                 }
 
-                //Toast.makeText(getContext(), fav + "" + fav.length(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), fav + "" + fav.length(), Toast.LENGTH_LONG).show();*/
 
             }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
                 protected Map<String, String> getParams() {
-                    Map<String, String> MyData = new HashMap<>();
-                    MyData.put("token", MainActivity.getLoginToken());
-                    MyData.put("id", String.valueOf(product.getId()));
-                    return MyData;
+                    Map<String, String> data = new HashMap<>();
+                    data.put("token", MainActivity.getLoginToken());
+                    data.put("id", String.valueOf(product.getId()));
+                    return data;
                 }
             };
-            requestQueue.add(getToken);
+            requestQueue.add(request);
         }
     };
 }

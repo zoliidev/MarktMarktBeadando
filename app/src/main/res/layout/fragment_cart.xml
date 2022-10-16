@@ -22,20 +22,28 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/idNestedSVAkcio"
+    <TextView
+        android:id="@+id/empty"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_cart"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/idNestedSVCart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".CartFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -43,6 +51,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
 
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

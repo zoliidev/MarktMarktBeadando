@@ -28,4 +28,7 @@
     <string name="favourites">❤Kedvencek</string>
     <string name="delivery">Kiszállítási módok:</string>
     <string name="placeorder">Megrendelem!</string>
+    <string name="favEmpty">Ez a lista üres\\nAdj hozzá terméket a \"♥\" ikonnal</string>
+    <string name="empty_cart">Ez a lista üres\\\\nAdj hozzá terméket a \"kosárba\" gombbal</string>
+    <string name="searchEmpty">Nincs találat a keresett szövegre</string>
 </resources>
