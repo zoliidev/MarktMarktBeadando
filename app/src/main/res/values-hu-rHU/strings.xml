@@ -26,4 +26,14 @@
     <string name="marktmarktlogo">MarktMarkLogo</string>
     <string name="cart">🛒Kosár</string>
     <string name="favourites">❤Kedvencek</string>
+    <string name="customer_service">Ügyfélszolgálat</string>
+    <string name="tel">TEL.:06–30–889–9667</string>
+    <string name="fax">FAX.:36–1–336–6552</string>
+    <string name="our_toll_free_number">Ingyenesen hívható zöld számunk</string>
+    <string name="department_store_opening_hours">Szakáruházi nyitvatartás</string>
+    <string name="monday_08_00_18_00">Hétfő: 08:00–18:00</string>
+    <string name="tuesday_08_00_18_00">Kedd: 08:00–18:00</string>
+    <string name="wednesday_08_00_18_00">Szerda: 08:00–18:00</string>
+    <string name="thursday_08_00_18_00">Csütörtök: 08:00–18:00</string>
+    <string name="friday_08_00_18_00">Péntek: 08:00–18:00</string>
 </resources>
