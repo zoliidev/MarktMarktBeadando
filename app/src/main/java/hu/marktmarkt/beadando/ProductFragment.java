@@ -1,5 +1,7 @@
 package hu.marktmarkt.beadando;
 
+import static hu.marktmarkt.beadando.MainActivity.isCart;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,6 +83,7 @@ public class ProductFragment extends Fragment {
         favourite = (ImageButton) view.findViewById(R.id.favBt);
         search.setVisibility(View.GONE);
         navBar.setVisibility(View.GONE);
+        isCart = false;
 
         searchResult = view.findViewById(R.id.searchResults);
         lnvNav = view.findViewById(R.id.lnvNav);
@@ -176,12 +179,23 @@ public class ProductFragment extends Fragment {
                 JSONArray cart = new JSONArray();
                 try {
                     cart = new JSONArray(response);
+                    int num = 0;
+                    for (int i = 0; i < cart.length(); i++) {
+                        int item = cart.getInt(i);
+                        if(item == product.getId()){
+                            Toast.makeText(getContext(), "Termék hozzáadva a kosárhoz!", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        num++;
+                    }
+                    if(num == cart.length()){
+                        Toast.makeText(getContext(), "Termék eltávolítva a kosárból!", Toast.LENGTH_LONG).show();
+                    }
                 } catch (JSONException e) {
                     Log.e("GetProduct @ MainFragment.java", e.getMessage());
                 }
 
                 //Toast.makeText(getContext(), cart + "" + cart.length(), Toast.LENGTH_LONG).show();
-
 
             }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
                 protected Map<String, String> getParams() {
@@ -209,25 +223,25 @@ public class ProductFragment extends Fragment {
             RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
             String url = "https://oldal.vaganyzoltan.hu/api/addFav.php";
 
-            StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
-                JSONArray fav = new JSONArray();
+            StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+                /*JSONArray fav = new JSONArray();
                 try {
                     fav = new JSONArray(response);
                 } catch (JSONException e) {
                     Log.e("GetProduct @ MainFragment.java", e.getMessage());
                 }
 
-                //Toast.makeText(getContext(), fav + "" + fav.length(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), fav + "" + fav.length(), Toast.LENGTH_LONG).show();*/
 
             }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
                 protected Map<String, String> getParams() {
-                    Map<String, String> MyData = new HashMap<>();
-                    MyData.put("token", MainActivity.getLoginToken());
-                    MyData.put("id", String.valueOf(product.getId()));
-                    return MyData;
+                    Map<String, String> data = new HashMap<>();
+                    data.put("token", MainActivity.getLoginToken());
+                    data.put("id", String.valueOf(product.getId()));
+                    return data;
                 }
             };
-            requestQueue.add(getToken);
+            requestQueue.add(request);
         }
     };
 }

@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -52,6 +54,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import hu.marktmarkt.beadando.Collection.FileManager;
+import hu.marktmarkt.beadando.Collection.ProdManager;
 import hu.marktmarkt.beadando.Model.Product;
 
 public class MainActivity extends AppCompatActivity {
@@ -63,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isMain;
     public static boolean isAkciok;
     public static boolean isProfil;
+    public static boolean showRemove;
+    public static boolean isCart;
     public static int offset;
     public static ArrayList<Product> products = new ArrayList<>();
     public static ArrayList<Product> discountedProducts = new ArrayList<>();
@@ -104,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                     bar.setVisibility(View.VISIBLE);
                     return;
                 }
+                showRemove = false;
                 searchResult.setVisibility(View.VISIBLE);
                 lnvNav.setVisibility(View.GONE);
                 bar.setVisibility(View.GONE);
@@ -111,36 +117,26 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<Product> resultList = new ArrayList<>();
                 recyclerView = findViewById(R.id.resultList);
 
-                RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
-                String url = "https://oldal.vaganyzoltan.hu/api/search.php";
+                ProdManager prodManager = new ProdManager(getBaseContext());
+                Map<String, String> data = new HashMap<>();
+                data.put("token", MainActivity.getLoginToken());
+                data.put("query", s.toString());
+                ProdManager.VolleyCallBack callBack = () -> {
 
-                StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
-                    JSONArray result;
-                    try {
-                        result = new JSONArray(response);
-
-                        for (int i = 0; i < result.length(); i++) {
-                            String obj = result.getString(i);
-                            String[] darab = obj.split("@");
-                            resultList.add(new Product(Integer.parseInt(darab[0]), darab[1], Integer.parseInt(darab[2]), darab[3], darab[4], Integer.parseInt(darab[5])));
-                            //Log.i("ArrayList", products.get(i).toString());
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    createGrids(resultList);
-
-                }, error -> Toast.makeText(getBaseContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
-                    protected Map<String, String> getParams() {
-                        Map<String, String> MyData = new HashMap<>();
-                        MyData.put("token", MainActivity.getLoginToken());
-                        MyData.put("query", s.toString());
-
-                        return MyData;
+                    if (resultList.isEmpty()) {
+                        TextView tx = findViewById(R.id.empty);
+                        tx.setVisibility(View.VISIBLE);
+                        RecyclerView rv = findViewById(R.id.resultList);
+                        rv.setVisibility(View.GONE);
+                    } else {
+                        TextView tx = findViewById(R.id.empty);
+                        tx.setVisibility(View.GONE);
+                        RecyclerView rv = findViewById(R.id.resultList);
+                        rv.setVisibility(View.VISIBLE);
+                        createGrids(resultList);
                     }
                 };
-                requestQueue.add(getToken);
-
+                prodManager.populateProds("https://oldal.vaganyzoltan.hu/api/search.php", resultList, data, callBack);
             }
 
             @Override
@@ -178,10 +174,6 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             Log.i("BackStackChanged","Back Stack Changed!!!");
-            //FragmentContainerView fragmentInstance = (FragmentContainerView) findViewById(R.id.fragmentView);
-//            Fragment fragmentInstance = getSupportFragmentManager().findFragmentById(R.id.fragmentView);
-//            Log.i("currentFragment","Fragment ID: " + fragmentInstance.getId());
-//            Log.i("findFragmentID","find Fragment ID:" + findViewById(R.id.mainFragment).getId());
             if (isMain){
                 navigationView.getMenu().findItem(R.id.itmMain).setChecked(true);
                 Log.i("setCheckedItmMain","MainChecked");
@@ -194,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
                         navigationView.getMenu().findItem(R.id.itmProfil).setChecked(true);
                         Log.i("setCheckedItmProfil","ProfilChecked");
                     }
-
         });
     }
     
@@ -206,55 +197,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void autoLogin(Context baseContext){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
-                String url = "https://oldal.vaganyzoltan.hu/api/validate.php";
-                String logToken = new FileManager().fileOlvas(baseContext, "loginToken.txt");
-                //String logToken = "";
-                if (!logToken.equals("")) logToken = logToken.substring(1);
-                if (logToken.equals("")) {
+        runOnUiThread(() -> {
+            RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+            String url = "https://oldal.vaganyzoltan.hu/api/validate.php";
+            String logToken = new FileManager().fileOlvas(baseContext, "loginToken.txt");
+            //String logToken = "";
+            if (!logToken.equals("")) logToken = logToken.substring(1);
+            if (logToken.equals("")) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new LoginFragment()).commit();
+            }
+
+            String finalLogToken = logToken;
+            StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
+                JSONObject object;
+                boolean loggedIn = false;
+                String resp = "Hiba";
+                try {
+                    object = new JSONObject(response);
+                    if (!object.isNull("loggedIN"))
+                        loggedIn = object.getBoolean("loggedIN");
+                    if (!object.isNull("resp")) resp = object.getString("resp");
+                } catch (JSONException e) {
+                    Log.e("SetToken @ MainActivity.java", e.getMessage());
+                }
+
+                if (loggedIn) {
+                    MainActivity.setToken(finalLogToken);
+                    BottomNavigationView navBar = findViewById(R.id.bottomNavigationView);
+                    EditText search = findViewById(R.id.searchBar);
+                    search.setVisibility(View.VISIBLE);
+                    navBar.setVisibility(View.VISIBLE);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new MainFragment()).commit();
+                    Toast.makeText(getBaseContext(), "Sikeres bejelentkezés!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getBaseContext(), resp, Toast.LENGTH_LONG).show();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new LoginFragment()).commit();
                 }
 
-                String finalLogToken = logToken;
-                StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
-                    JSONObject object;
-                    boolean loggedIn = false;
-                    String resp = "Hiba";
-                    try {
-                        object = new JSONObject(response);
-                        if (!object.isNull("loggedIN"))
-                            loggedIn = object.getBoolean("loggedIN");
-                        if (!object.isNull("resp")) resp = object.getString("resp");
-                    } catch (JSONException e) {
-                        Log.e("SetToken @ MainActivity.java", e.getMessage());
-                    }
-
-                    if (loggedIn) {
-                        MainActivity.setToken(finalLogToken);
-                        BottomNavigationView navBar = findViewById(R.id.bottomNavigationView);
-                        EditText search = findViewById(R.id.searchBar);
-                        search.setVisibility(View.VISIBLE);
-                        navBar.setVisibility(View.VISIBLE);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new MainFragment()).commit();
-                        Toast.makeText(getBaseContext(), "Sikeres bejelentkezés!", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getBaseContext(), resp, Toast.LENGTH_LONG).show();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new LoginFragment()).commit();
-                    }
-
-                }, error ->
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new LoginFragment()).commit()) {
-                    protected Map<String, String> getParams() {
-                        Map<String, String> MyData = new HashMap<>();
-                        MyData.put("token", finalLogToken);
-                        return MyData;
-                    }
-                };
-                requestQueue.add(getToken);
-            }
+            }, error ->
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, new LoginFragment()).commit()) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> MyData = new HashMap<>();
+                    MyData.put("token", finalLogToken);
+                    return MyData;
+                }
+            };
+            requestQueue.add(getToken);
         });
     }
 
@@ -269,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
     private void createGrids(ArrayList<Product> resultList){
         GridLayoutManager gridManager = new GridLayoutManager(getBaseContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(getBaseContext(), resultList);
+        adapter = new RecycleViewAdapter(getBaseContext(), resultList, callBack, R.layout.prod_card);
         adapter.setClickListener(itemClickListener);
         recyclerView.setAdapter(adapter);
     }
@@ -302,5 +290,11 @@ public class MainActivity extends AppCompatActivity {
             searchBar.setText("");
         }
     };
+    
+    RecycleViewAdapter.CallBack callBack = new RecycleViewAdapter.CallBack() {
+        @Override
+        public void onClose() {
 
+        }
+    };
 }

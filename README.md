@@ -1,6 +1,16 @@
 # MarktMartktBeadando / DROID APP
 **Classification: internal & partners only**
 
+> #### Markt Markt android webshop
+> Funkciók a felhasználó számára:
+> - Fiókba történő bejelentkezés (automatikus opcionálisan)
+> - Termékek kedvenchez hozzáadása
+> - Termékek kosárhoz hozzáadása
+> - Kosárból történő megrendelés
+> - Téma változtatás
+> - Jelszóváltoztatás
+> - Kijelentkezés
+
 # Api Segéd-software: POSTMAN!
 > #### Login-API
 > https://oldal.vaganyzoltan.hu/api/login.php
@@ -44,5 +54,51 @@
 >Kimenet -> Json tábla:
 > - termék-id lista
 
+> #### PasswordChange-API
+> https://oldal.vaganyzoltan.hu/api/passChange.php
+> POST-request-ben kell elküldeni:
+> - régi jelszó
+> - új jelszó
+> - token
+>
+>Kimenet -> Json tábla:
+> - válaszüzenet (sikeres vagy nem)
+
+> #### Termékkeresés-API
+> https://oldal.vaganyzoltan.hu/api/search.php
+> POST-request-ben kell elküldeni:
+> - keresni kívánt termék
+> - token
+>
+>Kimenet -> Json tábla:
+> - max 10 elemű terméklista
+
+> #### Kosár & kedvenc termékek-API
+> https://oldal.vaganyzoltan.hu/api/listFav.php || https://oldal.vaganyzoltan.hu/api/listCart.php
+> POST-request-ben kell elküldeni:
+> - token
+>
+>Kimenet -> Json tábla:
+> - Felhasználó terméklistája
+
+> #### Kosár & kedvenc termék hozzáadása/eltávolítása-API
+> https://oldal.vaganyzoltan.hu/api/addFav.php || https://oldal.vaganyzoltan.hu/api/addCart.php
+> Kezeli a hozzáadást, törlést. Ha a termék már szerepel a listán eltávolítja.
+> POST-request-ben kell elküldeni:
+> - id (termékkód)
+> - token
+>
+>Kimenet -> Json tábla:
+> - Frissített terméklista
+
+> #### Akciós termékek listája-API
+> https://oldal.vaganyzoltan.hu/api/getDiscounted.php
+> POST-request-ben kell elküldeni:
+> - token
+>
+>Kimenet -> Json tábla:
+> - Akciós termékek listája
+
+
 >Tervezés: Figma
-> - https://www.figma.com/file/LpYaS9CWV5I1zuZ5ZhE4kT/MarktMarkt-tervek?node-id=0%3A1
+> - https://www.figma.com/file/LpYaS9CWV5I1zuZ5ZhE4kT/MarktMarkt-tervek?node-id=0%3A1>

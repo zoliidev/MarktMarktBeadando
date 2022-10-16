@@ -13,7 +13,7 @@
     <string name="remember_me">Jegyezz meg</string>
     <string name="loading">Betöltés…</string>
     <string name="marktmarkt">MarktMarkt</string>
-    <string name="logout">Kijelenetkezés</string>
+    <string name="logout">Kijelentkezés</string>
     <string name="buy">Kosárba</string>
     <string name="favourite">szív</string>
     <string name="textview">TextView</string>
@@ -36,4 +36,9 @@
     <string name="wednesday_08_00_18_00">Szerda: 08:00–18:00</string>
     <string name="thursday_08_00_18_00">Csütörtök: 08:00–18:00</string>
     <string name="friday_08_00_18_00">Péntek: 08:00–18:00</string>
+    <string name="delivery">Kiszállítási módok:</string>
+    <string name="placeorder">Megrendelem!</string>
+    <string name="favEmpty">Ez a lista üres\\nAdj hozzá terméket a \"♥\" ikonnal</string>
+    <string name="empty_cart">Ez a lista üres\\\\nAdj hozzá terméket a \"kosárba\" gombbal</string>
+    <string name="searchEmpty">Nincs találat a keresett szövegre</string>
 </resources>

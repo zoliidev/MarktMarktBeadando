@@ -1,5 +1,10 @@
 package hu.marktmarkt.beadando;
 
+import static hu.marktmarkt.beadando.MainActivity.isCart;
+
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -77,6 +82,7 @@ public class SettingsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        isCart = false;
     }
 
 

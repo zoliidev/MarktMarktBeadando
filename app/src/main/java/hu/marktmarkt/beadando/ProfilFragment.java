@@ -35,6 +35,7 @@ import hu.marktmarkt.beadando.Model.Product;
 import static hu.marktmarkt.beadando.MainActivity.isMain;
 import static hu.marktmarkt.beadando.MainActivity.isAkciok;
 import static hu.marktmarkt.beadando.MainActivity.isProfil;
+import static hu.marktmarkt.beadando.MainActivity.isCart;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -102,6 +103,7 @@ public class ProfilFragment extends Fragment {
         isMain = false;
         isAkciok = false;
         isProfil = true;
+        isCart = false;
 
         logout = view.findViewById(R.id.btnLogout);
         logout.setOnClickListener(logoutListen);

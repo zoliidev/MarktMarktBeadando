@@ -1,6 +1,9 @@
 package hu.marktmarkt.beadando;
 
 
+import static hu.marktmarkt.beadando.MainActivity.showRemove;
+import static hu.marktmarkt.beadando.MainActivity.isCart;
+
 import android.os.Bundle;
 
 import androidx.core.widget.NestedScrollView;
@@ -14,12 +17,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import hu.marktmarkt.beadando.Collection.ProdManager;
 import hu.marktmarkt.beadando.Collection.Util;
 import hu.marktmarkt.beadando.Model.Product;
 
@@ -36,7 +42,7 @@ import hu.marktmarkt.beadando.Model.Product;
  * Use the {@link FavouriteFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FavouriteFragment extends Fragment {
+public class FavouriteFragment extends Fragment implements RecycleViewAdapter.CallBack{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -81,19 +87,22 @@ public class FavouriteFragment extends Fragment {
     private RecyclerView recyclerView;
     private NestedScrollView nestedSV;
     private ArrayList<Product> favouriteProducts;
+    FloatingActionButton floatingActionButton;
     RecycleViewAdapter adapter;
-
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         favouriteProducts=new ArrayList<>();
-        View view = inflater.inflate(R.layout.fragment_akciok, container, false);
-        nestedSV = view.findViewById(R.id.idNestedSVAkcio);
+        view = inflater.inflate(R.layout.fragment_favourite, container, false);
+        nestedSV = view.findViewById(R.id.idNestedSVFavourtie);
         recyclerView = view.findViewById(R.id.prodMain);
         Util util = new Util();
         util.addBars(requireActivity());
+        showRemove = true;
+        isCart = false;
 
         if(favouriteProducts.isEmpty()){
-            loadData();
+            loadData(view);
         }else{
             showLayout();
         }
@@ -122,45 +131,36 @@ public class FavouriteFragment extends Fragment {
             transaction.addToBackStack(null).commit();
         }
     };
-    private void loadData(){
-        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-        String urlProds = "https://oldal.vaganyzoltan.hu/api/listFav.php";
+    private void loadData(View view){
+        ProdManager prodManager = new ProdManager(requireContext());
+        Map<String, String> data = new HashMap<>();
+        data.put("token", MainActivity.getLoginToken());
 
-        StringRequest getProd = new StringRequest(Request.Method.POST, urlProds, response -> {
-            JSONArray Prod = new JSONArray();
-            try {
-                Prod = new JSONArray(response);
-            } catch (JSONException e) {
-                Log.e("GetProduct @ AkciokFragment.java", e.getMessage());
-            }
-
-            for (int i = 0; i < Prod.length(); i++) {
-                try {
-                    String product = Prod.getString(i);
-                    String[] splitProd = product.split("@");
-                    favouriteProducts.add(new Product(Integer.parseInt(splitProd[0]), splitProd[1], Integer.parseInt(splitProd[2]), splitProd[3], splitProd[4], Integer.parseInt(splitProd[5])));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            showLayout();
-
-        }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
-            protected Map<String, String> getParams() {
-                Map<String, String> MyData = new HashMap<>();
-                MyData.put("token", MainActivity.getLoginToken());
-                return MyData;
+        ProdManager.VolleyCallBack callBack = () -> {
+            if(favouriteProducts.isEmpty()){
+                NestedScrollView ns = view.findViewById(R.id.idNestedSVFavourtie);
+                ns.setVisibility(View.GONE);
+                TextView tx = view.findViewById(R.id.empty);
+                tx.setVisibility(View.VISIBLE);
+            }else{
+                showLayout();
             }
         };
-        requestQueue.add(getProd);
+
+        prodManager.populateProds("https://oldal.vaganyzoltan.hu/api/listFav.php", favouriteProducts, data, callBack);
     }
 
     private void showLayout(){
         GridLayoutManager gridManager = new GridLayoutManager(requireContext(), 2);
         recyclerView.setLayoutManager(gridManager);
-        adapter = new RecycleViewAdapter(requireContext(), favouriteProducts);
+        adapter = new RecycleViewAdapter(requireContext(), favouriteProducts, this, R.layout.prod_card3);
         adapter.setClickListener(itemClickListener);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClose() {
+        favouriteProducts = new ArrayList<Product>();
+        loadData(view);
     }
 }

@@ -1,5 +1,7 @@
 package hu.marktmarkt.beadando.Collection;
 
+import static hu.marktmarkt.beadando.MainActivity.isCart;
+
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.res.Resources;
