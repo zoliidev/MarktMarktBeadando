@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import hu.marktmarkt.beadando.Collection.FileManager;
 import hu.marktmarkt.beadando.Collection.Util;
@@ -110,13 +111,18 @@ public class SettingsFragment extends Fragment {
         int csekd = 0;
         csekd = AppCompatDelegate.getDefaultNightMode();
         hubMode.setChecked(csekd != 0);
-
+        if(Objects.equals(new FileManager().fileOlvas(getContext(), "mode.txt"), "\ntrue")){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            hubMode.setChecked(true);
+        }
+        else{ AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);  hubMode.setChecked(false);}
         hubMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     new FileManager().FileKi("true", requireActivity(), "mode.txt");
+                    hubMode.setChecked(true);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     new FileManager().FileKi("false", requireActivity(), "mode.txt");
