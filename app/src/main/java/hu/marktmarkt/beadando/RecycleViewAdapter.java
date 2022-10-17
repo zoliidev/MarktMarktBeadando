@@ -79,10 +79,14 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
         if (cardLayout == R.layout.prod_card3 || cardLayout == R.layout.prod_card2) {
             floatingActionButton.setOnClickListener(v -> {
-                if (isCart) {
-                    //Kosár
+                    //Kosár || Kedvencek
                     RequestQueue requestQueue = Volley.newRequestQueue(v.getContext());
-                    String url = "https://oldal.vaganyzoltan.hu/api/addCart.php";
+                    String url;
+                    if(isCart){
+                        url = "https://oldal.vaganyzoltan.hu/api/addCart.php";
+                    }else{
+                        url = "https://oldal.vaganyzoltan.hu/api/addFav.php";
+                    }
 
                     StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
                         callBack.onClose();
@@ -95,23 +99,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                         }
                     };
                     requestQueue.add(getToken);
-                } else {
-                    //Kedvencek
-                    RequestQueue requestQueue = Volley.newRequestQueue(v.getContext());
-                    String url = "https://oldal.vaganyzoltan.hu/api/addFav.php";
-                    StringRequest getToken = new StringRequest(Request.Method.POST, url, response -> {
-                        callBack.onClose();
-
-                    }, error -> Toast.makeText(v.getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
-                        protected Map<String, String> getParams() {
-                            Map<String, String> MyData = new HashMap<>();
-                            MyData.put("token", MainActivity.getLoginToken());
-                            MyData.put("id", String.valueOf(products.get(holder.getAdapterPosition()).getId()));
-                            return MyData;
-                        }
-                    };
-                    requestQueue.add(getToken);
-                }
             });
         }
 
