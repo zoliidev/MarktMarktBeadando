@@ -18,7 +18,7 @@ import hu.marktmarkt.beadando.Model.Product;
 
 public class ProdManager {
 
-    private Context context;
+    private final Context context;
 
     public ProdManager(Context context){
         this.context = context;

@@ -108,8 +108,7 @@ public class SettingsFragment extends Fragment {
         hubMode = view.findViewById(R.id.swDarkMode);
         int csekd = 0;
         csekd = AppCompatDelegate.getDefaultNightMode();
-        if (csekd == 0) hubMode.setChecked(false);
-        else hubMode.setChecked(true);
+        hubMode.setChecked(csekd != 0);
 
         hubMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

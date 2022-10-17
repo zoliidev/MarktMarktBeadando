@@ -78,9 +78,9 @@ public class ProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
         BottomNavigationView navBar = requireActivity().findViewById(R.id.bottomNavigationView);
         EditText search = requireActivity().findViewById(R.id.searchBar);
-        ImageView imageView = (ImageView) view.findViewById(R.id.productImageView);
-        Button buy = (Button) view.findViewById(R.id.buyBt);
-        favourite = (ImageButton) view.findViewById(R.id.favBt);
+        ImageView imageView = view.findViewById(R.id.productImageView);
+        Button buy = view.findViewById(R.id.buyBt);
+        favourite = view.findViewById(R.id.favBt);
         search.setVisibility(View.GONE);
         navBar.setVisibility(View.GONE);
         isCart = false;

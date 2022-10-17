@@ -136,7 +136,7 @@ public class orderFragment extends Fragment implements AdapterView.OnItemClickLi
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if(((TextView) parent.getChildAt(0)) != null){
+                if(parent.getChildAt(0) != null){
                     ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
                 }
             }

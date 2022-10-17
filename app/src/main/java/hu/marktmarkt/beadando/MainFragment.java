@@ -91,7 +91,7 @@ public class MainFragment extends Fragment {
 
     }
 
-    private JSONArray object = new JSONArray();
+    private final JSONArray object = new JSONArray();
     private final int limit = 20;
     private RecyclerView recyclerView;
     private NestedScrollView nestedSV;
