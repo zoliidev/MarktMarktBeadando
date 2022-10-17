@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import hu.marktmarkt.beadando.Collection.FileManager;
+import hu.marktmarkt.beadando.Collection.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -146,7 +147,7 @@ public class SettingsFragment extends Fragment {
             } catch (JSONException e) {
                 Log.e("SetToken @ LoginFragment.java", e.getMessage());
             }
-
+            new Util().setFragment(getParentFragmentManager(), new LoginFragment());
         }, error -> Toast.makeText(getContext(), error.getMessage() + "", Toast.LENGTH_LONG).show()) {
             protected Map<String, String> getParams() {
                 Map<String, String> MyData = new HashMap<>();
@@ -157,6 +158,7 @@ public class SettingsFragment extends Fragment {
             }
         };
         requestQueue.add(getToken);
+
     };
 
 }
